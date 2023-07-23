@@ -109,11 +109,11 @@ export default defineComponent({
       }
     };
     // 演示地址自动登录
-    onMounted(() => {
-      setTimeout(() => {
-        handleSubmit({ errors: undefined, values: userInfo });
-      }, 3000);
-    });
+    // onMounted(() => {
+    //   setTimeout(() => {
+    //     handleSubmit({ errors: undefined, values: userInfo });
+    //   }, 3000);
+    // });
     const setRememberPassword = () => {
       //
     };

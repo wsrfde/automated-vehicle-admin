@@ -1,7 +1,7 @@
 {
-  "name": "vue-admin-arco",
+  "name": "automated-vehicle-admin",
   "description": "",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": "ArcoDesign Team",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/babel-plugin-jsx": "^1.1.1",
-    "eslint": "^8.42.0",
+    "eslint": "8.22.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-typescript": "^3.5.5",

@@ -24,7 +24,7 @@
                   :style="{ margin: 0, fontSize: '18px', color: '#fff' }"
                   :heading="5"
                 >
-                  vue-admin-arco
+                  {{ title }}
                 </a-typography-title>
               </a-space>
             </div>
@@ -68,6 +68,7 @@ export default defineComponent({
     const route = useRoute();
     const permission = usePermission();
     const navbarHeight = `60px`;
+    const title = computed(() => appStore.title);
     const navbar = computed(() => appStore.navbar);
     const menu = computed(() => appStore.menu);
     const footer = computed(() => appStore.footer);
@@ -95,6 +96,7 @@ export default defineComponent({
       }
     );
     return {
+      title,
       navbar,
       menu,
       footer,

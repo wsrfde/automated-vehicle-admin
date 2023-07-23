@@ -1,4 +1,5 @@
 export interface AppState {
+  title: string;
   theme: string;
   colorWeek: boolean;
   navbar: boolean;

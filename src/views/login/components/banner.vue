@@ -18,6 +18,7 @@
 import { defineComponent, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import bannerImage from '@/assets/images/login-banner.png';
+import bannerImage1 from '@/assets/images/login-banner1.png';
 
 export default defineComponent({
   setup() {
@@ -31,12 +32,7 @@ export default defineComponent({
       {
         slogan: t('login.banner.slogan2'),
         subSlogan: t('login.banner.subSlogan2'),
-        image: bannerImage,
-      },
-      {
-        slogan: t('login.banner.slogan3'),
-        subSlogan: t('login.banner.subSlogan3'),
-        image: bannerImage,
+        image: bannerImage1,
       },
     ]);
     return {
