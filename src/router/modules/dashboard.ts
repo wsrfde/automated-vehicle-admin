@@ -8,16 +8,6 @@ export default {
     icon: 'icon-dashboard',
   },
   children: [
-    {
-      path: 'workplace',
-      name: 'workplace',
-      component: () => import('@/views/dashboard/workplace/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.workplace',
-        requiresAuth: true,
-        roles: ['*'],
-      },
-    },
     /** simple */
     {
       path: 'monitor',

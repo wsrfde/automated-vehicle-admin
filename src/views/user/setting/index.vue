@@ -15,9 +15,6 @@
           <a-tab-pane key="2" :title="$t('userSetting.tab.securitySettings')">
             <SecuritySettings />
           </a-tab-pane>
-          <a-tab-pane key="3" :title="$t('userSetting.tab.certification')">
-            <Certification />
-          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -29,14 +26,12 @@ import { defineComponent } from 'vue';
 import UserPanel from './components/user-panel.vue';
 import BasicInformation from './components/basic-information.vue';
 import SecuritySettings from './components/security-settings.vue';
-import Certification from './components/certification.vue';
 
 export default defineComponent({
   components: {
     UserPanel,
     BasicInformation,
     SecuritySettings,
-    Certification,
   },
   setup() {
     return {};

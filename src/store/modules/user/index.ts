@@ -52,9 +52,9 @@ const useUserStore = defineStore('user', {
     },
 
     // Get user's information
+    // 在路由守卫中被调用
     async info() {
       const res = await getUserInfo();
-
       this.setInfo(res.data);
     },
 

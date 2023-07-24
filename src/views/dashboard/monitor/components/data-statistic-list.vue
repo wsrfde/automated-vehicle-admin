@@ -13,7 +13,6 @@
     />
     <a-typography-text type="secondary" class="data-statistic-list-tip">
       {{ $t('monitor.list.tip.rotations') }} {{ data.length }}
-      {{ $t('monitor.list.tip.rest') }}
     </a-typography-text>
   </div>
 </template>
@@ -38,12 +37,11 @@ export default defineComponent({
     const { t } = useI18n();
     const data: PreviewRecord[] = [
       {
-        cover:
-          'http://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/c788fc704d32cf3b1136c7d45afc2669.png~tplv-uwbnlip3yd-webp.webp',
-        name: '视频直播',
+        cover: 'src/assets/images/monitor-img.jpg',
+        name: '前方监控画面',
         duration: '00:05:19',
         id: '54e23ade',
-        status: -1,
+        status: 1,
       },
     ];
     const renderTag = (status: number) => {

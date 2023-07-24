@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">{{ $t('login.form.title') }}</div>
-    <div class="login-form-sub-title">{{ $t('login.form.title') }}</div>
+    <div class="login-form-title">{{ title }}</div>
+    <div class="login-form-sub-title">你的一站式自动化平台</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -45,9 +45,9 @@
       </a-form-item>
       <a-space :size="16" direction="vertical">
         <div class="login-form-password-actions">
-          <!--  <a-checkbox checked="rememberPassword" @change="setRememberPassword">
-            {{ $t('login.form.rememberPassword') }}
-          </a-checkbox> -->
+          <!--          &lt;!&ndash;  <a-checkbox checked="rememberPassword" @change="setRememberPassword">-->
+          <!--            {{ $t('login.form.rememberPassword') }}-->
+          <!--          </a-checkbox> &ndash;&gt;-->
           <a-link>{{ $t('login.form.forgetPassword') }}</a-link>
         </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { Message } from '@arco-design/web-vue';
 import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
@@ -72,6 +72,12 @@ import useLoading from '@/hooks/loading';
 import { LoginData } from '@/api/user';
 
 export default defineComponent({
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+  },
   setup() {
     const router = useRouter();
     const { t } = useI18n();
@@ -94,8 +100,9 @@ export default defineComponent({
         try {
           await userStore.login(values);
           const { redirect, ...othersQuery } = router.currentRoute.value.query;
+          console.log(redirect, othersQuery);
           router.push({
-            name: (redirect as string) || 'workplace',
+            name: (redirect as string) || 'monitor',
             query: {
               ...othersQuery,
             },

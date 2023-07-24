@@ -16,7 +16,7 @@
       <a-button long>
         {{ $t('monitor.quickOperation.removeClarity') }}
         <template #icon>
-          <IconStop />
+          <icon-arrow-left />
         </template>
       </a-button>
       <a-button long>

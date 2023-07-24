@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup() {
     const { loading, setLoading } = useLoading(true);
-    const messageType = ref('message');
+    const messageType = ref('notice');
     const { t } = useI18n();
     const messageData = reactive<{
       renderList: MessageRecord[];
@@ -57,10 +57,6 @@ export default defineComponent({
     });
     const refData = toRefs(messageData);
     const tabList: TabItem[] = [
-      {
-        key: 'message',
-        title: t('messageBox.tab.title.message'),
-      },
       {
         key: 'notice',
         title: t('messageBox.tab.title.notice'),

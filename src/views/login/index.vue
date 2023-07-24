@@ -5,12 +5,12 @@
         alt="logo"
         src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
       />
-      <div class="logo-text">vue-admin-arco</div>
+      <div class="logo-text">{{ title }}</div>
     </div>
     <LoginBanner />
     <div class="content">
       <div class="content-inner">
-        <LoginForm />
+        <LoginForm :title="title" />
       </div>
       <div class="footer">
         <Footer />
@@ -20,7 +20,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useAppStore } from '@/store';
 import Footer from '@/components/footer/index.vue';
 import LoginBanner from './components/banner.vue';
 import LoginForm from './components/login-form.vue';
@@ -30,6 +31,11 @@ export default defineComponent({
     LoginBanner,
     LoginForm,
     Footer,
+  },
+  setup() {
+    const appStore = useAppStore();
+    const title = computed(() => appStore.title);
+    return { title };
   },
 });
 </script>

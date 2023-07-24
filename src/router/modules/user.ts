@@ -9,16 +9,6 @@ export default {
   },
   children: [
     {
-      path: 'info',
-      name: 'info',
-      component: () => import('@/views/user/info/index.vue'),
-      meta: {
-        locale: 'menu.user.info',
-        requiresAuth: true,
-        roles: ['*'],
-      },
-    },
-    {
       path: 'setting',
       name: 'setting',
       component: () => import('@/views/user/setting/index.vue'),

@@ -66,5 +66,6 @@ module.exports = {
     'no-param-reassign': 0,
     'prefer-regex-literals': 0,
     'import/no-extraneous-dependencies': 0,
+    'no-console': 0,  // 关闭console报错提示
   },
 };

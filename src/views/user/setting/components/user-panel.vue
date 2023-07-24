@@ -35,16 +35,6 @@
         }"
       >
         <template #label="{ label }">{{ $t(label) }} :</template>
-        <template #value="{ value, data }">
-          <a-tag
-            v-if="data.label === 'userSetting.label.certification'"
-            color="green"
-            size="small"
-          >
-            已认证
-          </a-tag>
-          <span v-else>{{ value }}</span>
-        </template>
       </a-descriptions>
     </a-space>
   </a-card>
@@ -67,10 +57,6 @@ export default defineComponent({
       {
         label: 'userSetting.label.name',
         value: userStore.name,
-      },
-      {
-        label: 'userSetting.label.certification',
-        value: userStore.certification,
       },
       {
         label: 'userSetting.label.accountId',

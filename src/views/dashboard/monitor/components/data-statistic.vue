@@ -11,7 +11,7 @@
       />
     </a-tabs>
     <div class="data-statistic-content">
-      <a-radio-group :default-value="3" type="button">
+      <a-radio-group :default-value="1" type="button">
         <a-radio :value="1">{{ $t('monitor.liveMethod.normal') }}</a-radio>
         <a-radio :value="2">{{ $t('monitor.liveMethod.flowControl') }}</a-radio>
         <a-radio :value="3">{{ $t('monitor.liveMethod.video') }}</a-radio>

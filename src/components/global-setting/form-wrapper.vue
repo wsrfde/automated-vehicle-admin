@@ -8,7 +8,7 @@
   />
   <a-switch
     v-else
-    :default-checked="defaultValue"
+    :default-checked="defaultCheck"
     size="small"
     @change="handleChange"
   />
@@ -28,8 +28,12 @@ export default defineComponent({
       default: '',
     },
     defaultValue: {
-      type: [String, Boolean, Number],
-      default: '',
+      type: Number,
+      default: 0,
+    },
+    defaultCheck: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['inputChange'],

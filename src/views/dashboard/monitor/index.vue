@@ -2,9 +2,6 @@
   <div class="container">
     <Breadcrumb :items="['menu.dashboard', 'menu.dashboard.monitor']" />
     <div class="layout">
-      <div class="layout-left-side">
-        <ChatPanel />
-      </div>
       <div class="layout-content">
         <a-space :size="16" direction="vertical" fill>
           <Studio />
@@ -15,7 +12,6 @@
         <a-space :size="16" direction="vertical" fill>
           <StudioStatus />
           <QuickOperation />
-          <StudioInformation />
         </a-space>
       </div>
     </div>
@@ -24,21 +20,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ChatPanel from './components/chat-panel.vue';
 import Studio from './components/studio.vue';
 import DataStatistic from './components/data-statistic.vue';
 import StudioStatus from './components/studio-status.vue';
 import QuickOperation from './components/quick-operation.vue';
-import StudioInformation from './components/studio-information.vue';
 
 export default defineComponent({
   components: {
-    ChatPanel,
     Studio,
     DataStatistic,
     StudioStatus,
     QuickOperation,
-    StudioInformation,
   },
   setup() {
     //
