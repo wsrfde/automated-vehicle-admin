@@ -4,7 +4,15 @@
       <icon-more />
     </template>
     <div class="studio-wrapper">
-      <img src="@/assets/images/monitor-img.jpg" class="studio-preview" />
+      <div class="studio-box">
+        <img
+          v-for="i in 6"
+          :key="i"
+          src="@/assets/images/monitor-img.png"
+          class="studio-preview"
+          alt="图片"
+        />
+      </div>
       <div class="studio-bar">
         <div></div>
         <a-typography-text type="secondary">
@@ -37,10 +45,14 @@ export default defineComponent({
 
 <style scoped lang="less">
 .studio {
+  &-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
   &-preview {
-    display: block;
-    max-width: 600px;
-    margin: 0 auto;
+    width: 21.7vw;
+    margin: 0.2vw;
   }
 
   &-bar {

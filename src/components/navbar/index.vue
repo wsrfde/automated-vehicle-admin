@@ -1,19 +1,6 @@
 <template>
   <div class="navbar">
-    <div class="left-side">
-      <!-- <a-space>
-        <img
-          alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        />
-        <a-typography-title
-          :style="{ margin: 0, fontSize: '18px' }"
-          :heading="5"
-        >
-          vue-admin-arco
-        </a-typography-title>
-      </a-space> -->
-    </div>
+    <div class="left-side"></div>
     <ul class="right-side">
       <li>
         <a-tooltip :content="$t('settings.navbar.alerts')">
@@ -41,20 +28,6 @@
             <message-box />
           </template>
         </a-popover>
-      </li>
-      <li>
-        <a-tooltip :content="$t('settings.title')">
-          <a-button
-            class="nav-btn"
-            type="outline"
-            :shape="'circle'"
-            @click="setVisible"
-          >
-            <template #icon>
-              <icon-settings />
-            </template>
-          </a-button>
-        </a-tooltip>
       </li>
       <li>
         <a-dropdown trigger="click">
@@ -131,9 +104,7 @@ export default defineComponent({
       },
     });
     const toggleTheme = useToggle(isDark);
-    const setVisible = () => {
-      appStore.updateSettings({ globalSettings: true });
-    };
+
     const refBtn = ref();
     const triggerBtn = ref();
     const setPopoverVisible = () => {
@@ -171,7 +142,6 @@ export default defineComponent({
       avatar,
       changeLocale,
       toggleTheme,
-      setVisible,
       setPopoverVisible,
       refBtn,
       triggerBtn,

@@ -38,7 +38,7 @@ export default defineComponent({
         },
         yAxis: {
           type: 'category',
-          data: ['点赞量', '评论量', '分享量'],
+          data: ['A区', 'B区', 'C区'],
           axisLabel: {
             show: true,
             color: '#4E5969',

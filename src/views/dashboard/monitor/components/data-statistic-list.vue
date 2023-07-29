@@ -37,7 +37,7 @@ export default defineComponent({
     const { t } = useI18n();
     const data: PreviewRecord[] = [
       {
-        cover: 'src/assets/images/monitor-img.jpg',
+        cover: 'src/assets/images/monitor-img.png',
         name: '前方监控画面',
         duration: '00:05:19',
         id: '54e23ade',

@@ -142,6 +142,28 @@ export default defineComponent({
     const contentClickData = ref<number[]>([]);
     const contentExposureData = ref<number[]>([]);
     const activeUsersData = ref<number[]>([]);
+    // const { chartOption } = useChartOption((dark) => ({
+    //   grid: {
+    //     left: '2.6%',
+    //     right: '4',
+    //     top: '40',
+    //     bottom: '40',
+    //   },
+    //   xAxis: {
+    //     // type: 'category',
+    //     // offset: 2,
+    //     // data: xAxis.value,
+    //     // boundaryGap: false,
+    //     // axisLabel: {
+    //     //   color: '#4E5969',
+    //     //   formatter(value: number, idx: number) {
+    //     //     if (idx === 0) return '';
+    //     //     if (idx === xAxis.value.length - 1) return '';
+    //     //     return `${value}`;
+    //     //   },
+    //     // },
+    //   },
+    // }));
     const { chartOption } = useChartOption((dark) => {
       return {
         grid: {

@@ -27,7 +27,7 @@ export default defineComponent({
       return {
         legend: {
           left: 'center',
-          data: ['UGC原创', '国外网站', '转载文章', '行业报告', '其他'],
+          data: ['自动抓取', '人工抓取', '其他'],
           bottom: 0,
           icon: 'circle',
           itemWidth: 8,
@@ -49,7 +49,7 @@ export default defineComponent({
               left: '9.6%',
               top: 'center',
               style: {
-                text: '纯文本',
+                text: 'A区',
                 ...graphicElementStyle,
               },
             },
@@ -58,7 +58,7 @@ export default defineComponent({
               left: 'center',
               top: 'center',
               style: {
-                text: '图文类',
+                text: 'B区',
                 ...graphicElementStyle,
               },
             },
@@ -67,7 +67,7 @@ export default defineComponent({
               left: '86.6%',
               top: 'center',
               style: {
-                text: '视频类',
+                text: 'C区',
                 ...graphicElementStyle,
               },
             },
@@ -89,30 +89,16 @@ export default defineComponent({
             data: [
               {
                 value: [148564],
-                name: 'UGC原创',
+                name: '自动抓取',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
                 value: [334271],
-                name: '国外网站',
+                name: '人工抓取',
                 itemStyle: {
                   color: '#846BCE',
-                },
-              },
-              {
-                value: [445694],
-                name: '转载文章',
-                itemStyle: {
-                  color: '#21CCFF',
-                },
-              },
-              {
-                value: [445694],
-                name: '行业报告',
-                itemStyle: {
-                  color: '#0E42D2',
                 },
               },
               {
@@ -139,30 +125,16 @@ export default defineComponent({
             data: [
               {
                 value: [148564],
-                name: 'UGC原创',
+                name: '自动抓取',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
                 value: [334271],
-                name: '国外网站',
+                name: '人工抓取',
                 itemStyle: {
                   color: '#846BCE',
-                },
-              },
-              {
-                value: [445694],
-                name: '转载文章',
-                itemStyle: {
-                  color: '#21CCFF',
-                },
-              },
-              {
-                value: [445694],
-                name: '行业报告',
-                itemStyle: {
-                  color: '#0E42D2',
                 },
               },
               {
@@ -189,30 +161,16 @@ export default defineComponent({
             data: [
               {
                 value: [148564],
-                name: 'UGC原创',
+                name: '自动抓取',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
                 value: [334271],
-                name: '国外网站',
+                name: '人工抓取',
                 itemStyle: {
                   color: '#846BCE',
-                },
-              },
-              {
-                value: [445694],
-                name: '转载文章',
-                itemStyle: {
-                  color: '#21CCFF',
-                },
-              },
-              {
-                value: [445694],
-                name: '行业报告',
-                itemStyle: {
-                  color: '#0E42D2',
                 },
               },
               {
