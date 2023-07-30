@@ -1,8 +1,5 @@
 <template>
-  <a-card
-    class="general-card"
-    :title="$t('multiDAnalysis.card.title.userActions')"
-  >
+  <a-card class="general-card" title="今日抓料统计">
     <Chart height="122px" :option="chartOption" />
   </a-card>
 </template>

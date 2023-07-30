@@ -46,7 +46,7 @@
       <a-space :size="16" direction="vertical">
         <div class="login-form-password-actions">
           <!--          &lt;!&ndash;  <a-checkbox checked="rememberPassword" @change="setRememberPassword">-->
-          <!--            {{ $t('login.form.rememberPassword') }}-->
+          <!--            记住密码 -->
           <!--          </a-checkbox> &ndash;&gt;-->
           <a-link>忘记密码</a-link>
         </div>

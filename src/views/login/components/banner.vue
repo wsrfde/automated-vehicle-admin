@@ -16,13 +16,11 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import bannerImage from '@/assets/images/login-banner.png';
 import bannerImage1 from '@/assets/images/login-banner1.png';
 
 export default defineComponent({
   setup() {
-    const { t } = useI18n();
     const carouselItem = computed(() => [
       {
         slogan: '一站式解决方案',

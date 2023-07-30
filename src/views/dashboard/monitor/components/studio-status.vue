@@ -9,7 +9,7 @@
           v-if="['mainstream', 'hotStandby', 'coldStandby'].includes(label)"
         >
           <a-typography-text style="padding-right: 8px">
-            {{ $t(`monitor.studioStatus.${label}`) }}
+            {{ label }}
           </a-typography-text>
           码率
         </span>
@@ -25,14 +25,12 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   setup() {
-    const { t } = useI18n();
     const dataStatus = computed(() => [
       {
-        label: 'mainstream',
+        label: '主流',
         value: '6 Mbps',
       },
       {
@@ -40,7 +38,7 @@ export default defineComponent({
         value: '60',
       },
       {
-        label: 'hotStandby',
+        label: '热备',
         value: '6 Mbps',
       },
       {
@@ -48,7 +46,7 @@ export default defineComponent({
         value: '60',
       },
       {
-        label: 'coldStandby',
+        label: '冷备',
         value: '6 Mbps',
       },
       {

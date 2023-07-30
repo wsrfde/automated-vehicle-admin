@@ -2,29 +2,21 @@
   <div>
     <a-row :gutter="16">
       <a-col :span="6">
-        <ChainItem
-          :title="$t('multiDAnalysis.card.title.retentionTrends')"
-          quota="retentionTrends"
-          chart-type="line"
-        />
+        <ChainItem title="分料趋势" quota="retentionTrends" chart-type="line" />
+      </a-col>
+      <a-col :span="6">
+        <ChainItem title="分料量" quota="userRetention" chart-type="bar" />
       </a-col>
       <a-col :span="6">
         <ChainItem
-          :title="$t('multiDAnalysis.card.title.userRetention')"
-          quota="userRetention"
-          chart-type="bar"
-        />
-      </a-col>
-      <a-col :span="6">
-        <ChainItem
-          :title="$t('multiDAnalysis.card.title.contentConsumptionTrends')"
+          title="剩余存量趋势"
           quota="contentConsumptionTrends"
           chart-type="line"
         />
       </a-col>
       <a-col :span="6">
         <ChainItem
-          :title="$t('multiDAnalysis.card.title.contentConsumption')"
+          title="剩余存量"
           quota="contentConsumption"
           chart-type="bar"
         />

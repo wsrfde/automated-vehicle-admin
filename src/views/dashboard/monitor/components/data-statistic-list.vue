@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, h, compile } from 'vue';
-import { useI18n } from 'vue-i18n';
 import {
   TableColumn,
   TableData,
@@ -34,7 +33,6 @@ interface PreviewRecord {
 }
 export default defineComponent({
   setup() {
-    const { t } = useI18n();
     const data: PreviewRecord[] = [
       {
         cover: 'src/assets/images/monitor-img.png',
@@ -47,7 +45,7 @@ export default defineComponent({
     const renderTag = (status: number) => {
       if (status === -1) {
         return `<a-tag  color="red" class='data-statistic-list-cover-tag'>
-            ${t('monitor.list.tag.auditFailed')}
+            ${'审核未通过'}
         </a-tag>`;
       }
       return '';

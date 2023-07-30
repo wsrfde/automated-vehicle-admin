@@ -34,7 +34,7 @@
           textAlign: 'left',
         }"
       >
-        <template #label="{ label }">{{ $t(label) }} :</template>
+        <template #label="{ label }">{{ label }} :</template>
       </a-descriptions>
     </a-space>
   </a-card>
@@ -55,19 +55,19 @@ export default defineComponent({
     };
     const renderData = [
       {
-        label: 'userSetting.label.name',
+        label: '用户名',
         value: userStore.name,
       },
       {
-        label: 'userSetting.label.accountId',
+        label: '账号ID',
         value: userStore.accountId,
       },
       {
-        label: 'userSetting.label.phone',
+        label: '手机号码',
         value: userStore.phone,
       },
       {
-        label: 'userSetting.label.registrationDate',
+        label: '注册时间',
         value: userStore.registrationDate,
       },
     ];

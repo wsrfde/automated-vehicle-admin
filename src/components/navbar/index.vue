@@ -36,12 +36,6 @@
           </a-avatar>
           <template #content>
             <a-doption>
-              <a-space @click="$router.push({ name: 'info' })">
-                <icon-user />
-                <span> 用户中心 </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
               <a-space @click="$router.push({ name: 'setting' })">
                 <icon-settings />
                 <span> 用户设置 </span>
