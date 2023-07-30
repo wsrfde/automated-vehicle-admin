@@ -3,7 +3,7 @@
     <div class="left-side"></div>
     <ul class="right-side">
       <li>
-        <a-tooltip :content="$t('settings.navbar.alerts')">
+        <a-tooltip content="消息通知">
           <div class="message-box-trigger">
             <a-badge :count="9" dot>
               <a-button
@@ -38,25 +38,19 @@
             <a-doption>
               <a-space @click="$router.push({ name: 'info' })">
                 <icon-user />
-                <span>
-                  {{ $t('messageBox.userCenter') }}
-                </span>
+                <span> 用户中心 </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="$router.push({ name: 'setting' })">
                 <icon-settings />
-                <span>
-                  {{ $t('messageBox.userSettings') }}
-                </span>
+                <span> 用户设置 </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
-                <span>
-                  {{ $t('messageBox.logout') }}
-                </span>
+                <span> 登出登录 </span>
               </a-space>
             </a-doption>
           </template>
@@ -71,8 +65,6 @@ import { defineComponent, computed, ref } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
-import { LOCALE_OPTIONS } from '@/locale';
-import useLocale from '@/hooks/locale';
 import useUser from '@/hooks/user';
 import MessageBox from '../message-box/index.vue';
 
@@ -84,8 +76,6 @@ export default defineComponent({
     const appStore = useAppStore();
     const userStore = useUserStore();
     const { logout } = useUser();
-    const { changeLocale } = useLocale();
-    const locales = [...LOCALE_OPTIONS];
     const avatar = computed(() => {
       return userStore.avatar;
     });
@@ -130,17 +120,10 @@ export default defineComponent({
       const res = await userStore.switchRoles();
       Message.success(res as string);
     };
-    const switchGit = () => {
-      window.open('https://github.com/chuzhixin');
-    };
-    const open = (val: string) => {
-      window.open(`https://vue-admin-beautiful.com/${val}`);
-    };
+
     return {
-      locales,
       theme,
       avatar,
-      changeLocale,
       toggleTheme,
       setPopoverVisible,
       refBtn,
@@ -148,8 +131,6 @@ export default defineComponent({
       handleLogout,
       setDropDownVisible,
       switchRoles,
-      switchGit,
-      open,
     };
   },
 });

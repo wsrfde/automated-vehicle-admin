@@ -1,5 +1,5 @@
 <template>
-  <a-card class="general-card" :title="$t('monitor.title.studioPreview')">
+  <a-card class="general-card" title="监控预览">
     <template #extra>
       <icon-more />
     </template>
@@ -49,9 +49,10 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    width: 66vw;
   }
   &-preview {
-    width: 21.7vw;
+    width: 21.6vw;
     margin: 0.2vw;
   }
 

@@ -25,13 +25,13 @@ export default defineComponent({
     const { t } = useI18n();
     const carouselItem = computed(() => [
       {
-        slogan: t('login.banner.slogan1'),
-        subSlogan: t('login.banner.subSlogan1'),
+        slogan: '一站式解决方案',
+        subSlogan: '丰富的页面，覆盖大多数典型业务场景',
         image: bannerImage,
       },
       {
-        slogan: t('login.banner.slogan2'),
-        subSlogan: t('login.banner.subSlogan2'),
+        slogan: '内置了自动化解决方案',
+        subSlogan: '车辆管理，行车状态，车机管理应有尽有',
         image: bannerImage1,
       },
     ]);

@@ -3,7 +3,7 @@ export default {
   name: 'profile',
   component: () => import('@/views/profile/index.vue'),
   meta: {
-    locale: 'menu.profile',
+    title: '详情页',
     requiresAuth: true,
     icon: 'icon-file',
   },
@@ -13,7 +13,7 @@ export default {
       name: 'basic',
       component: () => import('@/views/profile/basic/index.vue'),
       meta: {
-        locale: 'menu.profile.basic',
+        title: '基础详情页',
         requiresAuth: true,
         roles: ['admin'],
       },

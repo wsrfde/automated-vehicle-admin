@@ -10,7 +10,7 @@ export default function useLocale() {
   const changeLocale = (value: string) => {
     i18.locale.value = value;
     localStorage.setItem('arco-locale', value);
-    Message.success(i18.t('navbar.action.locale'));
+    Message.success('切换为中文');
   };
   return {
     currentLocale,

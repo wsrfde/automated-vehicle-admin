@@ -1,27 +1,21 @@
 <template>
   <a-card :bordered="false" :body-style="{ padding: '20px' }">
     <a-tabs default-active-tab="liveMethod">
-      <a-tab-pane
-        key="liveMethod"
-        :title="$t('monitor.tab.title.liveMethod')"
-      />
-      <a-tab-pane
-        key="onlinePopulation"
-        :title="$t('monitor.tab.title.onlinePopulation')"
-      />
+      <a-tab-pane key="liveMethod" title="监控角度" />
+      <a-tab-pane key="onlinePopulation" title="查看方式" />
     </a-tabs>
     <div class="data-statistic-content">
       <a-radio-group :default-value="1" type="button">
-        <a-radio :value="1">{{ $t('monitor.liveMethod.normal') }}</a-radio>
-        <a-radio :value="2">{{ $t('monitor.liveMethod.flowControl') }}</a-radio>
-        <a-radio :value="3">{{ $t('monitor.liveMethod.video') }}</a-radio>
-        <a-radio :value="4">{{ $t('monitor.liveMethod.web') }}</a-radio>
+        <a-radio :value="1">前方监控</a-radio>
+        <a-radio :value="2">车机监控</a-radio>
+        <a-radio :value="3">车尾监控</a-radio>
+        <a-radio :value="4">路面监控</a-radio>
       </a-radio-group>
 
       <div class="data-statistic-list-wrapper">
         <div class="data-statistic-list-header">
-          <a-button type="text">{{ $t('monitor.editCarousel') }}</a-button>
-          <a-button disabled>{{ $t('monitor.startCarousel') }}</a-button>
+          <a-button type="text">编辑轮播</a-button>
+          <a-button disabled>轮播监控</a-button>
         </div>
         <div class="data-statistic-list-content">
           <DataStatisticList />

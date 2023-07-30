@@ -58,12 +58,14 @@ router.beforeEach(async (to, from, next) => {
     NProgress.done();
   }
   if (isLogin()) {
+    // 判读用户是否登录
     if (userStore.role) {
-      crossroads();
+      // 有角色信息表示当前用户已经登录且获取过用户信息
+      await crossroads();
     } else {
       try {
         await userStore.info();
-        crossroads();
+        await crossroads();
       } catch (error) {
         next({
           name: 'login',
@@ -76,6 +78,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
+    // 如果未登录则重定向到登录页面
     if (to.name === 'login') {
       next();
       NProgress.done();

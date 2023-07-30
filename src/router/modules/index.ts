@@ -13,11 +13,6 @@ export default [
   Dashboard,
   /** simple */
   Visualization,
-  List,
-  Form,
-  Profile,
-  Result,
-  Exception,
   User,
   /** simple end */
 ];

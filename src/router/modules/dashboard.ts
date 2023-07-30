@@ -3,7 +3,7 @@ export default {
   name: 'dashboard',
   component: () => import('@/views/dashboard/index.vue'),
   meta: {
-    locale: 'menu.dashboard',
+    title: '仪表盘',
     requiresAuth: true,
     icon: 'icon-dashboard',
   },
@@ -14,11 +14,22 @@ export default {
       name: 'monitor',
       component: () => import('@/views/dashboard/monitor/index.vue'),
       meta: {
-        locale: 'menu.dashboard.monitor',
+        title: '实时监控',
         requiresAuth: true,
         roles: ['admin'],
       },
     },
     /** simple end */
+    {
+      path: 'overhead-crane-state',
+      name: 'overheadCraneState',
+      component: () =>
+        import('@/views/dashboard/overhead-crane-state/index.vue'),
+      meta: {
+        title: '天车状态',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };

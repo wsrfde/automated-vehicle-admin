@@ -3,7 +3,7 @@ export default {
   name: 'form',
   component: () => import('@/views/form/index.vue'),
   meta: {
-    locale: 'menu.form',
+    title: '表单页',
     icon: 'icon-settings',
     requiresAuth: true,
   },
@@ -13,7 +13,7 @@ export default {
       name: 'step',
       component: () => import('@/views/form/step/index.vue'),
       meta: {
-        locale: 'menu.form.step',
+        title: '分步表单',
         requiresAuth: true,
         roles: ['admin'],
       },
@@ -23,7 +23,7 @@ export default {
       name: 'group',
       component: () => import('@/views/form/group/index.vue'),
       meta: {
-        locale: 'menu.form.group',
+        title: '分组表单',
         requiresAuth: true,
         roles: ['admin'],
       },

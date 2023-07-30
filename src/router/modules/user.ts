@@ -3,7 +3,7 @@ export default {
   name: 'user',
   component: () => import('@/views/user/index.vue'),
   meta: {
-    locale: 'menu.user',
+    title: '个人中心',
     icon: 'icon-user',
     requiresAuth: true,
   },
@@ -13,7 +13,7 @@ export default {
       name: 'setting',
       component: () => import('@/views/user/setting/index.vue'),
       meta: {
-        locale: 'menu.user.setting',
+        title: '用户设置',
         requiresAuth: true,
         roles: ['*'],
       },

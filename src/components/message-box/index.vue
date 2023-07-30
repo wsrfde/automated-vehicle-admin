@@ -6,7 +6,7 @@
           <span> {{ item.title }}{{ formatUnreadLength(item.key) }} </span>
         </template>
         <a-result v-if="!renderList.length" status="404">
-          <template #subtitle> {{ $t('messageBox.noContent') }} </template>
+          <template #subtitle> 暂无内容 </template>
         </a-result>
         <List
           :render-list="renderList"
@@ -15,9 +15,7 @@
         />
       </a-tab-pane>
       <template #extra>
-        <a-button type="text" @click="emptyList">
-          {{ $t('messageBox.tab.button') }}
-        </a-button>
+        <a-button type="text" @click="emptyList"> 清空 </a-button>
       </template>
     </a-tabs>
   </a-spin>
@@ -25,7 +23,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, toRefs, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import {
   queryMessageList,
   setMessageStatus,
@@ -47,7 +44,6 @@ export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(true);
     const messageType = ref('notice');
-    const { t } = useI18n();
     const messageData = reactive<{
       renderList: MessageRecord[];
       messageList: MessageRecord[];
@@ -59,11 +55,11 @@ export default defineComponent({
     const tabList: TabItem[] = [
       {
         key: 'notice',
-        title: t('messageBox.tab.title.notice'),
+        title: '通知',
       },
       {
         key: 'todo',
-        title: t('messageBox.tab.title.todo'),
+        title: '待办',
       },
     ];
     async function fetchSourceData() {
