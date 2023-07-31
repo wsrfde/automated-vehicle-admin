@@ -17,7 +17,6 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import bannerImage from '@/assets/images/login-banner.png';
-import bannerImage1 from '@/assets/images/login-banner1.png';
 
 export default defineComponent({
   setup() {
@@ -28,9 +27,9 @@ export default defineComponent({
         image: bannerImage,
       },
       {
-        slogan: '内置了自动化解决方案',
-        subSlogan: '车辆管理，行车状态，车机管理应有尽有',
-        image: bannerImage1,
+        slogan: '自动化解决方案',
+        subSlogan: '天车模型，状态管理，数据统计等',
+        image: bannerImage,
       },
     ]);
     return {

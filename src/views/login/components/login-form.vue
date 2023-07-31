@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
     <div class="login-form-title">{{ title }}</div>
-    <div class="login-form-sub-title">你的一站式自动化平台</div>
+    <div class="login-form-sub-title">一站式自动化管理平台</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
