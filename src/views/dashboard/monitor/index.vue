@@ -52,7 +52,7 @@ export default defineComponent({
 
   &-content {
     flex: 1;
-    padding: 0 16px;
+    padding-right: 16px;
   }
 
   &-right-side {

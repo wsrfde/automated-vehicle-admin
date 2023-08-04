@@ -1,9 +1,11 @@
 import 'vue-router';
 
+export type roles = 'superAdmin' | 'admin' | 'user' | '*';
+
 declare module 'vue-router' {
   interface RouteMeta {
     // options
-    roles?: string[];
+    roles?: roles[];
     // every route must declare
     requiresAuth: boolean; // need login
     icon?: string;

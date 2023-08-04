@@ -44,7 +44,7 @@ export default defineComponent({
 
   .layout-content {
     flex: 1;
-    padding: 0 16px;
+    padding-right: 16px;
   }
 
   .layout-right-side {
@@ -53,6 +53,5 @@ export default defineComponent({
 }
 .layout-bottom {
   margin-top: 20px;
-  padding-left: 16px;
 }
 </style>

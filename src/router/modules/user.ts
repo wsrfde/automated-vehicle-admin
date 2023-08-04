@@ -18,5 +18,15 @@ export default {
         roles: ['*'],
       },
     },
+    {
+      path: 'manage',
+      name: 'manage',
+      component: () => import('@/views/user/manage/index.vue'),
+      meta: {
+        title: '用户管理',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };

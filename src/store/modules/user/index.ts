@@ -43,7 +43,7 @@ const useUserStore = defineStore('user', {
     },
     // Set user's information
     setInfo(partial: Partial<UserState>) {
-      this.$patch(partial);
+      this.$patch(partial); // 在这里会设置role
     },
 
     // Reset user's information

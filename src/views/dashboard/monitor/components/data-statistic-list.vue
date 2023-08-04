@@ -35,7 +35,7 @@ export default defineComponent({
   setup() {
     const data: PreviewRecord[] = [
       {
-        cover: 'src/assets/images/monitor-img.png',
+        cover: '/src/assets/images/monitor-img.png',
         name: '前方监控画面',
         duration: '00:05:19',
         id: '54e23ade',
@@ -78,7 +78,7 @@ export default defineComponent({
             rowIndex: number;
           }) {
             const tmp = `<div class='data-statistic-list-cover-wrapper'>
-              <img src=${record.cover} />
+              <img src=${record.cover}  alt=""/>
               ${renderTag(record.status)}
             </div>`;
             return h(compile(tmp));

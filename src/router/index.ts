@@ -1,8 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  LocationQueryRaw,
-} from 'vue-router';
+import { createRouter, createWebHistory, LocationQueryRaw } from 'vue-router';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css';
 
@@ -16,7 +12,7 @@ import appRoutes from './modules';
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const router = createRouter({
-  history: createWebHashHistory(''),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
