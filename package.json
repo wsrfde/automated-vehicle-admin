@@ -21,6 +21,7 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",
     "echarts": "^5.4.2",
+    "jsencrypt": "^3.3.2",
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",

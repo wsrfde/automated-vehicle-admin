@@ -41,6 +41,7 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   async function crossroads() {
     const Permission = usePermission();
+    // 判断用户是否有权限访问该路由
     if (Permission.accessRouter(to)) await next();
     else {
       const destination = Permission.findFirstPermissionRoute(
@@ -63,6 +64,9 @@ router.beforeEach(async (to, from, next) => {
         await userStore.info();
         await crossroads();
       } catch (error) {
+        // 清除所有token，防止进入判断isLogin()的无限循环。
+        // 当用户登录后，刷新页面，此时用户信息已经存在，但是token过期，此时需要清除用户信息
+        localStorage.clear();
         next({
           name: 'login',
           query: {

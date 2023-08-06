@@ -25,6 +25,8 @@ export default defineConfig({
     extensions: ['.ts', '.js'],
   },
   define: {
-    'process.env': {},
+    'process.env': {
+      BASE_API: 'http://47.105.44.218/',
+    },
   },
 });

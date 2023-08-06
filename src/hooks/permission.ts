@@ -12,6 +12,7 @@ export default function usePermission() {
         route.meta?.roles?.includes(userStore.role)
       );
     },
+    // Find the first route that can be accessed in the routing table
     findFirstPermissionRoute(_routers: any, role = 'admin') {
       const cloneRouters = [..._routers];
       while (cloneRouters.length) {

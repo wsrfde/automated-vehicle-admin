@@ -4,8 +4,8 @@
     <div class="login-form-sub-title">一站式自动化管理平台</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
-      ref="loginForm"
-      :model="userInfo"
+      ref="loginFormRef"
+      :model="loginForm"
       class="login-form"
       layout="vertical"
       @submit="handleSubmit"
@@ -17,8 +17,8 @@
         hide-label
       >
         <a-input
-          v-model="userInfo.username"
-          placeholder="用户名：admin"
+          v-model="loginForm.username"
+          placeholder="请输入用户名"
           @keyup.enter="handleSubmit"
         >
           <template #prefix>
@@ -33,23 +33,42 @@
         hide-label
       >
         <a-input-password
-          v-model="userInfo.password"
-          placeholder="密码：admin"
+          v-model="loginForm.password"
+          placeholder="请输入密码"
           allow-clear
-          @keyup.enter="handleSubmit"
         >
           <template #prefix>
             <icon-lock />
           </template>
         </a-input-password>
       </a-form-item>
+      <a-form-item
+        field="code"
+        :rules="[{ required: true, message: '验证码不能为空' }]"
+        :validate-trigger="['change', 'blur']"
+        hide-label
+      >
+        <a-space>
+          <a-input
+            v-model="loginForm.code"
+            auto-complete="off"
+            placeholder="验证码"
+            style="width: 63%"
+            @keyup.enter="handleSubmit"
+          >
+            <template #prefix>
+              <icon-safe />
+            </template>
+          </a-input>
+          <div class="login-code">
+            <img :src="codeUrl" alt="验证码" @click="getCode" />
+          </div>
+        </a-space>
+      </a-form-item>
+      <a-form-item field="rememberMe" class="custom-item">
+        <a-checkbox v-model="loginForm.rememberMe"> 记住密码 </a-checkbox>
+      </a-form-item>
       <a-space :size="16" direction="vertical">
-        <div class="login-form-password-actions">
-          <!--          &lt;!&ndash;  <a-checkbox checked="rememberPassword" @change="setRememberPassword">-->
-          <!--            记住密码 -->
-          <!--          </a-checkbox> &ndash;&gt;-->
-          <a-link>忘记密码</a-link>
-        </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
           登录
         </a-button>
@@ -62,13 +81,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Message } from '@arco-design/web-vue';
 import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
 import { useUserStore } from '@/store';
 import useLoading from '@/hooks/loading';
-import { LoginData } from '@/api/user';
+import { LoginData, getCodeImg } from '@/api/user';
+import encrypt from '@/utils/rsaEncrypt';
 
 export default defineComponent({
   props: {
@@ -82,10 +102,28 @@ export default defineComponent({
     const errorMessage = ref('');
     const { loading, setLoading } = useLoading();
     const userStore = useUserStore();
-    const userInfo = reactive({
-      username: 'admin',
-      password: 'admin',
+    const codeUrl = ref('');
+    const localPassword = ref('');
+
+    const loginForm = reactive({
+      username: '',
+      password: '',
+      code: '',
+      uuid: '',
+      rememberMe: false,
     });
+
+    const getLocalData = () => {
+      const localData = localStorage.getItem('loginForm');
+      if (localData) {
+        const { username, password, rememberMe } = JSON.parse(localData);
+        loginForm.username = username;
+        loginForm.password = rememberMe ? password : '';
+        localPassword.value = password || ''; // 如果为undefined，就赋值为空
+        loginForm.rememberMe = rememberMe;
+      }
+    };
+
     const handleSubmit = async ({
       errors,
       values,
@@ -93,10 +131,21 @@ export default defineComponent({
       errors: Record<string, ValidatedError> | undefined;
       values: LoginData;
     }) => {
+      const { password } = { ...values };
+      const user = {
+        ...values,
+        password:
+          localPassword.value === password ? password : encrypt(password),
+      };
       if (!errors) {
         setLoading(true);
         try {
-          await userStore.login(values);
+          if (loginForm.rememberMe) {
+            localStorage.setItem('loginForm', JSON.stringify(user));
+          } else {
+            localStorage.removeItem('loginForm');
+          }
+          await userStore.login(user);
           const { redirect, ...othersQuery } = router.currentRoute.value.query;
           console.log(redirect, othersQuery);
           await router.push({
@@ -113,21 +162,28 @@ export default defineComponent({
         }
       }
     };
-    // 演示地址自动登录
-    // onMounted(() => {
-    //   setTimeout(() => {
-    //     handleSubmit({ errors: undefined, values: userInfo });
-    //   }, 3000);
-    // });
-    const setRememberPassword = () => {
-      //
+
+    const getCode = () => {
+      getCodeImg().then((res) => {
+        codeUrl.value = res.img;
+        loginForm.uuid = res.uuid;
+      });
     };
+
+    onMounted(() => {
+      // 获取验证码
+      getCode();
+      // 获取本地数据
+      getLocalData();
+    });
+
     return {
       loading,
-      userInfo,
+      loginForm,
       errorMessage,
+      codeUrl,
       handleSubmit,
-      setRememberPassword,
+      getCode,
     };
   },
 });
@@ -135,6 +191,25 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .login-form {
+  .custom-item {
+    //margin: 0;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    :deep(.arco-form-item-label-col) {
+      margin-bottom: 0;
+    }
+  }
+  .login-code {
+    width: 33%;
+    display: inline-block;
+    height: 38px;
+    float: right;
+    img {
+      cursor: pointer;
+      vertical-align: middle;
+    }
+  }
+
   &-wrapper {
     width: 320px;
   }
