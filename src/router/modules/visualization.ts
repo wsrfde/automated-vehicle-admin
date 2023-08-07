@@ -16,7 +16,7 @@ export default {
       meta: {
         title: '多维数据分析',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['*'],
       },
     },
   ],

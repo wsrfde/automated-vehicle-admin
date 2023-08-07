@@ -71,7 +71,7 @@ export default defineComponent({
     const userStore = useUserStore();
     const { logout } = useUser();
     const avatar = computed(() => {
-      return userStore.avatar;
+      return `${process.env.BASE_API}/avatar/${userStore.avatarName}`;
     });
     const theme = computed(() => {
       return appStore.theme;

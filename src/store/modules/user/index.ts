@@ -10,21 +10,24 @@ import { UserState } from './types';
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    name: undefined,
-    avatar: undefined,
-    job: undefined,
-    organization: undefined,
-    location: undefined,
+    avatarName: undefined,
+    avatarPath: undefined,
+    createTime: undefined,
+    dept: undefined,
+    deptId: undefined,
     email: undefined,
-    introduction: undefined,
-    personalWebsite: undefined,
-    jobName: undefined,
-    organizationName: undefined,
-    locationName: undefined,
+    enabled: undefined,
+    gender: undefined,
+    id: undefined,
+    isAdmin: undefined,
+    jobs: undefined,
+    nickName: undefined,
+    password: undefined,
     phone: undefined,
-    registrationDate: undefined,
-    accountId: undefined,
-    certification: undefined,
+    pwdResetTime: undefined,
+    updateBy: undefined,
+    updateTime: undefined,
+    username: undefined,
     role: '',
   }),
 
@@ -55,7 +58,17 @@ const useUserStore = defineStore('user', {
     // 在路由守卫中被调用
     async info() {
       const res = await getUserInfo();
-      this.setInfo(res.data);
+      if (res.roles.length < 0) {
+        throw Error('用户没有权限');
+      }
+      delete res.user.roles;
+
+      const user = {
+        ...res.user,
+        role: res.roles[0],
+      };
+      console.log(user);
+      this.setInfo(user);
     },
 
     // Login
@@ -64,6 +77,7 @@ const useUserStore = defineStore('user', {
         const res = await userLogin(loginForm);
         console.log(res);
         setToken(res.token);
+        this.setInfo(res.user);
       } catch (err) {
         clearToken();
         throw err;

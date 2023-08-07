@@ -61,6 +61,7 @@ router.beforeEach(async (to, from, next) => {
       await crossroads();
     } else {
       try {
+        console.log('----');
         await userStore.info();
         await crossroads();
       } catch (error) {

@@ -16,7 +16,7 @@ export default {
       meta: {
         title: '实时监控',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['*'],
       },
     },
     /** simple end */
@@ -28,7 +28,7 @@ export default {
       meta: {
         title: '天车状态',
         requiresAuth: true,
-        roles: ['admin'],
+        roles: ['*'],
       },
     },
   ],

@@ -2,7 +2,7 @@
   <div class="container">
     <Breadcrumb :items="['个人中心', '用户管理']" />
     <a-layout class="layout-box">
-      <a-layout-sider class="sider-box" :width="200">
+      <a-layout-sider class="sider-box" :width="250">
         <RoleManage />
       </a-layout-sider>
       <a-layout-content class="content-box">

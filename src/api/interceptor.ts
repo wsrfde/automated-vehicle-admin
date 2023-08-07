@@ -11,7 +11,6 @@ export interface HttpResponse<T = unknown> {
   data: T;
 }
 // set base url
-// TODO：这里需要判断，如果是开发环境，就使用本地的API，如果是生产环境，就使用线上的地址
 axios.defaults.baseURL = process.env.BASE_API;
 // add request interceptors
 axios.interceptors.request.use(

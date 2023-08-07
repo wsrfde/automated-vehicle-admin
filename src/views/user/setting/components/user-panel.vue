@@ -51,24 +51,32 @@ export default defineComponent({
     const file = {
       uid: '-2',
       name: 'avatar.png',
-      url: userStore.avatar,
+      url: `${process.env.BASE_API}/avatar/${userStore.avatarName}`,
     };
     const renderData = [
       {
-        label: '用户名',
-        value: userStore.name,
+        label: '账号ID',
+        value: userStore.id,
       },
       {
-        label: '账号ID',
-        value: userStore.accountId,
+        label: '用户账号',
+        value: userStore.username,
+      },
+      {
+        label: '用户名',
+        value: userStore.nickName,
       },
       {
         label: '手机号码',
         value: userStore.phone,
       },
       {
+        label: '用户邮箱',
+        value: userStore.email,
+      },
+      {
         label: '注册时间',
-        value: userStore.registrationDate,
+        value: userStore.createTime,
       },
     ];
     const fileList = ref<FileItem[]>([file]);

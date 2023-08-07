@@ -25,7 +25,7 @@ export default {
       meta: {
         title: '用户管理',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['superAdmin'],
       },
     },
   ],
