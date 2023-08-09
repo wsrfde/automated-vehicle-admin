@@ -2,11 +2,14 @@
   <a-card :bordered="false">
     <a-space :size="54">
       <a-upload
-        action="/"
+        :action="baseUrl + '/api/users/updateAvatar'"
         list-type="picture-card"
+        :headers="headers"
         :file-list="fileList"
+        name="avatar"
         :show-upload-button="true"
         :show-file-list="false"
+        :on-before-upload="uploadBefore"
         @change="uploadChange"
       >
         <template #upload-button>
@@ -14,7 +17,7 @@
             <template #trigger-icon>
               <icon-camera />
             </template>
-            <img v-if="fileList.length" :src="fileList[0].url" />
+            <img v-if="userStore.avatarName" :src="fileList[0].url" />
           </a-avatar>
         </template>
       </a-upload>
@@ -44,10 +47,16 @@
 import { defineComponent, ref } from 'vue';
 import { FileItem } from '@arco-design/web-vue/es/upload/interfaces';
 import { useUserStore } from '@/store';
+import { getToken } from '@/utils/auth';
+import { Message } from '@arco-design/web-vue';
 
 export default defineComponent({
   setup() {
     const userStore = useUserStore();
+    const baseUrl = process.env.BASE_API;
+    const headers = {
+      Authorization: getToken(),
+    };
     const file = {
       uid: '-2',
       name: 'avatar.png',
@@ -55,25 +64,21 @@ export default defineComponent({
     };
     const renderData = [
       {
-        label: '账号ID',
-        value: userStore.id,
-      },
-      {
-        label: '用户账号',
+        label: '登入账号',
         value: userStore.username,
       },
       {
-        label: '用户名',
-        value: userStore.nickName,
+        label: '账号ID',
+        value: userStore.id,
       },
-      {
-        label: '手机号码',
-        value: userStore.phone,
-      },
-      {
-        label: '用户邮箱',
-        value: userStore.email,
-      },
+      // {
+      //   label: '手机号码',
+      //   value: userStore.phone,
+      // },
+      // {
+      //   label: '用户邮箱',
+      //   value: userStore.email,
+      // },
       {
         label: '注册时间',
         value: userStore.createTime,
@@ -83,10 +88,21 @@ export default defineComponent({
     const uploadChange = (fileItemList: FileItem[], fileItem: FileItem) => {
       fileList.value = [fileItem];
     };
+    const uploadBefore = (currentFile) => {
+      const isLt2M = currentFile.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        Message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isLt2M;
+    };
     return {
+      userStore,
+      headers,
       fileList,
       renderData,
+      baseUrl,
       uploadChange,
+      uploadBefore,
     };
   },
 });
@@ -97,11 +113,13 @@ export default defineComponent({
   padding: 14px 0 4px 4px;
   border-radius: 4px;
 }
+
 :deep(.arco-avatar-trigger-icon-button) {
   width: 32px;
   height: 32px;
   line-height: 32px;
   background-color: #e8f3ff;
+
   .arco-icon-camera {
     margin-top: 8px;
     color: rgb(var(--arcoblue-6));

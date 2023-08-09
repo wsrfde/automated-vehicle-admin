@@ -67,7 +67,7 @@ router.beforeEach(async (to, from, next) => {
       } catch (error) {
         // 清除所有token，防止进入判断isLogin()的无限循环。
         // 当用户登录后，刷新页面，此时用户信息已经存在，但是token过期，此时需要清除用户信息
-        localStorage.clear();
+        // localStorage.clear();
         next({
           name: 'login',
           query: {

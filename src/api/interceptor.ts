@@ -93,7 +93,11 @@ axios.interceptors.response.use(
 
       switch (code) {
         case 400:
-          Notification.error('请求错误');
+          Notification.error({
+            title: '请求错误',
+            content: error.response.data.message,
+            duration: 3000,
+          });
           break;
         case 401:
           Notification.error('未授权，请登录');
@@ -107,7 +111,7 @@ axios.interceptors.response.use(
         default:
           Notification.error({
             title: error.response.data.message || '网络请求异常',
-            duration: 5000,
+            duration: 3000,
           });
       }
     }

@@ -9,10 +9,7 @@
     <a-row class="wrapper">
       <a-col :span="24">
         <a-tabs default-active-key="1" type="rounded">
-          <a-tab-pane key="1" title="基础信息">
-            <BasicInformation />
-          </a-tab-pane>
-          <a-tab-pane key="2" title="安全设置">
+          <a-tab-pane key="1" title="安全设置">
             <SecuritySettings />
           </a-tab-pane>
         </a-tabs>
@@ -24,13 +21,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import UserPanel from './components/user-panel.vue';
-import BasicInformation from './components/basic-information.vue';
 import SecuritySettings from './components/security-settings.vue';
 
 export default defineComponent({
   components: {
     UserPanel,
-    BasicInformation,
     SecuritySettings,
   },
   setup() {

@@ -65,7 +65,7 @@ const useUserStore = defineStore('user', {
 
       const user = {
         ...res.user,
-        role: res.roles[0],
+        role: res.user.nickName,
       };
       console.log(user);
       this.setInfo(user);

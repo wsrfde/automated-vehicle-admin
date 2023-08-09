@@ -15,7 +15,7 @@ export default {
       meta: {
         title: '操作日志',
         requiresAuth: true,
-        roles: ['superAdmin', 'admin'],
+        roles: ['super_admin', 'admin'],
       },
     },
   ],

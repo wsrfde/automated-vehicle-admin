@@ -7,58 +7,84 @@
       添加
     </a-button>
 
-    <a-tree v-model:checked-keys="checkedKeys" :data="treeData" show-line>
+    <a-tree :data="treeData" show-line class="custom-tree">
       <template #switcher-icon> - </template>
       <template #extra="nodeData">
-        <icon-delete
-          style="
-            position: absolute;
-            right: 8px;
-            font-size: 12px;
-            top: 10px;
-            color: #3370ff;
-          "
-          @click="() => deleteData(nodeData)"
-        />
+        <icon-edit class="icon-style" @click="editData(nodeData)" />
+        <a-popconfirm content="您确定要删除吗?" @ok="deleteData(nodeData)">
+          <icon-delete class="icon-style" />
+        </a-popconfirm>
       </template>
     </a-tree>
   </a-card>
+  <change-roles-modal
+    ref="changeRolesModalRef"
+    :edit-form="editForm"
+    @refresh="getRolesData"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, onMounted, ref } from 'vue';
+import { getRoles, deleteRole } from '@/api/user';
+import { Notification } from '@arco-design/web-vue';
+import ChangeRolesModal from './changeRolesModal.vue';
 
 export default defineComponent({
+  components: { ChangeRolesModal },
   setup() {
-    const checkedKeys = ref([]);
+    const page = ref(0);
+    const pageSize = ref(99); // 角色不会有很多的
+    const treeData = ref([]);
+    const editForm = ref({});
+    const changeRolesModalRef = ref<InstanceType<typeof ChangeRolesModal>>();
 
-    const treeData = [
-      {
-        title: '后台管理员',
-        key: 'superAdmin',
-      },
-      {
-        title: '前台管理员',
-        key: 'admin',
-      },
-      {
-        title: '操作员',
-        key: 'user',
-      },
-    ];
-
-    function deleteData(nodeData) {
-      console.log(nodeData);
+    function editData(nodeData) {
+      // editForm.value = nodeData;
+      changeRolesModalRef.value?.changeTitle('修改角色');
+      changeRolesModalRef.value?.show();
+      changeRolesModalRef.value?.fillForm(nodeData);
     }
     const addData = () => {
-      console.log('-----');
+      changeRolesModalRef.value?.changeTitle('添加角色');
+      changeRolesModalRef.value?.show();
     };
 
+    function getRolesData() {
+      const query = {
+        page: page.value,
+        size: pageSize.value,
+      };
+      getRoles(query).then((res) => {
+        treeData.value = res.content.map((item) => ({
+          title: item.name,
+          key: item.description,
+          id: item.id,
+        }));
+      });
+    }
+
+    function deleteData(nodeData) {
+      deleteRole([nodeData.id]).then(() => {
+        Notification.success({
+          title: '删除成功',
+        });
+        getRolesData();
+      });
+    }
+
+    onMounted(() => {
+      getRolesData();
+    });
+
     return {
-      checkedKeys,
       treeData,
+      changeRolesModalRef,
+      editForm,
       deleteData,
+      editData,
       addData,
+      getRolesData,
     };
   },
 });
@@ -67,5 +93,19 @@ export default defineComponent({
 <style scoped lang="less">
 .add-button {
   margin-bottom: 10px;
+}
+.custom-tree {
+  .icon-style {
+    position: absolute;
+    font-size: 14px;
+    top: 8px;
+    color: #3370ff;
+    &:nth-of-type(1) {
+      right: 30px;
+    }
+    &:nth-of-type(2) {
+      right: 8px;
+    }
+  }
 }
 </style>

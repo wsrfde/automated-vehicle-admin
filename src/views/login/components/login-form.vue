@@ -156,7 +156,8 @@ export default defineComponent({
           });
           Message.success('欢迎使用');
         } catch (err) {
-          errorMessage.value = (err as Error).message;
+          console.log(err.response.data.message);
+          errorMessage.value = err.response.data.message;
         } finally {
           setLoading(false);
         }
