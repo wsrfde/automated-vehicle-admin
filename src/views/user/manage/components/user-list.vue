@@ -108,11 +108,18 @@
             content="您确定要删除吗?"
             @ok="deleteUserFun(record, rowIndex)"
           >
-            <a-button type="text" status="danger"> 删除 </a-button>
+            <a-button
+              type="text"
+              status="danger"
+              :disabled="isSameName(record.username)"
+            >
+              删除
+            </a-button>
           </a-popconfirm>
           <a-button
             type="text"
             status="warning"
+            :disabled="isSameName(record.username)"
             @click="resetPasswordFun(record, rowIndex)"
           >
             重置密码
@@ -129,6 +136,7 @@ import useLoading from '@/hooks/loading';
 import { Pagination } from '@/types/global';
 import { addUser, deleteUser, editUser, getUsers, resetPwd } from '@/api/user';
 import { Notification } from '@arco-design/web-vue';
+import useUserStore from '../../../../store/modules/user';
 
 const generateFormModel = () => {
   return {
@@ -141,6 +149,7 @@ export default defineComponent({
     const formModel = ref(generateFormModel());
     const { loading, setLoading } = useLoading(true); // 这里应该是true
     const editIndex = ref(-1);
+    const userStore = useUserStore();
     const rolesOptions = computed(() => [
       {
         label: '后台管理员',
@@ -184,7 +193,7 @@ export default defineComponent({
     const renderData = ref([]);
     const basePagination: Pagination = {
       current: 1,
-      pageSize: 20,
+      pageSize: 10,
     };
     const pagination = reactive({
       ...basePagination,
@@ -197,6 +206,9 @@ export default defineComponent({
     const findLabel = (value: string) => {
       const findItem = rolesOptions.value.find((item) => item.value === value);
       return findItem?.label || value;
+    };
+    const isSameName = (name) => {
+      return userStore.userInfo.username === name;
     };
 
     const changeEditIndex = (n) => {
@@ -218,7 +230,6 @@ export default defineComponent({
       };
       setLoading(true);
       getUsers(query).then((res) => {
-        console.log(res);
         setLoading(false);
         renderData.value = res.content;
         pagination.current = params.page;
@@ -233,13 +244,12 @@ export default defineComponent({
       }
       const query = {
         ...record,
-        dept: { id: 1 },
+        dept: { id: 7 },
         enabled: true,
         gender: '男',
-        jobs: [{ id: 1 }],
+        jobs: [{ id: 11 }],
         roles: [{ id: 1 }],
       };
-      console.log(record);
       // 没有id为添加，有id为修改
       (!record.id ? addUser(query) : editUser(query)).then(() => {
         editIndex.value = -1; // 清空编辑状态
@@ -278,7 +288,6 @@ export default defineComponent({
 
     const onPageChange = (current: number) => {
       const query = { ...basePagination, current };
-      console.log(query);
       getUserList(query);
     };
 
@@ -295,6 +304,7 @@ export default defineComponent({
       rolesOptions,
       formModel,
       findLabel,
+      isSameName,
       changeEditIndex,
       saveEdit,
       onPageChange,

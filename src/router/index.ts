@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css';
 import usePermission from '@/hooks/permission';
 import { useUserStore } from '@/store';
 import PageLayout from '@/layout/page-layout.vue';
-import { isLogin } from '@/utils/auth';
+import { clearToken, isLogin } from '@/utils/auth';
 import Login from './modules/login';
 import appRoutes from './modules';
 
@@ -61,13 +61,11 @@ router.beforeEach(async (to, from, next) => {
       await crossroads();
     } else {
       try {
-        console.log('----');
         await userStore.info();
         await crossroads();
       } catch (error) {
-        // 清除所有token，防止进入判断isLogin()的无限循环。
-        // 当用户登录后，刷新页面，此时用户信息已经存在，但是token过期，此时需要清除用户信息
-        // localStorage.clear();
+        // 清除token，防止进入判断isLogin()的无限循环。
+        clearToken();
         next({
           name: 'login',
           query: {
