@@ -31,7 +31,7 @@ export function updatePass(data) {
   return axios.post('/api/users/updatePass', data);
 }
 
-export function editUser(data) {
+export function editUserInfo(data) {
   return axios.put('/api/users/center', data);
 }
 
@@ -53,4 +53,24 @@ export function deleteRole(ids) {
 
 export function editRole(data) {
   return axios.put('/api/roles', data);
+}
+
+export function getUsers(params) {
+  return axios.get('/api/users', { params });
+}
+
+export function addUser(data) {
+  return axios.post('/api/users', data);
+}
+
+export function deleteUser(ids) {
+  return axios.delete('/api/users/', { data: ids });
+}
+
+export function editUser(data) {
+  return axios.put('/api/users', data);
+}
+
+export function resetPwd(ids) {
+  return axios.put('/api/users/resetPwd', ids);
 }

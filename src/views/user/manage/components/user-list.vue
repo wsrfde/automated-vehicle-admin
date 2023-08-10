@@ -10,21 +10,10 @@
         >
           <a-row :gutter="16">
             <a-col :span="8">
-              <a-form-item field="number" label="用户昵称">
-                <a-input v-model="formModel.name" placeholder="请输入" />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item field="name" label="手机号码">
-                <a-input v-model="formModel.number" placeholder="请输入" />
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item field="contentType" label="用户角色">
-                <a-select
-                  v-model="formModel.contentType"
-                  :options="rolesOptions"
-                  placeholder="请输入"
+              <a-form-item field="blurry" label="用户帐号">
+                <a-input
+                  v-model="formModel.blurry"
+                  placeholder="请输入用户帐号或邮箱"
                 />
               </a-form-item>
             </a-col>
@@ -34,7 +23,7 @@
       <a-divider style="height: 84px" direction="vertical" />
       <a-col :flex="'86px'" style="text-align: right">
         <a-space direction="vertical" :size="18">
-          <a-button type="primary" @click="search">
+          <a-button type="primary" @click="getUserList">
             <template #icon>
               <icon-search />
             </template>
@@ -74,36 +63,31 @@
       row-key="id"
       @page-change="onPageChange"
     >
-      <template #role="{ record, rowIndex }">
+      <template #username="{ record, rowIndex }">
+        <a-input v-if="rowIndex === editIndex" v-model="record.username" />
+        <p v-else>{{ record.username }}</p>
+      </template>
+      <template #nickName="{ record, rowIndex }">
         <a-select
           v-if="rowIndex === editIndex"
-          v-model="record.role"
-          @change="(e) => (record.role = e)"
-        >
-          <a-option v-for="value of options" :key="value">
-            {{ value }}
-          </a-option>
-        </a-select>
-        <p v-else>{{ record.role }}</p>
-      </template>
-      <template #name="{ record, rowIndex }">
-        <a-input v-if="rowIndex === editIndex" v-model="record.name" />
-        <p v-else>{{ record.name }}</p>
+          v-model="record.nickName"
+          :options="rolesOptions"
+          @change="(e) => (record.nickName = e)"
+        />
+        <p v-else>
+          {{ findLabel(record.nickName) }}
+        </p>
       </template>
       <template #phone="{ record, rowIndex }">
         <a-input v-if="rowIndex === editIndex" v-model="record.phone" />
         <p v-else>{{ record.phone }}</p>
-      </template>
-      <template #password="{ record, rowIndex }">
-        <a-input v-if="rowIndex === editIndex" v-model="record.password" />
-        <p v-else>{{ record.password }}</p>
       </template>
       <template #email="{ record, rowIndex }">
         <a-input v-if="rowIndex === editIndex" v-model="record.email" />
         <p v-else>{{ record.email }}</p>
       </template>
       <template #optional="{ record, rowIndex }">
-        <a-space>
+        <a-space :size="5">
           <a-button
             v-if="rowIndex !== editIndex"
             :disabled="editIndex !== -1"
@@ -122,10 +106,17 @@
           </a-button>
           <a-popconfirm
             content="您确定要删除吗?"
-            @ok="deleteUser(record, rowIndex)"
+            @ok="deleteUserFun(record, rowIndex)"
           >
             <a-button type="text" status="danger"> 删除 </a-button>
           </a-popconfirm>
+          <a-button
+            type="text"
+            status="warning"
+            @click="resetPasswordFun(record, rowIndex)"
+          >
+            重置密码
+          </a-button>
         </a-space>
       </template>
     </a-table>
@@ -133,75 +124,52 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, computed } from 'vue';
+import { defineComponent, reactive, ref, computed, onMounted } from 'vue';
 import useLoading from '@/hooks/loading';
-import { roles } from '@/router/typings';
-import { Options, Pagination } from '@/types/global';
+import { Pagination } from '@/types/global';
+import { addUser, deleteUser, editUser, getUsers, resetPwd } from '@/api/user';
+import { Notification } from '@arco-design/web-vue';
 
 const generateFormModel = () => {
   return {
-    number: '',
-    name: '',
-    contentType: '',
-    filterType: '',
-    createdTime: [],
-    status: '',
+    blurry: '',
   };
 };
 
 export default defineComponent({
   setup() {
     const formModel = ref(generateFormModel());
-    const rolesOptions = computed<Options[]>(() => [
+    const { loading, setLoading } = useLoading(true); // 这里应该是true
+    const editIndex = ref(-1);
+    const rolesOptions = computed(() => [
       {
         label: '后台管理员',
-        value: 'superAdmin',
+        value: 'super_admin',
       },
       {
         label: '前台管理员',
         value: 'admin',
       },
       {
-        label: '操作员',
+        label: '普通用户',
         value: 'user',
       },
     ]);
-
-    const search = () => {
-      // fetchData({
-      //   ...basePagination,
-      //   ...formModel.value,
-      // } as unknown as PolicyParams);
-    };
-    const reset = () => {
-      formModel.value = generateFormModel();
-    };
-
-    const { loading, setLoading } = useLoading(false); // 这里应该是true
-    const options: roles[] = ['superAdmin', 'admin', 'user'];
-
-    const editIndex = ref(-1);
-
     const columns = [
       {
-        title: '用户昵称',
-        dataIndex: 'name',
-        slotName: 'name',
-      },
-      {
-        title: '手机号码',
-        dataIndex: 'phone',
-        slotName: 'phone',
-      },
-      {
-        title: '登入密码',
-        dataIndex: 'password',
-        slotName: 'password',
+        title: '用户帐号',
+        dataIndex: 'username',
+        slotName: 'username',
       },
       {
         title: '用户角色',
-        dataIndex: 'role',
-        slotName: 'role',
+        dataIndex: 'nickName',
+        slotName: 'nickName',
+      },
+      {
+        title: '电话',
+        dataIndex: 'phone',
+        slotName: 'phone',
       },
       {
         title: '邮箱',
@@ -213,33 +181,7 @@ export default defineComponent({
         slotName: 'optional',
       },
     ];
-
-    const renderData = reactive([
-      {
-        key: '1',
-        role: 'superAdmin',
-        name: '阿明',
-        phone: '15122223333',
-        password: '123456',
-        email: 'jane.doe@example.com',
-      },
-      {
-        key: '2',
-        role: 'admin',
-        name: '阿光',
-        phone: '15123333333',
-        password: '123456',
-        email: 'alisa.ross@example.com',
-      },
-      {
-        key: '3',
-        role: 'user',
-        name: '阿强',
-        phone: '15223333333',
-        password: '123456',
-        email: 'qqq.ross@example.com',
-      },
-    ]);
+    const renderData = ref([]);
     const basePagination: Pagination = {
       current: 1,
       pageSize: 20,
@@ -247,57 +189,120 @@ export default defineComponent({
     const pagination = reactive({
       ...basePagination,
     });
+
+    const reset = () => {
+      formModel.value = generateFormModel();
+    };
+
+    const findLabel = (value: string) => {
+      const findItem = rolesOptions.value.find((item) => item.value === value);
+      return findItem?.label || value;
+    };
+
     const changeEditIndex = (n) => {
       editIndex.value = n;
-    };
-    const saveEdit = (record, rowIndex) => {
-      editIndex.value = -1; // 清空编辑状态
-      console.log(record, rowIndex);
-    };
-    const deleteUser = (record, rowIndex) => {
-      console.log(record, rowIndex);
     };
 
     const createData = () => {
       editIndex.value = 0;
-      renderData.unshift({});
+      renderData.value.unshift({});
     };
 
-    const fetchData = async (params = { current: 1, pageSize: 20 }) => {
+    const getUserList = (params = {}) => {
+      const query = {
+        page: basePagination.current,
+        size: basePagination.pageSize,
+        ...params,
+        ...formModel.value,
+        sort: 'id',
+      };
       setLoading(true);
-      try {
-        console.log(params);
-        // const { data } = await queryPolicyList(params);
-        // renderData.value = data.list;
-        // pagination.current = params.current;
-        // pagination.total = data.total;
-      } catch (err) {
-        // you can report use errorHandler or other
-      } finally {
+      getUsers(query).then((res) => {
+        console.log(res);
         setLoading(false);
+        renderData.value = res.content;
+        pagination.current = params.page;
+        pagination.total = res.totalElements;
+      });
+    };
+
+    const saveEdit = (record) => {
+      if (Object.values(record).length < 4) {
+        Notification.error('请填写完整信息');
+        return;
       }
+      const query = {
+        ...record,
+        dept: { id: 1 },
+        enabled: true,
+        gender: '男',
+        jobs: [{ id: 1 }],
+        roles: [{ id: 1 }],
+      };
+      console.log(record);
+      // 没有id为添加，有id为修改
+      (!record.id ? addUser(query) : editUser(query)).then(() => {
+        editIndex.value = -1; // 清空编辑状态
+        Notification.success({
+          title: '成功',
+          content: !record.id ? '添加成功' : '修改成功',
+        });
+        getUserList();
+      });
+    };
+    const deleteUserFun = (record, rowIndex) => {
+      // 数据没有id，直接删除
+      if (!record.id) {
+        renderData.value.splice(rowIndex, 1);
+        editIndex.value = -1;
+        return;
+      }
+      deleteUser([record.id]).then(() => {
+        editIndex.value = -1;
+        Notification.success({
+          title: '成功',
+          content: '删除成功',
+        });
+        getUserList();
+      });
+    };
+
+    const resetPasswordFun = (record) => {
+      resetPwd([record.id]).then(() => {
+        Notification.success({
+          title: '成功',
+          content: '重置成功',
+        });
+      });
     };
 
     const onPageChange = (current: number) => {
-      fetchData({ ...basePagination, current });
+      const query = { ...basePagination, current };
+      console.log(query);
+      getUserList(query);
     };
+
+    onMounted(() => {
+      getUserList();
+    });
 
     return {
       loading,
       columns,
       renderData,
-      options,
       editIndex,
       pagination,
       rolesOptions,
       formModel,
+      findLabel,
       changeEditIndex,
       saveEdit,
       onPageChange,
       createData,
-      search,
+      getUserList,
       reset,
-      deleteUser,
+      deleteUserFun,
+      resetPasswordFun,
     };
   },
 });

@@ -65,7 +65,7 @@ import { useUserStore } from '@/store';
 import { storeToRefs } from 'pinia';
 import { isvalidPhone } from '@/utils/validate';
 import { Notification } from '@arco-design/web-vue';
-import { editUser } from '@/api/user';
+import { editUserInfo } from '@/api/user';
 import ChangeEmailModal from './changeEmailModal.vue';
 import changePasswordModal from './changePasswordModal.vue';
 
@@ -112,7 +112,7 @@ export default defineComponent({
           gender: userInfo.value.gender,
           nickName: userInfo.value.nickName,
         };
-        editUser(formData).then(() => {
+        editUserInfo(formData).then(() => {
           Notification.success('修改成功');
           isChangePhone.value = false;
           userStore.info();
