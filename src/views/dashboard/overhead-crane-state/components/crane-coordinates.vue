@@ -2,7 +2,7 @@
   <a-row :gutter="24">
     <a-col :span="12">
       <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="coordinatesData" bordered :column="2">
+        <a-descriptions :data="oneCarData" bordered :column="2">
           <template #title>
             <p class="desc-title">天车 #01</p>
           </template>
@@ -11,29 +11,9 @@
     </a-col>
     <a-col :span="12">
       <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="coordinatesData" bordered :column="2">
+        <a-descriptions :data="twoCarData" bordered :column="2">
           <template #title>
             <p class="desc-title">天车 #02</p>
-          </template>
-        </a-descriptions>
-      </a-card>
-    </a-col>
-  </a-row>
-  <a-row :gutter="24" style="margin-top: 20px">
-    <a-col :span="12">
-      <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="coordinatesData" bordered :column="2">
-          <template #title>
-            <p class="desc-title">天车 #03</p>
-          </template>
-        </a-descriptions>
-      </a-card>
-    </a-col>
-    <a-col :span="12">
-      <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="coordinatesData" bordered :column="2">
-          <template #title>
-            <p class="desc-title">天车 #04</p>
           </template>
         </a-descriptions>
       </a-card>
@@ -42,38 +22,53 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, onUnmounted } from 'vue';
+import StompClient from '@/utils/stompServer';
+
+const initData = (data = {}) => [
+  {
+    label: '大车X坐标',
+    value: data.crane_x,
+  },
+  {
+    label: '小车Y坐标',
+    value: data.crane_y,
+  },
+  {
+    label: '抓斗高度Z坐标',
+    value: data.crane_z,
+  },
+  {
+    label: '称重',
+    value: data.grab_w,
+  },
+];
 
 export default defineComponent({
   setup() {
-    const coordinatesData = [
+    const oneCarData = ref(initData());
+    const twoCarData = ref(initData());
+    const stompClient = new StompClient([
       {
-        label: '大车X坐标',
-        value: '2000',
+        topicUrl: 'jtgx/crane/position/1',
+        callback: (e) => {
+          oneCarData.value = initData(e);
+        },
       },
       {
-        label: '小车X坐标',
-        value: '25000',
+        topicUrl: 'jtgx/crane/position/2',
+        callback: (e) => {
+          twoCarData.value = initData(e);
+        },
       },
-      {
-        label: '大车Y坐标',
-        value: '8000',
-      },
-      {
-        label: '小车Y坐标',
-        value: '300',
-      },
-      {
-        label: '抓斗高度Z坐标',
-        value: '120',
-      },
-      {
-        label: '抓斗开度K坐标',
-        value: '2000',
-      },
-    ];
+    ]);
+    stompClient.connect();
+    onUnmounted(() => {
+      stompClient.destroy();
+    });
     return {
-      coordinatesData,
+      oneCarData,
+      twoCarData,
     };
   },
 });

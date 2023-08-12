@@ -2,16 +2,15 @@
   <div class="container">
     <Breadcrumb :items="['仪表盘', '天车状态']" />
     <div class="layout">
-      <div class="layout-content">
-        <a-space :size="16" direction="vertical">
-          <CraneModel />
-        </a-space>
-      </div>
-      <div class="layout-right-side">
-        <a-space :size="16" direction="vertical" fill>
+      <a-layout>
+        <a-layout-content><CraneModel /></a-layout-content>
+        <a-layout-sider style="width: 260px">
           <CraneStateSet />
-        </a-space>
-      </div>
+        </a-layout-sider>
+        <a-layout-sider style="width: 260px; margin-left: 20px">
+          <CraneStateSet />
+        </a-layout-sider>
+      </a-layout>
     </div>
     <div class="layout-bottom">
       <a-space :size="16" direction="vertical" fill>
@@ -49,6 +48,9 @@ export default defineComponent({
 
   .layout-right-side {
     flex-basis: 280px;
+    &:not(:last-child) {
+      margin-right: 15px;
+    }
   }
 }
 .layout-bottom {

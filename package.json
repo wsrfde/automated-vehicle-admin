@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.47.0",
+    "@stomp/stompjs": "^7.0.0",
     "@types/mockjs": "^1.0.7",
     "@vueuse/core": "^10.1.2",
     "axios": "^1.4.0",

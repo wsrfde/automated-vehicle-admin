@@ -12,9 +12,9 @@ export default defineComponent({});
 
 <style scoped lang="less">
 .three-card {
-  width: fit-content;
+  margin-right: 20px;
   .three-box {
-    width: 66vw;
+    width: 100%;
     height: 60vh;
     border: none;
   }
