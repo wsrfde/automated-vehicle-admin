@@ -85,7 +85,7 @@ import { defineComponent, ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Message } from '@arco-design/web-vue';
 import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
-import { useUserStore } from '@/store';
+import { useUserStore, useAppStore } from '@/store';
 import useLoading from '@/hooks/loading';
 import { LoginData, getCodeImg } from '@/api/user';
 import encrypt from '@/utils/rsaEncrypt';
@@ -102,6 +102,7 @@ export default defineComponent({
     const errorMessage = ref('');
     const { loading, setLoading } = useLoading();
     const userStore = useUserStore();
+    const appStore = useAppStore();
     const codeUrl = ref('');
     const localPassword = ref('');
 
@@ -122,6 +123,18 @@ export default defineComponent({
         localPassword.value = password || ''; // 如果为undefined，就赋值为空
         loginForm.rememberMe = rememberMe;
       }
+    };
+
+    const routerJump = async () => {
+      const { redirect, ...othersQuery } = router.currentRoute.value.query;
+      console.log(redirect, othersQuery);
+      await router.push({
+        name: (redirect as string) || appStore.defaultRouter,
+        query: {
+          ...othersQuery,
+        },
+      });
+      Message.success('欢迎使用');
     };
 
     const handleSubmit = async ({
@@ -146,15 +159,7 @@ export default defineComponent({
             localStorage.removeItem('loginForm');
           }
           await userStore.login(user);
-          const { redirect, ...othersQuery } = router.currentRoute.value.query;
-          console.log(redirect, othersQuery);
-          await router.push({
-            name: (redirect as string) || 'overhead-crane-state',
-            query: {
-              ...othersQuery,
-            },
-          });
-          Message.success('欢迎使用');
+          await routerJump();
         } catch (err) {
           console.log(err.response.data.message);
           errorMessage.value = err.response.data.message;
@@ -172,6 +177,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      if (userStore.role) routerJump();
       // 获取验证码
       getCode();
       // 获取本地数据

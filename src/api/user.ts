@@ -11,7 +11,6 @@ export interface LoginRes {
 }
 export function login(data: LoginData) {
   return axios.post<LoginRes>('/auth/login', data);
-  // return axios.post<LoginRes>('/api/user/login', data);
 }
 
 export function logout() {
@@ -20,7 +19,6 @@ export function logout() {
 
 export function getUserInfo() {
   return axios.get<UserState>('/auth/info');
-  // return axios.post<UserState>('/api/user/info');
 }
 
 export function getCodeImg() {

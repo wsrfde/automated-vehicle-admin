@@ -67,7 +67,6 @@ const useUserStore = defineStore('user', {
         ...res.user,
         role: res.user.nickName,
       };
-      console.log(user);
       this.setInfo(user);
     },
 

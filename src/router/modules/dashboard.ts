@@ -31,5 +31,15 @@ export default {
         roles: ['*'],
       },
     },
+    {
+      path: 'vehicle-manage',
+      name: 'vehicleManage',
+      component: () => import('@/views/dashboard/vehicle-manage/index.vue'),
+      meta: {
+        title: '车辆管理',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };

@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { getRoles, deleteRole } from '@/api/user';
 import { Notification } from '@arco-design/web-vue';
 import ChangeRolesModal from './changeRolesModal.vue';

@@ -1,21 +1,17 @@
 import axios from 'axios';
 
-export interface ContentDataRecord {
-  x: string;
-  y: number;
+export function addVehicleData(data) {
+  return axios.post('/api/vehicle', data);
 }
 
-export function queryContentData() {
-  return axios.get<ContentDataRecord[]>('/api/content-data');
+export function getVehicleData(params) {
+  return axios.get('/api/vehicle', { params });
 }
 
-export interface PopularRecord {
-  key: number;
-  clickNumber: string;
-  title: string;
-  increases: number;
+export function deleteVehicleData(data) {
+  return axios.delete('/api/vehicle', { data });
 }
 
-export function queryPopularList(params: { type: string }) {
-  return axios.get<PopularRecord[]>('/api/popular/list', { params });
+export function editVehicleData(data) {
+  return axios.put('/api/vehicle', data);
 }

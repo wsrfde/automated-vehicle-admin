@@ -58,11 +58,11 @@ router.beforeEach(async (to, from, next) => {
   if (isLogin()) {
     // 判读用户是否登录
     if (userStore.role) {
+      console.log('已经登录过了');
       // 有角色信息表示当前用户已经登录且获取过用户信息
       await crossroads();
     } else {
       try {
-        console.log('------');
         await userStore.info();
         await crossroads();
       } catch (error) {

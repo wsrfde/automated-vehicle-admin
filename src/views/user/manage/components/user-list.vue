@@ -106,7 +106,7 @@
           </a-button>
           <a-popconfirm
             content="您确定要删除吗?"
-            @ok="deleteUserFun(record, rowIndex)"
+            @ok="deleteFun(record, rowIndex)"
           >
             <a-button
               type="text"
@@ -260,7 +260,7 @@ export default defineComponent({
         getUserList();
       });
     };
-    const deleteUserFun = (record, rowIndex) => {
+    const deleteFun = (record, rowIndex) => {
       // 数据没有id，直接删除
       if (!record.id) {
         renderData.value.splice(rowIndex, 1);
@@ -287,8 +287,7 @@ export default defineComponent({
     };
 
     const onPageChange = (current: number) => {
-      const query = { ...basePagination, current };
-      getUserList(query);
+      getUserList({ ...basePagination, current });
     };
 
     onMounted(() => {
@@ -311,7 +310,7 @@ export default defineComponent({
       createData,
       getUserList,
       reset,
-      deleteUserFun,
+      deleteFun,
       resetPasswordFun,
     };
   },

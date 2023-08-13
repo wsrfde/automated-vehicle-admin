@@ -9,6 +9,7 @@ export interface AppState {
   themeColor: string;
   menuWidth: number;
   globalSettings: boolean;
+  defaultRouter: string;
   monitorAddress: string;
   [key: string]: unknown;
 }
