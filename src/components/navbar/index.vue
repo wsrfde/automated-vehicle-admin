@@ -3,33 +3,6 @@
     <div class="left-side"></div>
     <ul class="right-side">
       <li>
-        <a-tooltip content="消息通知">
-          <div class="message-box-trigger">
-            <a-badge :count="9" dot>
-              <a-button
-                class="nav-btn"
-                type="outline"
-                :shape="'circle'"
-                @click="setPopoverVisible"
-              >
-                <icon-notification />
-              </a-button>
-            </a-badge>
-          </div>
-        </a-tooltip>
-        <a-popover
-          trigger="click"
-          :arrow-style="{ display: 'none' }"
-          :content-style="{ padding: 0, minWidth: '400px' }"
-          content-class="message-popover"
-        >
-          <div ref="refBtn" class="ref-btn"></div>
-          <template #content>
-            <message-box />
-          </template>
-        </a-popover>
-      </li>
-      <li>
         <a-dropdown trigger="click">
           <a-avatar :size="32" :style="{ marginRight: '8px' }">
             <img alt="avatar" :src="avatar" />
@@ -60,12 +33,9 @@ import { Message } from '@arco-design/web-vue';
 import { useDark, useToggle } from '@vueuse/core';
 import { useAppStore, useUserStore } from '@/store';
 import useUser from '@/hooks/user';
-import MessageBox from '../message-box/index.vue';
 
 export default defineComponent({
-  components: {
-    MessageBox,
-  },
+  components: {},
   setup() {
     const appStore = useAppStore();
     const userStore = useUserStore();

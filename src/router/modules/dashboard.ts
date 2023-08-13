@@ -9,16 +9,16 @@ export default {
   },
   children: [
     /** simple */
-    {
-      path: 'monitor',
-      name: 'monitor',
-      component: () => import('@/views/dashboard/monitor/index.vue'),
-      meta: {
-        title: '实时监控',
-        requiresAuth: true,
-        roles: ['*'],
-      },
-    },
+    // {
+    //   path: 'monitor',
+    //   name: 'monitor',
+    //   component: () => import('@/views/dashboard/monitor/index.vue'),
+    //   meta: {
+    //     title: '实时监控',
+    //     requiresAuth: true,
+    //     roles: ['*'],
+    //   },
+    // },
     /** simple end */
     {
       path: 'overhead-crane-state',

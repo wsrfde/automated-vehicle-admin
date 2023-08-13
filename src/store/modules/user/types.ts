@@ -3,7 +3,7 @@ export interface UserState {
   avatarName?: string;
   avatarPath?: string;
   createTime?: string;
-  dept?: {};
+  dept?: object;
   deptId?: number;
   email?: string;
   enabled?: boolean;

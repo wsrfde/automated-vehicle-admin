@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import defaultSettings from '@/config/settings.json';
+import defaultSettings from '@/config/settings';
 import { AppState } from './types';
 
 const useAppStore = defineStore('app', {
-  state: (): AppState => ({ ...defaultSettings }),
+  state: (): AppState => ({ ...defaultSettings() }),
 
   getters: {
     appCurrentSetting(state: AppState): AppState {
@@ -27,6 +27,10 @@ const useAppStore = defineStore('app', {
         this.theme = 'light';
         document.body.removeAttribute('arco-theme');
       }
+    },
+    changeMonitorAddress(payload: string) {
+      this.monitorAddress = payload;
+      localStorage.setItem('monitorAddress', this.monitorAddress);
     },
   },
 });

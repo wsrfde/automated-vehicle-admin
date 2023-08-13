@@ -8,6 +8,7 @@ import {
 } from 'vue-router';
 import { useAppStore } from '@/store';
 import usePermission from '@/hooks/permission';
+import { isExternal } from '@/utils/validate';
 
 export default defineComponent({
   emit: ['collapse'],
@@ -70,9 +71,14 @@ export default defineComponent({
 
     const selectedKey = ref<string[]>([]);
     const goto = (item: RouteRecordRaw) => {
-      router.push({
-        name: item.name,
-      });
+      // 判断是否是外部链接，如果是打开新窗口跳转
+      if (isExternal(item.path)) {
+        window.open(item.path as string, '_blank');
+      } else {
+        router.push({
+          name: item.name,
+        });
+      }
     };
     watch(
       route,
@@ -103,9 +109,10 @@ export default defineComponent({
       function travel(_route: RouteRecordRaw[], nodes = []) {
         if (_route) {
           _route.forEach((element) => {
+            // console.log(element);
             // This is demo, modify nodes as needed
             const icon = element?.meta?.icon ? `<${element?.meta?.icon}/>` : ``;
-            const r = (
+            const r = element.children ? (
               <a-sub-menu
                 key={element?.name}
                 v-slots={{
@@ -122,6 +129,17 @@ export default defineComponent({
                   );
                 })}
               </a-sub-menu>
+            ) : (
+              <a-menu-item
+                v-slots={{
+                  icon: () => h(compile(icon)),
+                  title: () => h(compile(element?.meta?.title || '')),
+                }}
+                key={element?.name}
+                onClick={() => goto(element)}
+              >
+                {element?.meta?.title || ''}
+              </a-menu-item>
             );
             nodes.push(r as never);
           });

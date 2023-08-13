@@ -149,7 +149,7 @@ export default defineComponent({
           const { redirect, ...othersQuery } = router.currentRoute.value.query;
           console.log(redirect, othersQuery);
           await router.push({
-            name: (redirect as string) || 'monitor',
+            name: (redirect as string) || 'overhead-crane-state',
             query: {
               ...othersQuery,
             },

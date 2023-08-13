@@ -1,46 +1,44 @@
 <template>
   <a-layout class="layout">
     <a-layout>
-      <a-layout>
-        <a-layout-sider
-          v-if="menu"
-          class="layout-sider"
-          :breakpoint="'xl'"
-          :collapsed="collapse"
-          :collapsible="true"
-          :width="menuWidth"
-          :style="{ paddingTop: navbar ? '60px' : '' }"
-          :hide-trigger="true"
-          @collapse="setCollapsed"
-        >
-          <div class="menu-wrapper">
-            <div class="left-side">
-              <a-space>
-                <img
-                  alt="logo"
-                  src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-                />
-                <a-typography-title
-                  :style="{ margin: 0, fontSize: '18px', color: '#fff' }"
-                  :heading="5"
-                >
-                  {{ title }}
-                </a-typography-title>
-              </a-space>
-            </div>
-            <Menu />
+      <a-layout-sider
+        v-if="menu"
+        class="layout-sider"
+        :breakpoint="'xl'"
+        :collapsed="collapse"
+        :collapsible="true"
+        :width="menuWidth"
+        :style="{ paddingTop: navbar ? '60px' : '' }"
+        :hide-trigger="true"
+        @collapse="setCollapsed"
+      >
+        <div class="menu-wrapper">
+          <div class="left-side">
+            <a-space>
+              <img
+                alt="logo"
+                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+              />
+              <a-typography-title
+                :style="{ margin: 0, fontSize: '18px', color: '#fff' }"
+                :heading="5"
+              >
+                {{ title }}
+              </a-typography-title>
+            </a-space>
           </div>
-        </a-layout-sider>
+          <Menu />
+        </div>
+      </a-layout-sider>
 
-        <a-layout class="layout-content" :style="paddingStyle">
-          <div v-if="navbar" class="layout-navbar">
-            <NavBar />
-          </div>
-          <a-layout-content>
-            <router-view />
-          </a-layout-content>
-          <Footer v-if="footer" />
-        </a-layout>
+      <a-layout class="layout-content" :style="paddingStyle">
+        <div v-if="navbar" class="layout-navbar">
+          <NavBar />
+        </div>
+        <a-layout-content>
+          <router-view />
+        </a-layout-content>
+        <Footer v-if="footer" />
       </a-layout>
     </a-layout>
   </a-layout>

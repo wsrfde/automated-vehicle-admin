@@ -1,4 +1,4 @@
-import System from '@/router/modules/System';
+import System from './System';
 import Dashboard from './dashboard';
 import Visualization from './visualization';
 import User from './user';

@@ -12,6 +12,9 @@
           <a-tab-pane key="1" title="安全设置">
             <SecuritySettings />
           </a-tab-pane>
+          <a-tab-pane key="2" title="系统设置">
+            <SystemSettings />
+          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -20,11 +23,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import SystemSettings from '@/views/user/setting/components/system-settings.vue';
 import UserPanel from './components/user-panel.vue';
 import SecuritySettings from './components/security-settings.vue';
 
 export default defineComponent({
   components: {
+    SystemSettings,
     UserPanel,
     SecuritySettings,
   },

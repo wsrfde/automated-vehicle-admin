@@ -8,6 +8,7 @@ import PageLayout from '@/layout/page-layout.vue';
 import { clearToken, isLogin } from '@/utils/auth';
 import Login from './modules/login';
 import appRoutes from './modules';
+import externalModules from './externalModules';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
@@ -23,7 +24,7 @@ const router = createRouter({
       name: 'root',
       path: '/',
       component: PageLayout,
-      children: appRoutes,
+      children: [...appRoutes, ...externalModules],
     },
     {
       path: '/:pathMatch(.*)*',
@@ -61,6 +62,7 @@ router.beforeEach(async (to, from, next) => {
       await crossroads();
     } else {
       try {
+        console.log('------');
         await userStore.info();
         await crossroads();
       } catch (error) {

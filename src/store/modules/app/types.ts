@@ -9,5 +9,6 @@ export interface AppState {
   themeColor: string;
   menuWidth: number;
   globalSettings: boolean;
+  monitorAddress: string;
   [key: string]: unknown;
 }
