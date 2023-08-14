@@ -51,5 +51,15 @@ export default {
         roles: ['*'],
       },
     },
+    {
+      path: 'radar-tune',
+      name: 'radarTune',
+      component: () => import('@/views/dashboard/radar-tune/index.vue'),
+      meta: {
+        title: '雷达微调',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };

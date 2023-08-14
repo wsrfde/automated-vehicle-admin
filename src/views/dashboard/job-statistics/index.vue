@@ -167,9 +167,6 @@ export default defineComponent({
       {
         title: '出矿口倒料统计(Kg)',
         dataIndex: 'outlet',
-        // slotName: 'outlet',
-        // fixed: 'left',
-        // width: 140,
       },
       {
         title: '准备装车倒料统计(Kg)',
@@ -186,20 +183,6 @@ export default defineComponent({
         dataIndex: 'twoCar',
         slotName: 'twoCar',
       },
-      {
-        title: '日运输统计(Kg)',
-        dataIndex: 'dayStatistics',
-        slotName: 'dayStatistics',
-      },
-      {
-        title: '月运输统计(Kg)',
-        dataIndex: 'monthStatistics',
-        slotName: 'monthStatistics',
-      },
-      // {
-      //   title: '操作',
-      //   slotName: 'optional',
-      // },
     ];
 
     const renderData = ref([
