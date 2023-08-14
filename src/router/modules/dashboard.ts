@@ -41,5 +41,15 @@ export default {
         roles: ['*'],
       },
     },
+    {
+      path: 'job-statistics',
+      name: 'jobStatistics',
+      component: () => import('@/views/dashboard/job-statistics/index.vue'),
+      meta: {
+        title: '工作统计',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
