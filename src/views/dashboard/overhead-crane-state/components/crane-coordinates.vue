@@ -1,24 +1,7 @@
 <template>
-  <a-row :gutter="24">
-    <a-col :span="12">
-      <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="oneCarData" bordered :column="2">
-          <template #title>
-            <p class="desc-title">天车 #01</p>
-          </template>
-        </a-descriptions>
-      </a-card>
-    </a-col>
-    <a-col :span="12">
-      <a-card class="general-card" title="天车坐标">
-        <a-descriptions :data="twoCarData" bordered :column="2">
-          <template #title>
-            <p class="desc-title">天车 #02</p>
-          </template>
-        </a-descriptions>
-      </a-card>
-    </a-col>
-  </a-row>
+  <a-card class="crane-coordinates" title="天车坐标">
+    <a-descriptions :data="oneCarData" bordered :column="2" />
+  </a-card>
 </template>
 
 <script lang="ts">
@@ -28,19 +11,19 @@ import StompClient from '@/utils/stompServer';
 const initData = (data = {}) => [
   {
     label: '大车X坐标',
-    value: data.crane_x,
+    value: data.crane_x || '-',
   },
   {
     label: '小车Y坐标',
-    value: data.crane_y,
+    value: data.crane_y || '-',
   },
   {
     label: '抓斗高度Z坐标',
-    value: data.crane_z,
+    value: data.crane_z || '-',
   },
   {
     label: '称重',
-    value: data.grab_w,
+    value: data.grab_w || '-',
   },
 ];
 
@@ -75,13 +58,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-.desc-title {
-  margin-bottom: -12px;
-  padding: 5px 20px;
-  text-align: center;
-  font-weight: normal;
-  background-color: var(--color-fill-1);
-  border: solid var(--color-neutral-3);
-  border-width: 1px 1px 0 1px;
+.crane-coordinates {
+  height: 100%;
 }
 </style>

@@ -65,7 +65,7 @@ const useUserStore = defineStore('user', {
 
       const user = {
         ...res.user,
-        role: res.user.nickName,
+        role: res.user.nickName, // 后端不肯加role字段，用nickName代替
       };
       this.setInfo(user);
     },

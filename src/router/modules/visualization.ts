@@ -14,7 +14,18 @@ export default {
       component: () =>
         import('@/views/visualization/multi-dimension-data-analysis/index.vue'),
       meta: {
-        title: '多维数据分析',
+        title: '数据分析',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
+    {
+      path: 'overhead-crane-model',
+      name: 'overheadCraneModel',
+      component: () =>
+        import('@/views/visualization/overhead-crane-model/index.vue'),
+      meta: {
+        title: '天车模型',
         requiresAuth: true,
         roles: ['*'],
       },

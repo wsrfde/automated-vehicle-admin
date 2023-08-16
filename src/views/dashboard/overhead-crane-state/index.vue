@@ -1,59 +1,115 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['仪表盘', '天车状态']" />
-    <div class="layout">
-      <a-layout>
-        <a-layout-content><CraneModel /></a-layout-content>
-        <a-layout-sider style="width: 260px">
-          <CraneStateSet />
-        </a-layout-sider>
-        <a-layout-sider style="width: 260px; margin-left: 20px">
-          <CraneStateSet />
-        </a-layout-sider>
-      </a-layout>
-    </div>
-    <div class="layout-bottom">
-      <a-space :size="16" direction="vertical" fill>
-        <CraneCoordinates />
-        <CraneTimeline />
-      </a-space>
+    <CarAlert />
+    <AlarmAlert />
+    <div class="car-box">
+      <a-card class="custom-card" title="天车 #01">
+        <CraneStep
+          class="mb15"
+          :current-step="currentStep"
+          :step-option="stepOption"
+        />
+        <a-layout>
+          <a-layout-content>
+            <CraneCoordinates />
+          </a-layout-content>
+          <a-layout-content class="ml15">
+            <CraneState />
+          </a-layout-content>
+          <a-layout-sider style="width: 14vw" class="ml15">
+            <CraneHandle
+              :current-step="currentStep"
+              :step-option="stepOption"
+              @change-step="changeStep"
+            />
+          </a-layout-sider>
+        </a-layout>
+      </a-card>
+      <a-divider />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import CraneTimeline from '@/views/dashboard/overhead-crane-state/components/crane-timeline.vue';
-import CraneModel from './components/crane-model.vue';
-import CraneStateSet from './components/crane-state-set.vue';
+import { defineComponent, ref } from 'vue';
+import CraneStep from './components/crane-step.vue';
+import CraneHandle from './components/crane-handle.vue';
+import CarAlert from './components/car-alert.vue';
+import AlarmAlert from './components/alarm-alert.vue';
+import CraneState from './components/crane-state.vue';
 import CraneCoordinates from './components/crane-coordinates.vue';
 
 export default defineComponent({
-  components: { CraneTimeline, CraneModel, CraneCoordinates, CraneStateSet },
+  components: {
+    AlarmAlert,
+    CarAlert,
+    CraneHandle,
+    CraneStep,
+    CraneCoordinates,
+    CraneState,
+  },
+  setup() {
+    const currentStep = ref(2);
+    const stepOption = [
+      {
+        title: '维修',
+        value: 1,
+      },
+      {
+        title: '待命',
+        value: 2,
+      },
+      {
+        title: '预备装车',
+        value: 3,
+      },
+      {
+        title: '装车',
+        value: 4,
+      },
+      {
+        title: '倒料',
+        value: 5,
+      },
+    ];
+
+    const changeStep = (step: number) => {
+      currentStep.value = step;
+    };
+
+    return {
+      currentStep,
+      stepOption,
+      changeStep,
+    };
+  },
 });
 </script>
 
 <style scoped lang="less">
+.mb15 {
+  margin-bottom: 15px;
+}
+.ml15 {
+  margin-left: 15px;
+}
 .container {
   padding: 0 20px 20px 20px;
 }
-
-.layout {
-  display: flex;
-
-  .layout-content {
-    flex: 1;
-    padding-right: 16px;
-  }
-
-  .layout-right-side {
-    flex-basis: 280px;
-    &:not(:last-child) {
-      margin-right: 15px;
+.car-box {
+  margin-top: 20px;
+  .custom-card {
+    background: none;
+    :deep(.arco-card-header) {
+      background: var(--color-bg-2);
+    }
+    :deep(& > .arco-card-body) {
+      padding: 0;
+    }
+    &:last-child {
+      //margin-top: 20px;
     }
   }
-}
-.layout-bottom {
-  margin-top: 20px;
 }
 </style>
