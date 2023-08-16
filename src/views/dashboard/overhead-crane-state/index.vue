@@ -4,10 +4,15 @@
     <CarAlert />
     <AlarmAlert />
     <div class="car-box">
-      <a-card class="custom-card" title="天车 #01">
+      <a-card
+        v-for="(item, index) in craneConfigList"
+        :key="item.title"
+        class="custom-card"
+        :title="item.title"
+      >
         <CraneStep
           class="mb15"
-          :current-step="currentStep"
+          :current-step="item.currentStep"
           :step-option="stepOption"
         />
         <a-layout>
@@ -19,20 +24,21 @@
           </a-layout-content>
           <a-layout-sider style="width: 14vw" class="ml15">
             <CraneHandle
-              :current-step="currentStep"
+              :current-step="item.currentStep"
               :step-option="stepOption"
-              @change-step="changeStep"
+              @change-step="(e) => changeStep(e, index)"
             />
           </a-layout-sider>
         </a-layout>
+        <a-divider v-if="index !== craneConfigList.length - 1" />
       </a-card>
-      <a-divider />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onUnmounted, reactive } from 'vue';
+import StompClient from '@/utils/stompServer';
 import CraneStep from './components/crane-step.vue';
 import CraneHandle from './components/crane-handle.vue';
 import CarAlert from './components/car-alert.vue';
@@ -50,7 +56,6 @@ export default defineComponent({
     CraneState,
   },
   setup() {
-    const currentStep = ref(2);
     const stepOption = [
       {
         title: '维修',
@@ -73,14 +78,45 @@ export default defineComponent({
         value: 5,
       },
     ];
+    const craneConfigList = reactive([
+      {
+        title: '天车 #01',
+        currentStep: 1,
+      },
+      {
+        title: '天车 #02',
+        currentStep: 2,
+      },
+    ]);
 
-    const changeStep = (step: number) => {
-      currentStep.value = step;
+    const changeStep = (step: number, index) => {
+      craneConfigList[index].currentStep = step;
     };
 
+    const stompClient = new StompClient([
+      {
+        topicUrl: 'jtgx/crane/position/1',
+        callback: (e) => {
+          console.log(e);
+          // oneCarData.value = initData(e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/crane/position/2',
+        callback: (e) => {
+          console.log(e);
+          // twoCarData.value = initData(e);
+        },
+      },
+    ]);
+    stompClient.connect();
+    onUnmounted(() => {
+      stompClient.destroy();
+    });
+
     return {
-      currentStep,
       stepOption,
+      craneConfigList,
       changeStep,
     };
   },

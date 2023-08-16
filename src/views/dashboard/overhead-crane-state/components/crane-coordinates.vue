@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, onUnmounted } from 'vue';
-import StompClient from '@/utils/stompServer';
 
 const initData = (data = {}) => [
   {
@@ -31,24 +30,7 @@ export default defineComponent({
   setup() {
     const oneCarData = ref(initData());
     const twoCarData = ref(initData());
-    const stompClient = new StompClient([
-      {
-        topicUrl: 'jtgx/crane/position/1',
-        callback: (e) => {
-          oneCarData.value = initData(e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/crane/position/2',
-        callback: (e) => {
-          twoCarData.value = initData(e);
-        },
-      },
-    ]);
-    stompClient.connect();
-    onUnmounted(() => {
-      stompClient.destroy();
-    });
+
     return {
       oneCarData,
       twoCarData,
