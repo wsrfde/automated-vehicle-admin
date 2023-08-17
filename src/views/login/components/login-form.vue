@@ -54,7 +54,6 @@
             auto-complete="off"
             placeholder="验证码"
             style="width: 63%"
-            @keyup.enter="handleSubmit"
           >
             <template #prefix>
               <icon-safe />
@@ -137,6 +136,13 @@ export default defineComponent({
       Message.success('欢迎使用');
     };
 
+    const getCode = () => {
+      getCodeImg().then((res) => {
+        codeUrl.value = res.img;
+        loginForm.uuid = res.uuid;
+      });
+    };
+
     const handleSubmit = async ({
       errors,
       values,
@@ -163,17 +169,13 @@ export default defineComponent({
         } catch (err) {
           console.log(err.response.data.message);
           errorMessage.value = err.response.data.message;
+          if (err.response.data.message === '验证码不存在或已过期') {
+            getCode();
+          }
         } finally {
           setLoading(false);
         }
       }
-    };
-
-    const getCode = () => {
-      getCodeImg().then((res) => {
-        codeUrl.value = res.img;
-        loginForm.uuid = res.uuid;
-      });
     };
 
     onMounted(() => {
