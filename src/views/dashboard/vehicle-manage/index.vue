@@ -17,8 +17,8 @@
       <!--                </a-form-item>-->
       <!--              </a-col>-->
       <!--              <a-col :span="8">-->
-      <!--                <a-form-item field="wide" label="车辆宽度">-->
-      <!--                  <a-input v-model="formModel.wide" placeholder="请输入" />-->
+      <!--                <a-form-item field="width" label="车辆宽度">-->
+      <!--                  <a-input v-model="formModel.width" placeholder="请输入" />-->
       <!--                </a-form-item>-->
       <!--              </a-col>-->
       <!--              <a-col :span="8">-->
@@ -81,9 +81,9 @@
           <a-input v-if="rowIndex === editIndex" v-model="record.length" />
           <p v-else>{{ record.length }}</p>
         </template>
-        <template #wide="{ record, rowIndex }">
-          <a-input v-if="rowIndex === editIndex" v-model="record.wide" />
-          <p v-else>{{ record.wide }}</p>
+        <template #width="{ record, rowIndex }">
+          <a-input v-if="rowIndex === editIndex" v-model="record.width" />
+          <p v-else>{{ record.width }}</p>
         </template>
         <template #height="{ record, rowIndex }">
           <a-input v-if="rowIndex === editIndex" v-model="record.height" />
@@ -143,7 +143,7 @@ const generateFormModel = () => {
     height: '',
     length: '',
     license: '',
-    wide: '',
+    width: '',
   };
 };
 
@@ -166,8 +166,8 @@ export default defineComponent({
       },
       {
         title: '车辆宽度',
-        dataIndex: 'wide',
-        slotName: 'wide',
+        dataIndex: 'width',
+        slotName: 'width',
       },
       {
         title: '车辆高度',

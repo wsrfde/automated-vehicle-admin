@@ -2,58 +2,110 @@
   <a-card class="alarm-alert" title="">
     <p class="alert-box">
       <b>声光报警：</b>
-      <a-tag :color="stateColorFun('正常')" size="large" class="custom-tag">
-        正常
+      <a-tag :color="stateData.color" size="large" class="custom-tag">
+        {{ stateData.text }}
       </a-tag>
     </p>
     <p class="stop-handle">
-      <!--      <b>紧急停止：</b>-->
-      <!--      shape="circle"-->
-      <!--      size="large"-->
       <a-button
+        v-if="!isStop"
         type="primary"
         status="danger"
         class="custom-btn"
         @click="openCloseFun"
       >
-        <icon-record-stop size="20" />紧急停止
+        <icon-record-stop size="20" style="margin-right: 10px" />
+        紧急停止
+      </a-button>
+      <a-button
+        v-else
+        type="primary"
+        status="success"
+        class="custom-btn"
+        @click="resetFun"
+      >
+        <icon-play-circle size="20" style="margin-right: 10px" />
+        紧急复位
       </a-button>
     </p>
   </a-card>
-  <StopModal ref="stopModalRef" />
+  <StopModal ref="stopModalRef" @change-state="changeState" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
+import { emergencyStop } from '@/api/dashboard';
+import { Notification } from '@arco-design/web-vue';
 import StopModal from './stop-modal.vue';
 
 export default defineComponent({
   components: { StopModal },
-  setup() {
+  props: {
+    carTips: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
+    const isStop = ref(false);
     const stopModalRef = ref<InstanceType<typeof StopModal>>();
 
-    const stateColorFun = (state: string) => {
+    const stateFormat = (state: string) => {
       switch (state) {
-        case '正常':
-          return '#5ebb3a';
-        case '警告':
-          return '#ff7d00';
-        case '异常':
-          return '#f53f3f';
+        case 'success':
+          return {
+            color: '#5ebb3a',
+            text: '正常',
+          };
+        case 'warn':
+          return {
+            color: '#ff7d00',
+            text: '警告',
+          };
+        case 'error':
+          return {
+            color: '#f53f3f',
+            text: '异常',
+          };
         default:
-          return 'red';
+          return {
+            color: '#ccc',
+            text: '-',
+          };
       }
     };
 
+    const stateData = computed(() => stateFormat(props.carTips.alarmState));
+
+    const stopFun = (stop: number) => {
+      const query = {
+        stop, // 1:停止 0:复位
+      };
+      emergencyStop(query).then(() => {
+        Notification.success(stop === 1 ? '紧急停止成功' : '紧急复位成功');
+      });
+    };
     const openCloseFun = () => {
-      console.log('---');
       stopModalRef.value?.show();
+    };
+    const resetFun = () => {
+      stopFun(0);
+      isStop.value = false;
+    };
+    const changeState = (e) => {
+      stopFun(1);
+      stopModalRef.value?.hide();
+      isStop.value = e;
     };
 
     return {
+      isStop,
       stopModalRef,
-      stateColorFun,
+      stateData,
+      stateFormat,
       openCloseFun,
+      changeState,
+      resetFun,
     };
   },
 });
@@ -77,19 +129,6 @@ export default defineComponent({
         text-align: center;
       }
     }
-
-    //.stop-handle {
-    //  display: flex;
-    //  align-items: center;
-    //  b {
-    //    margin-right: 20px;
-    //  }
-    //  .custom-btn {
-    //    //margin-left: 65px;
-    //    //width: 45px;
-    //    //height: 45px;
-    //  }
-    //}
   }
 }
 </style>

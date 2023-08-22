@@ -13,7 +13,7 @@ export default class StompClient {
       onConnect() {
         // 返回实例中可以调用unsubscribe()方法，用来取消订阅
         topics.forEach((item) => {
-          // 这里在onConnect中this的指向为stompClient实例，所以直接调用subscribe方法即可
+          // 这里在onConnect中this的指向为new StompClient实例，所以直接调用subscribe方法即可
           this.subscribe(item.topicUrl, (message) => {
             const payload = JSON.parse(message.body);
             item.callback(payload);

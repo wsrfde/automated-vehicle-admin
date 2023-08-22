@@ -1,30 +1,24 @@
 <template>
   <a-card class="crane-handle" title="天车操作">
-    <p>
-      <span>切换状态：</span>
-      <a-select
-        v-model="selectVal"
-        placeholder="请选择"
-        style="width: 120px"
-        @change="changeSelect"
-      >
-        <a-option
-          v-for="(item, index) of stepOption"
-          :key="index"
-          :value="item.value"
-          :label="item.title"
-        />
-      </a-select>
-    </p>
-    <p>
+    <a-space>
       <span>操作方式：</span>
-      <a-switch @change="changeSwitch">
+      <a-switch v-model="checkVal" :before-change="changeSwitch">
         <template #checked> 自动 </template>
         <template #unchecked> 手动 </template>
       </a-switch>
-    </p>
-    <a-button type="outline" class="m10" @click="stopRun">停止倒料</a-button>
-    <a-button type="primary" class="m10" @click="startRun">开始倒料</a-button>
+    </a-space>
+    <a-space direction="vertical" fill style="margin-top: 10px">
+      <span>状态切换：</span>
+      <a-button
+        v-for="(item, index) in stepOption"
+        :key="index"
+        :disabled="!checkVal || item.value === currentStep"
+        type="outline"
+        @click="btnClick(item.value)"
+      >
+        {{ item.title }}
+      </a-button>
+    </a-space>
   </a-card>
 </template>
 
@@ -34,8 +28,8 @@ import { defineComponent, ref } from 'vue';
 export default defineComponent({
   props: {
     currentStep: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '',
     },
     stepOption: {
       type: Array,
@@ -44,28 +38,32 @@ export default defineComponent({
   },
   emits: ['changeStep'],
   setup(props, { emit }) {
-    const selectVal = ref(props.currentStep);
-    const changeSelect = (val: number) => {
+    const checkVal = ref(false);
+
+    const btnClick = (val: number) => {
       emit('changeStep', val);
     };
-    const changeSwitch = (val: boolean) => {
-      console.log(val);
-    };
-    const stopRun = () => {
-      console.log('stop');
-    };
-    const startRun = () => {
-      console.log('start');
+
+    const changeSwitch = async (newValue) => {
+      console.log(newValue);
+      await new Promise((resolve) => {
+        setTimeout(resolve, 500);
+      });
+      return true;
     };
 
-    return { selectVal, changeSelect, changeSwitch, stopRun, startRun };
+    return {
+      checkVal,
+      btnClick,
+      changeSwitch,
+    };
   },
 });
 </script>
 
 <style scoped lang="less">
 p {
-  margin: 0 auto 15px;
+  margin: 0 0 15px;
 }
 .m10 {
   display: block;

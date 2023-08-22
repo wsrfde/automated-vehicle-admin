@@ -15,3 +15,7 @@ export function deleteVehicleData(data) {
 export function editVehicleData(data) {
   return axios.put('/api/vehicle', data);
 }
+
+export function emergencyStop(data) {
+  return axios.post('/api/mqtt/emergency', data);
+}

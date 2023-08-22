@@ -167,7 +167,7 @@ export default defineComponent({
           await userStore.login(user);
           await routerJump();
         } catch (err) {
-          console.log(err.response.data.message);
+          console.log(err);
           errorMessage.value = err.response.data.message;
           if (err.response.data.message === '验证码不存在或已过期') {
             getCode();

@@ -1,6 +1,6 @@
 <template>
   <a-card class="general-card" title="装车落料">
-    <a-steps :current="currentStep">
+    <a-steps :current="findStepIndex(currentStep)">
       <a-step
         v-for="(item, index) in stepOption"
         :key="index"
@@ -16,21 +16,26 @@ import { defineComponent, ref } from 'vue';
 export default defineComponent({
   props: {
     currentStep: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '',
     },
     stepOption: {
       type: Array,
       default: () => [],
     },
   },
-  setup() {
+  setup(props) {
     const timelineConfig = ref({
       direction: 'horizontal',
     });
 
+    const findStepIndex = (val: string) => {
+      return props.stepOption.findIndex((item: any) => item.value === val) + 1;
+    };
+
     return {
       timelineConfig,
+      findStepIndex,
     };
   },
 });
