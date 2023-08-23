@@ -34,8 +34,6 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
 import type { Form } from '@arco-design/web-vue';
-import { emergencyStop } from '@/api/dashboard';
-import { Notification } from '@arco-design/web-vue';
 
 export default defineComponent({
   emits: ['changeState'],
@@ -67,7 +65,7 @@ export default defineComponent({
     const handleBeforeOk = () => {
       formRef.value?.validate((errors) => {
         if (!errors) {
-          emit('changeState', true);
+          emit('changeState', 1);
         }
       });
     };

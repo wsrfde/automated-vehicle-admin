@@ -7,7 +7,7 @@
     <div class="alert-box">
       <transition appear>
         <p v-if="isShow" class="alert-text">
-          <span>车辆{{ carTips.carLicence }}进入门闸</span>
+          <span>车辆{{ carTips.license }}进入门闸</span>
           <span>{{ carTips.passTime }}</span>
         </p>
       </transition>
@@ -29,7 +29,7 @@ export default defineComponent({
     const isShow = ref(false);
 
     watch(
-      props.carTips,
+      () => props.carTips,
       (e) => {
         console.log(e);
         isShow.value = false;

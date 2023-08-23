@@ -2,7 +2,6 @@
   <div class="container">
     <Breadcrumb :items="['仪表盘', '天车状态']" />
     <CarAlert :car-tips="carTips" />
-    <AlarmAlert :car-tips="carTips" />
     <div class="car-box">
       <a-card
         v-for="(item, index) in craneConfigList"
@@ -10,23 +9,25 @@
         class="custom-card"
         :title="item.title"
       >
+        <AlarmAlert :crane-no="item.crane_no" :crane-data="item.data" />
         <CraneStep
           class="mb15"
-          :current-step="item.currentStep"
+          :current-step="item.data.step"
           :step-option="stepOption"
         />
         <a-layout>
           <a-layout-content>
-            <CraneCoordinates />
+            <CraneCoordinates :crane-data="item.data" />
           </a-layout-content>
           <a-layout-content class="ml15">
-            <CraneState />
+            <CraneState :crane-data="item.data" />
           </a-layout-content>
           <a-layout-sider style="width: 14vw" class="ml15">
             <CraneHandle
-              :current-step="item.currentStep"
+              :crane-no="item.crane_no"
+              :current-operate="item.data.operate"
+              :current-step="item.data.step"
               :step-option="stepOption"
-              @change-step="(e) => changeStep(e, index)"
             />
           </a-layout-sider>
         </a-layout>
@@ -56,10 +57,7 @@ export default defineComponent({
     CraneState,
   },
   setup() {
-    const carTips = reactive({});
-    const carState = ref({});
-    const oneCarData = reactive({});
-    const twoCarData = reactive({});
+    const carTips = ref({});
 
     const stepOption = [
       {
@@ -86,88 +84,84 @@ export default defineComponent({
     const craneConfigList = reactive([
       {
         title: '天车 #01',
-        currentStep: 'maintain',
+        crane_no: 1,
+        data: {}, // 用于存储天车数据
       },
       {
         title: '天车 #02',
-        currentStep: 'maintain',
+        crane_no: 2,
+        data: {}, // 用于存储天车数据
       },
     ]);
 
     const changeStep = (step: number, index) => {
-      craneConfigList[index].currentStep = step;
+      craneConfigList[index].data.step = step;
     };
 
     const stomp = new StompClient([
       {
-        topicUrl: 'jtgx/alarmAlert', // 车辆进入通知
+        topicUrl: 'jtgx/car/park', // 车辆进入通知
         callback: (e) => {
-          Object.assign(carTips, e);
+          carTips.value = e;
         },
       },
       {
-        topicUrl: 'jtgx/emergency', // 紧急停止按钮状态
+        topicUrl: 'jtgx/emergency/1', // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          Object.assign(carTips, e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/overhead-crane-handle', // 当前状态
-        callback: (e) => {
-          console.log(e);
-          carState.value = e;
+          Object.assign(craneConfigList[0].data, e);
         },
       },
       {
         topicUrl: 'jtgx/crane/position/1', // 坐标信息
         callback: (e) => {
-          console.log(e);
-          Object.assign(oneCarData, e);
+          Object.assign(craneConfigList[0].data, e);
         },
       },
       {
         topicUrl: 'jtgx/backStage/1', // 状态集合
         callback: (e) => {
-          console.log(e);
-          Object.assign(oneCarData, e);
+          Object.assign(craneConfigList[0].data, e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/overhead-crane-handle/1', // 当前状态
+        callback: (e) => {
+          Object.assign(craneConfigList[0].data, e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/emergency/2', // 声光报警&紧急停止按钮状态
+        callback: (e) => {
+          Object.assign(craneConfigList[1].data, e);
         },
       },
       {
         topicUrl: 'jtgx/crane/position/2',
         callback: (e) => {
-          console.log(e);
-          Object.assign(twoCarData, e);
+          Object.assign(craneConfigList[1].data, e);
         },
       },
       {
         topicUrl: 'jtgx/backStage/2',
         callback: (e) => {
-          console.log(e);
-          Object.assign(twoCarData, e);
+          Object.assign(craneConfigList[1].data, e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/overhead-crane-handle/2', // 当前状态
+        callback: (e) => {
+          Object.assign(craneConfigList[1].data, e);
         },
       },
     ]);
     stomp.connect();
-    console.log(stomp);
-    // 发送消息
-    // const sendMsg = () => {
-    //   stomp.stompClient.publish('jtgx/emergency', {
-    //     stop: 1,
-    //   });
-    // };
-    setTimeout(() => {
-      // sendMsg();
-      // console.log('发送消息');
-    }, 2000);
+
     onUnmounted(() => {
       stomp.destroy();
     });
 
     return {
       carTips,
-      carState,
-      oneCarData,
-      twoCarData,
       stepOption,
       craneConfigList,
       changeStep,

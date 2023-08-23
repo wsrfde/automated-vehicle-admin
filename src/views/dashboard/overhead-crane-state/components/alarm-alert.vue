@@ -1,14 +1,8 @@
 <template>
   <a-card class="alarm-alert" title="">
-    <p class="alert-box">
-      <b>声光报警：</b>
-      <a-tag :color="stateData.color" size="large" class="custom-tag">
-        {{ stateData.text }}
-      </a-tag>
-    </p>
     <p class="stop-handle">
       <a-button
-        v-if="!isStop"
+        v-if="btnStatus"
         type="primary"
         status="danger"
         class="custom-btn"
@@ -28,6 +22,12 @@
         紧急复位
       </a-button>
     </p>
+    <p class="alert-box">
+      <b>声光报警：</b>
+      <a-tag :color="stateData.color" size="large" class="custom-tag">
+        {{ stateData.text }}
+      </a-tag>
+    </p>
   </a-card>
   <StopModal ref="stopModalRef" @change-state="changeState" />
 </template>
@@ -41,13 +41,17 @@ import StopModal from './stop-modal.vue';
 export default defineComponent({
   components: { StopModal },
   props: {
-    carTips: {
+    craneNo: {
+      type: Number,
+      default: 1,
+    },
+    craneData: {
       type: Object,
       default: () => ({}),
     },
   },
   setup(props) {
-    const isStop = ref(false);
+    const btnStatus = computed(() => props.craneData.stop === 0);
     const stopModalRef = ref<InstanceType<typeof StopModal>>();
 
     const stateFormat = (state: string) => {
@@ -75,13 +79,17 @@ export default defineComponent({
       }
     };
 
-    const stateData = computed(() => stateFormat(props.carTips.alarmState));
+    const stateData = computed(() => stateFormat(props.craneData.alarmState));
 
-    const stopFun = (stop: number) => {
+    const stopFun = async (stop: number) => {
       const query = {
-        stop, // 1:停止 0:复位
+        message: {
+          crane_no: props.craneNo,
+          alarmState: stop === 0 ? 'success' : 'error',
+          stop, // 1:停止 0:复位
+        },
       };
-      emergencyStop(query).then(() => {
+      await emergencyStop(JSON.stringify(query)).then(() => {
         Notification.success(stop === 1 ? '紧急停止成功' : '紧急复位成功');
       });
     };
@@ -90,16 +98,14 @@ export default defineComponent({
     };
     const resetFun = () => {
       stopFun(0);
-      isStop.value = false;
     };
-    const changeState = (e) => {
-      stopFun(1);
+    const changeState = async (e) => {
+      await stopFun(e);
       stopModalRef.value?.hide();
-      isStop.value = e;
     };
 
     return {
-      isStop,
+      btnStatus,
       stopModalRef,
       stateData,
       stateFormat,
@@ -113,16 +119,17 @@ export default defineComponent({
 
 <style scoped lang="less">
 .alarm-alert {
-  margin-top: 20px;
+  margin-bottom: 20px;
+  border-width: 0 0 1px 0;
+  p {
+    margin: 0;
+  }
 
   :deep(.arco-card-body) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     .alert-box {
-      b {
-        //margin-right: 20px;
-      }
       .custom-tag {
         display: inline-block;
         width: 150px;

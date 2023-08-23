@@ -1,6 +1,6 @@
 <template>
   <a-card class="crane-coordinates" title="天车坐标">
-    <a-descriptions :data="initData(carData)" bordered :column="2" />
+    <a-descriptions :data="initData(craneData)" bordered :column="2" />
   </a-card>
 </template>
 
@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
-    carData: {
+    craneData: {
       type: Object,
       default: () => ({}),
     },

@@ -19,3 +19,11 @@ export function editVehicleData(data) {
 export function emergencyStop(data) {
   return axios.post('/api/mqtt/emergency', data);
 }
+
+export function overheadCrane(data) {
+  return axios.post('/api/mqtt/overheadCrane', data);
+}
+
+export function getJobStatistics(params) {
+  return axios.get('/api/stats', { params });
+}

@@ -2,56 +2,6 @@
   <div class="container">
     <Breadcrumb :items="['系统监控', '操作日志']" />
     <a-card class="general-card" title="操作日志">
-      <a-row>
-        <a-col :flex="1">
-          <a-form
-            :model="formModel"
-            :label-col-props="{ span: 6 }"
-            :wrapper-col-props="{ span: 18 }"
-            label-align="left"
-          >
-            <a-row :gutter="16">
-              <a-col :span="8">
-                <a-form-item field="name" label="用户昵称">
-                  <a-input v-model="formModel.name" placeholder="请输入" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="number" label="手机号码">
-                  <a-input v-model="formModel.number" placeholder="请输入" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="time" label="操作日期">
-                  <a-range-picker
-                    v-model="formModel.time"
-                    style="width: 100%"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row>
-          </a-form>
-        </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
-        <a-col :flex="'86px'" style="text-align: right">
-          <a-space direction="vertical" :size="18">
-            <a-button type="primary" @click="search">
-              <template #icon>
-                <icon-search />
-              </template>
-              查询
-            </a-button>
-            <a-button @click="reset">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              重置
-            </a-button>
-          </a-space>
-        </a-col>
-      </a-row>
-      <a-divider />
-
       <a-table
         :columns="columns"
         :data="renderData"
@@ -62,9 +12,11 @@
         row-key="id"
         @page-change="onPageChange"
       >
-        <template #action="{ record }">
-          <a-tag :color="record.action === '紧急停止' ? 'red' : 'arcoblue'">
-            {{ record.action }}
+        <template #description="{ record }">
+          <a-tag
+            :color="record.description === '紧急停止' ? 'red' : 'arcoblue'"
+          >
+            {{ record.description }}
           </a-tag>
         </template>
       </a-table>
@@ -73,70 +25,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
+import { getSystemLogs } from '@/api/system';
 import useLoading from '@/hooks/loading';
 import { Pagination } from '@/types/global';
 
-const generateFormModel = () => {
-  return {
-    number: '',
-    name: '',
-    time: [],
-  };
-};
-
 export default defineComponent({
   setup() {
-    const formModel = ref(generateFormModel());
-
-    const search = () => {
-      // fetchData({
-      //   ...basePagination,
-      //   ...formModel.value,
-      // } as unknown as PolicyParams);
-    };
-    const reset = () => {
-      formModel.value = generateFormModel();
-    };
-
     const { loading, setLoading } = useLoading(false); // 这里应该是true
 
     const columns = [
       {
         title: '用户昵称',
-        dataIndex: 'name',
+        dataIndex: 'username',
       },
       {
-        title: '手机号码',
-        dataIndex: 'phone',
+        title: '用户地址',
+        dataIndex: 'address',
+      },
+      {
+        title: 'IP地址',
+        dataIndex: 'requestIp',
+      },
+      {
+        title: '浏览器',
+        dataIndex: 'browser',
       },
       {
         title: '执行动作',
-        dataIndex: 'action',
-        slotName: 'action',
+        dataIndex: 'description',
+        slotName: 'description',
       },
       {
-        title: '操作日期',
-        dataIndex: 'time',
+        title: '执行日期',
+        dataIndex: 'createTime',
       },
     ];
 
-    const renderData = reactive([
-      {
-        key: '1',
-        name: '阿明',
-        phone: '15122223333',
-        action: '紧急停止',
-        time: '2023/8/2 11:18:38',
-      },
-      {
-        key: '2',
-        name: '阿光',
-        phone: '15123333333',
-        action: '车辆启动',
-        time: '2023/8/1 20:18:38',
-      },
-    ]);
+    const renderData = ref([]);
     const basePagination: Pagination = {
       current: 1,
       pageSize: 20,
@@ -145,14 +71,13 @@ export default defineComponent({
       ...basePagination,
     });
 
-    const fetchData = async (params = { current: 1, pageSize: 20 }) => {
+    const fetchData = async (params = { current: 1, pageSize: 10 }) => {
       setLoading(true);
       try {
-        console.log(params);
-        // const { data } = await queryPolicyList(params);
-        // renderData.value = data.list;
-        // pagination.current = params.current;
-        // pagination.total = data.total;
+        const res = await getSystemLogs(params);
+        renderData.value = res.content;
+        pagination.current = params.current;
+        pagination.total = res.totalElements;
       } catch (err) {
         // you can report use errorHandler or other
       } finally {
@@ -163,16 +88,15 @@ export default defineComponent({
     const onPageChange = (current: number) => {
       fetchData({ ...basePagination, current });
     };
-
+    onMounted(() => {
+      fetchData();
+    });
     return {
       loading,
       columns,
       renderData,
       pagination,
-      formModel,
       onPageChange,
-      search,
-      reset,
     };
   },
 });

@@ -2,7 +2,8 @@
   <a-card class="crane-handle" title="天车操作">
     <a-space>
       <span>操作方式：</span>
-      <a-switch v-model="checkVal" :before-change="changeSwitch">
+      <!--      :before-change="changeSwitch"-->
+      <a-switch :model-value="currentOperate" @change="changeSwitch">
         <template #checked> 自动 </template>
         <template #unchecked> 手动 </template>
       </a-switch>
@@ -12,9 +13,9 @@
       <a-button
         v-for="(item, index) in stepOption"
         :key="index"
-        :disabled="!checkVal || item.value === currentStep"
+        :disabled="!currentOperate || item.value === currentStep"
         type="outline"
-        @click="btnClick(item.value)"
+        @click="changeState(item.value)"
       >
         {{ item.title }}
       </a-button>
@@ -23,10 +24,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
+import { overheadCrane } from '@/api/dashboard';
+import { Notification } from '@arco-design/web-vue';
 
 export default defineComponent({
   props: {
+    craneNo: {
+      type: Number,
+      default: 1,
+    },
+    currentOperate: {
+      type: Boolean,
+      default: false,
+    },
     currentStep: {
       type: String,
       default: '',
@@ -36,25 +47,25 @@ export default defineComponent({
       default: () => [],
     },
   },
-  emits: ['changeStep'],
-  setup(props, { emit }) {
-    const checkVal = ref(false);
+  setup(props) {
+    const overheadCraneFun = async (step, operate) => {
+      const query = { message: { crane_no: props.craneNo, step, operate } };
 
-    const btnClick = (val: number) => {
-      emit('changeStep', val);
+      await overheadCrane(JSON.stringify(query)).then((res) => {
+        Notification.success('天车操作成功');
+      });
     };
 
-    const changeSwitch = async (newValue) => {
-      console.log(newValue);
-      await new Promise((resolve) => {
-        setTimeout(resolve, 500);
-      });
-      return true;
+    const changeState = async (val: number) => {
+      await overheadCraneFun(val, props.currentOperate);
+    };
+
+    const changeSwitch = async (val) => {
+      await overheadCraneFun(props.currentStep, val);
     };
 
     return {
-      checkVal,
-      btnClick,
+      changeState,
       changeSwitch,
     };
   },
