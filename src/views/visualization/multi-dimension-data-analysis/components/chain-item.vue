@@ -31,7 +31,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import useLoading from '@/hooks/loading';
-import { queryDataChainGrowth, DataChainGrowth } from '@/api/visualization';
 import useChartOption from '@/hooks/chart-option';
 
 export default defineComponent({
@@ -46,7 +45,7 @@ export default defineComponent({
     },
     chartType: {
       type: String,
-      default: '',
+      default: 'line',
     },
   },
   setup(props) {
@@ -96,23 +95,18 @@ export default defineComponent({
         ],
       };
     });
-    const fetchData = async (params: DataChainGrowth) => {
+    const fetchData = async () => {
       try {
-        const { data } = await queryDataChainGrowth(params);
-        const { chartData } = data;
-        count.value = data.count;
-        growth.value = data.growth;
-        chartData.data.value.forEach((el, idx) => {
-          if (props.chartType === 'bar') {
-            chartDatas.value.push({
-              value: el,
-              itemStyle: {
-                color: idx % 2 ? '#468DFF' : '#86DF6C',
-              },
-            });
-          } else {
-            chartDatas.value.push(el);
-          }
+        // const { data } = await queryDataChainGrowth(params);
+        // 过去12天的数据
+        const data = [
+          1160, 2305, 2751, 1049, 1451, 1717, 1183, 1905, 2701, 2197, 2719,
+          2235,
+        ];
+        count.value = data[data.length - 1]; // 今日数据量
+        growth.value = (((count.value - data[0]) / data[0]) * 100).toFixed(2); // 数据增长率
+        data.forEach((el) => {
+          chartDatas.value.push(el);
         });
       } catch (err) {
         // you can report use errorHandler or other
@@ -120,7 +114,7 @@ export default defineComponent({
         setLoading(false);
       }
     };
-    fetchData({ quota: props.quota });
+    fetchData();
     return {
       loading,
       count,

@@ -1,19 +1,20 @@
 <template>
-  <a-card class="general-card" title="今日抓料统计">
+  <a-card class="general-card" title="今日抓料统计（吨）">
     <Chart height="122px" :option="chartOption" />
   </a-card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import useChartOption from '@/hooks/chart-option';
 
 export default defineComponent({
   setup() {
+    const renderData = ref([1033, 1244, 3520]);
     const { chartOption } = useChartOption((isDark) => {
       return {
         grid: {
-          left: 44,
+          left: 52,
           right: 20,
           top: 0,
           bottom: 20,
@@ -35,7 +36,7 @@ export default defineComponent({
         },
         yAxis: {
           type: 'category',
-          data: ['A区', 'B区', 'C区'],
+          data: ['1号天车', '2号天车', '3号天车'],
           axisLabel: {
             show: true,
             color: '#4E5969',
@@ -60,7 +61,7 @@ export default defineComponent({
         },
         series: [
           {
-            data: [1033, 1244, 1520],
+            data: renderData.value,
             type: 'bar',
             barWidth: 7,
             itemStyle: {

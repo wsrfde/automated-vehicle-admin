@@ -1,18 +1,22 @@
 <template>
   <a-spin :loading="loading" style="width: 100%">
-    <a-card class="general-card" title="抓料来源">
+    <a-card class="general-card" title="天车作业分布">
       <Chart style="width: 100%; height: 300px" :option="chartOption" />
     </a-card>
   </a-spin>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import useLoading from '@/hooks/loading';
 import useChartOption from '@/hooks/chart-option';
 
 export default defineComponent({
   setup() {
+    const loadData = ref([1111, 2222, 3333]);
+    const pourData = ref([1000, 2000, 3000]);
+    const preLoadData = ref([100, 200, 300]);
+
     const { chartOption } = useChartOption((isDark) => {
       const graphicElementStyle = {
         textAlign: 'center',
@@ -24,7 +28,7 @@ export default defineComponent({
       return {
         legend: {
           left: 'center',
-          data: ['自动抓取', '人工抓取', '其他'],
+          data: ['1号天车', '2号天车', '3号天车'],
           bottom: 0,
           icon: 'circle',
           itemWidth: 8,
@@ -46,7 +50,7 @@ export default defineComponent({
               left: '9.6%',
               top: 'center',
               style: {
-                text: 'A区',
+                text: '装车吨数',
                 ...graphicElementStyle,
               },
             },
@@ -55,7 +59,7 @@ export default defineComponent({
               left: 'center',
               top: 'center',
               style: {
-                text: 'B区',
+                text: '倒料吨数',
                 ...graphicElementStyle,
               },
             },
@@ -64,7 +68,7 @@ export default defineComponent({
               left: '86.6%',
               top: 'center',
               style: {
-                text: 'C区',
+                text: '预装吨数',
                 ...graphicElementStyle,
               },
             },
@@ -85,22 +89,22 @@ export default defineComponent({
             },
             data: [
               {
-                value: [148564],
-                name: '自动抓取',
+                value: loadData.value[0],
+                name: '1号天车',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
-                value: [334271],
-                name: '人工抓取',
+                value: loadData.value[1],
+                name: '2号天车',
                 itemStyle: {
                   color: '#846BCE',
                 },
               },
               {
-                value: [445694],
-                name: '其他',
+                value: loadData.value[2],
+                name: '3号天车',
                 itemStyle: {
                   color: '#86DF6C',
                 },
@@ -121,22 +125,22 @@ export default defineComponent({
             },
             data: [
               {
-                value: [148564],
-                name: '自动抓取',
+                value: pourData.value[0],
+                name: '1号天车',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
-                value: [334271],
-                name: '人工抓取',
+                value: pourData.value[1],
+                name: '2号天车',
                 itemStyle: {
                   color: '#846BCE',
                 },
               },
               {
-                value: [445694],
-                name: '其他',
+                value: pourData.value[2],
+                name: '3号天车',
                 itemStyle: {
                   color: '#86DF6C',
                 },
@@ -157,22 +161,22 @@ export default defineComponent({
             },
             data: [
               {
-                value: [148564],
-                name: '自动抓取',
+                value: preLoadData.value[0],
+                name: '1号天车',
                 itemStyle: {
                   color: '#249EFF',
                 },
               },
               {
-                value: [334271],
-                name: '人工抓取',
+                value: preLoadData.value[1],
+                name: '2号天车',
                 itemStyle: {
                   color: '#846BCE',
                 },
               },
               {
-                value: [445694],
-                name: '其他',
+                value: preLoadData.value[2],
+                name: '3号天车',
                 itemStyle: {
                   color: '#86DF6C',
                 },

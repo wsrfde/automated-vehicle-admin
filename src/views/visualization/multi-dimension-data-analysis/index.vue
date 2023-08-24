@@ -3,14 +3,8 @@
     <Breadcrumb :items="['数据可视化', '多维数据分析']" />
     <a-space direction="vertical" :size="16" fill>
       <a-row :gutter="16">
-        <a-col :span="18">
+        <a-col :span="24">
           <DataOverview />
-        </a-col>
-        <a-col :span="6">
-          <a-space direction="vertical" :size="16" fill>
-            <UserActions />
-            <ContentTypeDistribution />
-          </a-space>
         </a-col>
       </a-row>
       <DataChainGrowth />
@@ -23,16 +17,12 @@
 import { defineComponent } from 'vue';
 import DataOverview from './components/data-overview.vue';
 import DataChainGrowth from './components/data-chain-growth.vue';
-import UserActions from './components/user-actions.vue';
-import ContentTypeDistribution from './components/content-type-distribution.vue';
 import ContentPublishingSource from './components/content-publishing-source.vue';
 
 export default defineComponent({
   components: {
     DataOverview,
     DataChainGrowth,
-    UserActions,
-    ContentTypeDistribution,
     ContentPublishingSource,
   },
 });
@@ -43,7 +33,7 @@ export default defineComponent({
   padding: 0 20px 20px 20px;
 }
 
-:deep(.section-titile) {
+:deep(.section-title) {
   margin-top: 0;
   margin-bottom: 16px;
   font-size: 16px;
