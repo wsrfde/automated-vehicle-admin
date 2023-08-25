@@ -4,17 +4,18 @@
     <a-space direction="vertical" :size="16" fill>
       <a-row :gutter="16">
         <a-col :span="24">
-          <DataOverview />
+          <DataOverview :request-data="requestData" />
         </a-col>
       </a-row>
-      <DataChainGrowth />
-      <ContentPublishingSource />
+      <DataChainGrowth :load-data="requestData[0]" />
+      <ContentPublishingSource :request-data="requestData" />
     </a-space>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
+import { getRecent7DaysData } from '@/api/visualization';
 import DataOverview from './components/data-overview.vue';
 import DataChainGrowth from './components/data-chain-growth.vue';
 import ContentPublishingSource from './components/content-publishing-source.vue';
@@ -24,6 +25,30 @@ export default defineComponent({
     DataOverview,
     DataChainGrowth,
     ContentPublishingSource,
+  },
+  setup() {
+    const requestData = reactive([[], []]);
+    const fetchData = async () => {
+      const res = await getRecent7DaysData();
+      (res ?? []).forEach((item) => {
+        if (item.step === '装车') {
+          requestData[0].push({
+            craneNo: item.craneNo,
+            name: `${item.craneNo}号天车${item.step}`,
+            value: item.data,
+          });
+        } else {
+          requestData[1].push({
+            name: `${item.craneNo}号天车${item.step}`,
+            value: item.data,
+          });
+        }
+      });
+    };
+    fetchData();
+    return {
+      requestData,
+    };
   },
 });
 </script>

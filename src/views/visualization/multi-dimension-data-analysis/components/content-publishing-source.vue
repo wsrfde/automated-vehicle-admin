@@ -7,15 +7,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import useLoading from '@/hooks/loading';
 import useChartOption from '@/hooks/chart-option';
 
 export default defineComponent({
-  setup() {
-    const loadData = ref([1111, 2222, 3333]);
-    const pourData = ref([1000, 2000, 3000]);
-    const preLoadData = ref([100, 200, 300]);
+  props: {
+    requestData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props) {
+    const loadData = ref([0, 0, 0]);
+    const pourData = ref([0, 0, 0]);
+    const preLoadData = ref([0, 0, 0]);
+
+    const sumValue = (arr: number[]) => {
+      return arr.reduce((prev, cur) => prev + cur, 0);
+    };
+
+    watch(props.requestData, (newVal) => {
+      if (newVal.length > 0) {
+        loadData.value = newVal[0].map((item) => sumValue(item.value));
+        pourData.value = newVal[1].map((item) => sumValue(item.value));
+        // preLoadData.value = newVal[2].map((item) => sumValue(item.value));
+      }
+    });
 
     const { chartOption } = useChartOption((isDark) => {
       const graphicElementStyle = {

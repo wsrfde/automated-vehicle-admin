@@ -1,29 +1,14 @@
 <template>
   <div>
     <a-row :gutter="16">
-      <a-col :span="6">
+      <a-col v-for="item in loadData" :key="item.craneNo" :span="6">
         <ChainItem
-          title="1号天车抓料趋势"
-          quota="retentionTrends"
-          chart-type="line"
+          :title="item.craneNo + '号天车抓料趋势'"
+          :render-data="item.value"
         />
       </a-col>
       <a-col :span="6">
-        <ChainItem
-          title="2号天车抓料趋势"
-          quota="retentionTrends"
-          chart-type="line"
-        />
-      </a-col>
-      <a-col :span="6">
-        <ChainItem
-          title="3号天车抓料趋势"
-          quota="retentionTrends"
-          chart-type="line"
-        />
-      </a-col>
-      <a-col :span="6">
-        <UserActions />
+        <UserActions :load-data="loadData" />
       </a-col>
     </a-row>
   </div>
@@ -38,6 +23,12 @@ export default defineComponent({
   components: {
     ChainItem,
     UserActions,
+  },
+  props: {
+    loadData: {
+      type: Array,
+      default: () => [],
+    },
   },
 });
 </script>

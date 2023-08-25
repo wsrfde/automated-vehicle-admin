@@ -35,13 +35,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, watch } from 'vue';
 import { LineSeriesOption } from 'echarts';
 import useLoading from '@/hooks/loading';
 import { ToolTipFormatterParams } from '@/types/echarts';
 import useChartOption from '@/hooks/chart-option';
 import dayjs from 'dayjs';
-import { getStatistics } from '@/api/visualization';
 
 const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
   return items
@@ -97,7 +96,13 @@ const generateSeries = (
   };
 };
 export default defineComponent({
-  setup() {
+  props: {
+    requestData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props) {
     const { loading, setLoading } = useLoading(true);
     const oneCarLoad = ref<number[]>([]);
     const twoCarLoad = ref<number[]>([]);
@@ -116,14 +121,43 @@ export default defineComponent({
       })
       .reverse();
 
-    const lastValue = (arr: number[]) => {
-      return arr[arr.length - 1];
+    const sumValue = (arr: number[]) => {
+      return arr.reduce((prev, cur) => prev + cur, 0);
     };
+
+    watch(props.requestData, (newVal) => {
+      const data = newVal.flat();
+      data.forEach((el) => {
+        switch (el.name) {
+          case '1号天车装车':
+            oneCarLoad.value = el.value;
+            break;
+          case '2号天车装车':
+            twoCarLoad.value = el.value;
+            break;
+          case '3号天车装车':
+            threeCarLoad.value = el.value;
+            break;
+          case '1号天车倒料':
+            oneCarPour.value = el.value;
+            break;
+          case '2号天车倒料':
+            twoCarPour.value = el.value;
+            break;
+          case '3号天车倒料':
+            threeCarPour.value = el.value;
+            break;
+          default:
+            break;
+        }
+      });
+      setLoading(false);
+    });
 
     const renderData = computed(() => [
       {
         title: '1号天车装车',
-        value: lastValue(oneCarLoad.value),
+        value: sumValue(oneCarLoad.value),
         prefix: {
           icon: 'icon-archive',
           background: '#FFE4BA',
@@ -132,7 +166,7 @@ export default defineComponent({
       },
       {
         title: '2号天车装车',
-        value: lastValue(twoCarLoad.value),
+        value: sumValue(twoCarLoad.value),
         prefix: {
           icon: 'icon-archive',
           background: '#E8FFFB',
@@ -141,7 +175,7 @@ export default defineComponent({
       },
       {
         title: '3号天车装车',
-        value: lastValue(threeCarLoad.value),
+        value: sumValue(threeCarLoad.value),
         prefix: {
           icon: 'icon-archive',
           background: '#E8F3FF',
@@ -150,7 +184,7 @@ export default defineComponent({
       },
       {
         title: '1号天车倒料',
-        value: lastValue(oneCarPour.value),
+        value: sumValue(oneCarPour.value),
         prefix: {
           icon: 'icon-bg-colors',
           background: '#ffe5d4',
@@ -159,7 +193,7 @@ export default defineComponent({
       },
       {
         title: '2号天车倒料',
-        value: lastValue(twoCarPour.value),
+        value: sumValue(twoCarPour.value),
         prefix: {
           icon: 'icon-bg-colors',
           background: '#b5eed1',
@@ -168,7 +202,7 @@ export default defineComponent({
       },
       {
         title: '3号天车倒料',
-        value: lastValue(threeCarPour.value),
+        value: sumValue(threeCarPour.value),
         prefix: {
           icon: 'icon-bg-colors',
           background: '#cbe9ff',
@@ -289,73 +323,7 @@ export default defineComponent({
         ],
       };
     });
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const query = {
-          dateFrom: `${xAxis.value[0]} 00:00:00`,
-          dateTo: `${xAxis.value[xAxis.value.length - 1]} 23:59:59`,
-        };
-        const res = await getStatistics(query);
-        // const { data } = await queryDataOverview();
-        const data = [
-          {
-            name: '1号天车装车',
-            value: [892, 3380, 3513, 2020, 2602, 1308, 3326],
-          },
-          {
-            name: '2号天车装车',
-            value: [2064, 3725, 2941, 3714, 1937, 3882, 3242],
-          },
-          {
-            name: '3号天车装车',
-            value: [2015, 3873, 1499, 2902, 1659, 3392, 3264],
-          },
-          {
-            name: '1号天车倒料',
-            value: [3456, 2117, 3697, 2889, 3380, 2117, 2420],
-          },
-          {
-            name: '2号天车倒料',
-            value: [3013, 1491, 3719, 3261, 1411, 1902, 3180],
-          },
-          {
-            name: '3号天车倒料',
-            value: [1455, 3891, 1804, 3774, 3486, 834, 992],
-          },
-        ];
 
-        data.forEach((el) => {
-          switch (el.name) {
-            case '1号天车装车':
-              oneCarLoad.value = el.value;
-              break;
-            case '2号天车装车':
-              twoCarLoad.value = el.value;
-              break;
-            case '3号天车装车':
-              threeCarLoad.value = el.value;
-              break;
-            case '1号天车倒料':
-              oneCarPour.value = el.value;
-              break;
-            case '2号天车倒料':
-              twoCarPour.value = el.value;
-              break;
-            case '3号天车倒料':
-              threeCarPour.value = el.value;
-              break;
-            default:
-              break;
-          }
-        });
-      } catch (err) {
-        // you can report use errorHandler or other
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
     return {
       loading,
       renderData,

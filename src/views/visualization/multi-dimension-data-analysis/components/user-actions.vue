@@ -5,12 +5,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import useChartOption from '@/hooks/chart-option';
 
 export default defineComponent({
-  setup() {
-    const renderData = ref([1033, 1244, 3520]);
+  props: {
+    loadData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props) {
+    const renderData = ref([]);
+    watch(props.loadData, (val) => {
+      renderData.value = val.map((item) => item.value[item.value.length - 1]);
+    });
     const { chartOption } = useChartOption((isDark) => {
       return {
         grid: {

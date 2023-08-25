@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import useLoading from '@/hooks/loading';
 import useChartOption from '@/hooks/chart-option';
 
@@ -39,21 +39,21 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    quota: {
-      type: String,
-      default: '',
-    },
     chartType: {
       type: String,
       default: 'line',
+    },
+    renderData: {
+      type: Array,
+      default: () => [],
     },
   },
   setup(props) {
     const { loading, setLoading } = useLoading(true);
     const count = ref(0);
     const growth = ref(100);
-    const isUp = computed(() => growth.value > 50);
-    const chartDatas = ref<any>([]);
+    const isUp = computed(() => growth.value > 0);
+    const chartData = ref<any>([]);
     const { chartOption } = useChartOption(() => {
       return {
         grid: {
@@ -76,7 +76,7 @@ export default defineComponent({
         },
         series: [
           {
-            data: chartDatas.value,
+            data: chartData.value,
             ...(props.chartType === 'bar'
               ? {
                   type: 'bar',
@@ -95,26 +95,28 @@ export default defineComponent({
         ],
       };
     });
-    const fetchData = async () => {
-      try {
-        // const { data } = await queryDataChainGrowth(params);
-        // 过去12天的数据
-        const data = [
-          1160, 2305, 2751, 1049, 1451, 1717, 1183, 1905, 2701, 2197, 2719,
-          2235,
-        ];
-        count.value = data[data.length - 1]; // 今日数据量
-        growth.value = (((count.value - data[0]) / data[0]) * 100).toFixed(2); // 数据增长率
-        data.forEach((el) => {
-          chartDatas.value.push(el);
-        });
-      } catch (err) {
-        // you can report use errorHandler or other
-      } finally {
+
+    watch(
+      props.renderData,
+      (data) => {
+        if (data.length) {
+          count.value = data[data.length - 1];
+          if (data[data.length - 2] === 0) {
+            growth.value = 0;
+          } else {
+            growth.value = (
+              ((data[data.length - 1] - data[data.length - 2]) /
+                data[data.length - 2]) *
+              100
+            ).toFixed(2);
+          }
+
+          chartData.value = data;
+        }
         setLoading(false);
-      }
-    };
-    fetchData();
+      },
+      { immediate: true }
+    );
     return {
       loading,
       count,
