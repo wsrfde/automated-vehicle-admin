@@ -201,7 +201,6 @@ export default defineComponent({
         ...params,
         ...formModel.value,
       };
-      console.log(query);
       setLoading(true);
       getVehicleData(query).then((res) => {
         setLoading(false);

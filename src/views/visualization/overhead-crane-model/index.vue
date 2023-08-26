@@ -2,7 +2,7 @@
   <div class="container">
     <Breadcrumb :items="['数据可视化', '天车模型']" />
     <a-card class="general-card three-card" title="">
-      <object class="three-box" data="http://three.iojun.com/"></object>
+      <iframe class="three-box" src="http://three.iojun.com/"></iframe>
     </a-card>
   </div>
 </template>

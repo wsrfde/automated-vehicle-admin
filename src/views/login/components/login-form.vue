@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
     <div class="login-form-title">{{ title }}</div>
-    <div class="login-form-sub-title">一站式自动化管理平台</div>
+    <div class="login-form-sub-title">智能化管理平台 </div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginFormRef"
@@ -71,9 +71,9 @@
         <a-button type="primary" html-type="submit" long :loading="loading">
           登录
         </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          注册账号
-        </a-button>
+        <!--        <a-button type="text" long class="login-form-register-btn">-->
+        <!--          注册账号-->
+        <!--        </a-button>-->
       </a-space>
     </a-form>
   </div>

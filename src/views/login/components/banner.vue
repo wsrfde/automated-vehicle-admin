@@ -6,7 +6,7 @@
           <div :key="item.slogan" class="carousel-item">
             <div class="carousel-title">{{ item.slogan }}</div>
             <div class="carousel-sub-title">{{ item.subSlogan }}</div>
-            <img class="carousel-image" :src="item.image" />
+            <img class="carousel-image" :src="item.image" alt="" />
           </div>
         </a-carousel-item>
       </a-carousel>
@@ -22,13 +22,13 @@ export default defineComponent({
   setup() {
     const carouselItem = computed(() => [
       {
-        slogan: '一站式解决方案',
-        subSlogan: '丰富的页面，覆盖大多数典型业务场景',
+        slogan: '智能化管理平台',
+        subSlogan: '覆盖大多数典型业务场景',
         image: bannerImage,
       },
       {
         slogan: '自动化解决方案',
-        subSlogan: '天车模型，状态管理，数据统计等',
+        subSlogan: '以智定未来，以创领时代',
         image: bannerImage,
       },
     ]);

@@ -2,7 +2,6 @@
   <a-card class="crane-handle" title="天车操作">
     <a-space>
       <span>操作方式：</span>
-      <!--      :before-change="changeSwitch"-->
       <a-switch :model-value="currentOperate" @change="changeSwitch">
         <template #checked> 自动 </template>
         <template #unchecked> 手动 </template>
@@ -51,7 +50,7 @@ export default defineComponent({
     const overheadCraneFun = async (step, operate) => {
       const query = { message: { crane_no: props.craneNo, step, operate } };
 
-      await overheadCrane(JSON.stringify(query)).then((res) => {
+      await overheadCrane(JSON.stringify(query)).then(() => {
         Notification.success('天车操作成功');
       });
     };
