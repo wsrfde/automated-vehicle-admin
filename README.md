@@ -1,31 +1,30 @@
-<div align="center">
-  <h1>vue-admin-arco</h1>
-</div>
 
-<div align="center">
 
-本模板基于 [arco-design-pro-vue](https://arco.design/) 源码魔改而来，Arco Design 是一款由字节跳动出品的让人眼前一亮的 UI 库。
+## 💻 部署文档
+Node版本：v18.12.0
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/arco-design/arco-design-pro/blob/main/LICENSE)
+yarn版本：1.22.19
 
-</div>
+1. 安装包管理器
+> yarn只需要安装一次即可，如果已经安装过了，可以跳过这一步
+```bash
+npm install yarn -g
+```
 
-## 🔗 演示地址
+2. 安装依赖
+```bash
+yarn
+```
 
-- [vue-admin-arco 魔改版](https://vue-admin-beautiful.com/vue-admin-arco)
+3. 打包项目
+```bash
+yarn build:normal
+```
 
-## ✨ 魔改内容
+打包后的文件在`dist`目录下
 
-- 重构主题
-- 升级最新版本
-- 未完待续
 
-## 📝 声明
-
-- 本项目目前绝大多数源码均源自字节跳动 Arco Design 开源仓库
-- 本项目仅用于个人学习用途
-
-## 🌐 文档地址
+## 🌐 项目文档
 
 - [arco.design](https://arco.design/vue/docs/start)
 - [字节跳动原版](https://vue-pro.arco.design)

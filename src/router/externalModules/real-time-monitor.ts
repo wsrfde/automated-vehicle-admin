@@ -5,7 +5,7 @@ export default {
   name: 'real-time-monitor',
   meta: {
     title: '实时监控',
-    icon: 'icon-link',
+    icon: 'icon-video-camera',
     requiresAuth: true,
     roles: ['*'],
   },
