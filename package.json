@@ -7,10 +7,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --config ./config/vite.config.dev.ts",
-    "build": "vue-tsc --noEmit --skipLibCheck && vite build --config ./config/vite.config.prod.ts",
+    "build": "vite build --config ./config/vite.config.prod.ts",
     "lint-staged": "npx lint-staged",
     "prepare": "husky install",
-    "build:normal": "vite build --config ./config/vite.config.prod.ts",
+    "build:strict": "vue-tsc --noEmit --skipLibCheck && vite build --config ./config/vite.config.prod.ts",
     "module:update": "ncu -u --registry https://registry.npmmirror.com&&cnpm i",
     "lint:eslint": "eslint {src,mock}/**/*.{vue,js,ts} --fix"
   },
