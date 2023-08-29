@@ -2,7 +2,7 @@
   <div class="container">
     <Breadcrumb :items="['数据可视化', '天车模型']" />
     <a-card class="general-card three-card" title="">
-      <iframe class="three-box" src="http://three.iojun.com/"></iframe>
+      <iframe class="three-box" :src="iframeUrl"></iframe>
     </a-card>
   </div>
 </template>
@@ -10,7 +10,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-export default defineComponent({});
+export default defineComponent({
+  setup() {
+    const iframeUrl = process.env.THREE_URL;
+    return { iframeUrl };
+  },
+});
 </script>
 
 <style scoped lang="less">
