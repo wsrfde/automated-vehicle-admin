@@ -145,25 +145,20 @@ const generateFormModel = () => {
 };
 
 export default defineComponent({
-  setup() {
+  props: {
+    rolesData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  setup(props) {
     const formModel = ref(generateFormModel());
     const { loading, setLoading } = useLoading(true); // 这里应该是true
     const editIndex = ref(-1);
     const userStore = useUserStore();
-    const rolesOptions = computed(() => [
-      {
-        label: '后台管理员',
-        value: 'super_admin',
-      },
-      {
-        label: '前台管理员',
-        value: 'admin',
-      },
-      {
-        label: '普通用户',
-        value: 'user',
-      },
-    ]);
+    const rolesOptions = computed(() =>
+      props.rolesData.map((item) => ({ label: item.title, value: item.key }))
+    );
     const columns = [
       {
         title: '用户帐号',

@@ -20,27 +20,38 @@
   <change-roles-modal
     ref="changeRolesModalRef"
     :edit-form="editForm"
-    @refresh="getRolesData"
+    @refresh="refresh"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import { getRoles, deleteRole } from '@/api/user';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { deleteRole } from '@/api/user';
 import { Notification } from '@arco-design/web-vue';
 import ChangeRolesModal from './changeRolesModal.vue';
 
 export default defineComponent({
   components: { ChangeRolesModal },
-  setup() {
+  props: {
+    rolesData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  emits: ['getRolesData'],
+  setup(props, { emit }) {
     const page = ref(0);
     const pageSize = ref(99); // 角色不会有很多的
-    const treeData = ref([]);
+    // const treeData = ref([]);
+    const treeData = computed(() => props.rolesData);
     const editForm = ref({});
+    const query = {
+      page: page.value,
+      size: pageSize.value,
+    };
     const changeRolesModalRef = ref<InstanceType<typeof ChangeRolesModal>>();
 
     function editData(nodeData) {
-      // editForm.value = nodeData;
       changeRolesModalRef.value?.changeTitle('修改角色');
       changeRolesModalRef.value?.show();
       changeRolesModalRef.value?.fillForm(nodeData);
@@ -50,31 +61,21 @@ export default defineComponent({
       changeRolesModalRef.value?.show();
     };
 
-    function getRolesData() {
-      const query = {
-        page: page.value,
-        size: pageSize.value,
-      };
-      getRoles(query).then((res) => {
-        treeData.value = res.content.map((item) => ({
-          title: item.name,
-          key: item.description,
-          id: item.id,
-        }));
-      });
-    }
+    const refresh = () => {
+      emit('getRolesData', query);
+    };
 
     function deleteData(nodeData) {
       deleteRole([nodeData.id]).then(() => {
         Notification.success({
           title: '删除成功',
         });
-        getRolesData();
+        emit('getRolesData', query);
       });
     }
 
     onMounted(() => {
-      getRolesData();
+      emit('getRolesData', query);
     });
 
     return {
@@ -84,7 +85,7 @@ export default defineComponent({
       deleteData,
       editData,
       addData,
-      getRolesData,
+      refresh,
     };
   },
 });
