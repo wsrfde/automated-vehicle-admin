@@ -18,15 +18,15 @@ export default defineComponent({
     const initData = (data = {}) => [
       {
         label: '大车X坐标',
-        value: data.crane_x ? data.crane_x.toFixed() : '-',
+        value: data.crane_x ? (data.crane_x / 10000).toFixed(2) : '-',
       },
       {
         label: '小车Y坐标',
-        value: data.crane_y ? data.crane_y.toFixed() : '-',
+        value: data.crane_y ? (data.crane_y / 1000).toFixed(2) : '-',
       },
       {
         label: '抓斗高度Z坐标',
-        value: data.crane_z ? data.crane_z.toFixed() : '-',
+        value: data.crane_z ? (data.crane_z / 1000).toFixed(2) : '-',
       },
       {
         label: '称重（吨）',

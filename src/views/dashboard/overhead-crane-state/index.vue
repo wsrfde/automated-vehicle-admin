@@ -136,7 +136,7 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jjtgx/crane/position/front/2',
+        topicUrl: 'jtgx/crane/position/front/2',
         callback: (e) => {
           Object.assign(craneConfigList[1].data, e);
         },
