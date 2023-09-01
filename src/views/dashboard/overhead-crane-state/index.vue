@@ -112,7 +112,7 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jtgx/crane/position/1', // 坐标信息
+        topicUrl: 'jtgx/crane/position/front/1', // 坐标信息
         callback: (e) => {
           Object.assign(craneConfigList[0].data, e);
         },
@@ -136,7 +136,7 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jtgx/crane/position/2',
+        topicUrl: 'jjtgx/crane/position/front/2',
         callback: (e) => {
           Object.assign(craneConfigList[1].data, e);
         },
