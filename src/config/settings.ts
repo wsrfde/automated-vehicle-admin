@@ -13,5 +13,5 @@ export default (): AppStore => ({
   globalSettings: false,
   defaultRouter: 'overheadCraneState',
   monitorAddress:
-    localStorage.getItem('monitorAddress') || 'http://192.168.8.20',
+    localStorage.getItem('monitorAddress') || 'http://192.168.18.200',
 });
