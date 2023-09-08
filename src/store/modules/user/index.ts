@@ -57,7 +57,7 @@ const useUserStore = defineStore('user', {
     // Get user's information
     // 在路由守卫中被调用
     async info() {
-      const res = await getUserInfo();
+      const res: any = await getUserInfo();
       if (res.roles.length < 0) {
         throw Error('用户没有权限');
       }
@@ -73,8 +73,7 @@ const useUserStore = defineStore('user', {
     // Login
     async login(loginForm: LoginData) {
       try {
-        const res = await userLogin(loginForm);
-        console.log(res);
+        const res: any = await userLogin(loginForm);
         setToken(res.token);
         this.setInfo(res.user);
       } catch (err) {

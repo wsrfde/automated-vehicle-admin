@@ -1,8 +1,13 @@
 import { Client } from '@stomp/stompjs';
+import { IFrame } from '@stomp/stompjs/src/i-frame';
+import { StompConfig } from '@stomp/stompjs/src/stomp-config';
 
 export default class StompClient {
-  constructor(topics) {
-    this.stompClient = {};
+  stompClient: Partial<Client> = {};
+
+  stompConfig: StompConfig = {};
+
+  constructor(topics: { topicUrl: string; callback: (e: any) => void }[]) {
     this.stompConfig = {
       brokerURL: process.env.WS_API,
       reconnectDelay: 200, // 失败重连时间，200毫秒
@@ -10,22 +15,23 @@ export default class StompClient {
       //   console.log(`STOMP: ${str}`);
       // },
       // 生命周期回调-连接成功
-      onConnect() {
-        // 返回实例中可以调用unsubscribe()方法，用来取消订阅
+      onConnect: () => {
         topics.forEach((item) => {
-          // 这里在onConnect中this的指向为new StompClient实例，所以直接调用subscribe方法即可
-          this.subscribe(item.topicUrl, (message) => {
-            const payload = JSON.parse(message.body);
-            item.callback(payload);
-          });
+          if (this.stompClient.subscribe) {
+            // 返回实例中可以调用unsubscribe()方法，用来取消订阅
+            this.stompClient.subscribe(item.topicUrl, (message) => {
+              const payload = JSON.parse(message.body);
+              item.callback(payload);
+            });
+          }
         });
       },
       // 生命周期回调-连接关闭
-      onDisconnect() {
+      onDisconnect: () => {
         console.info('stomp连接关闭');
       },
       // 生命周期回调-发生错误
-      onStompError() {
+      onStompError: (frame: IFrame) => {
         console.info(`stomp报错:${frame.headers.message}`);
         console.info(`额外的细节:${frame.body}`);
       },
@@ -34,10 +40,14 @@ export default class StompClient {
 
   connect() {
     this.stompClient = new Client(this.stompConfig);
-    this.stompClient.activate();
+    if (this.stompClient.activate) {
+      this.stompClient.activate();
+    }
   }
 
   destroy() {
-    this.stompClient.deactivate();
+    if (this.stompClient.deactivate) {
+      this.stompClient.deactivate().then();
+    }
   }
 }

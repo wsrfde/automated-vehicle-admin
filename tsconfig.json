@@ -4,6 +4,7 @@
     "module": "ES2020",
     "moduleResolution": "node",
     "strict": true,
+    "noImplicitAny": false, // 在表达式和声明上,隐含any类型时报错:关闭
     "jsx": "preserve",
     "allowJs": true,
     "sourceMap": true,
@@ -13,7 +14,10 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["es2020", "dom"]
+    "lib": ["es2020", "dom"],
+    "types": [
+      "node",
+    ]
   },
   "include": ["src/**/*", "src/**/*.vue"]
 }

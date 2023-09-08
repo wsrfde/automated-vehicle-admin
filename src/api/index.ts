@@ -27,9 +27,8 @@ axios.interceptors.request.use(
 );
 // add response interceptors
 axios.interceptors.response.use(
-  (
-    response: AxiosResponse<HttpResponse, any>
-  ): AxiosResponse<HttpResponse, any> => {
+  (response: AxiosResponse<HttpResponse, any>): any => {
+    // :AxiosResponse<HttpResponse, any>
     return response.data;
   },
   async (error) => {
@@ -41,9 +40,11 @@ axios.interceptors.response.use(
       const reader = new FileReader();
       reader.readAsText(error.response.data, 'utf-8');
       reader.onload = () => {
-        const errorMsg = JSON.parse(reader.result).message;
+        const errorMsg = JSON.parse(
+          typeof reader.result === 'string' ? reader.result : ''
+        ).message;
         Notification.error({
-          title: errorMsg,
+          content: errorMsg,
           duration: 5000,
         });
       };
@@ -55,7 +56,7 @@ axios.interceptors.response.use(
       } catch (e) {
         if (error.toString().indexOf('Error: timeout') !== -1) {
           Notification.error({
-            title: '网络请求超时',
+            content: '网络请求超时',
             duration: 5000,
           });
           return Promise.reject(error);
@@ -83,7 +84,7 @@ axios.interceptors.response.use(
           break;
         default:
           Notification.error({
-            title: error.response.data.message || '网络请求异常',
+            content: error.response.data.message || '网络请求异常',
             duration: 3000,
           });
       }
