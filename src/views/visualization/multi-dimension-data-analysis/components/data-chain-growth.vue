@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import ChainItem from './chain-item.vue';
 import UserActions from './user-actions.vue';
 
@@ -26,7 +26,7 @@ export default defineComponent({
   },
   props: {
     loadData: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
   },

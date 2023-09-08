@@ -98,17 +98,19 @@ export default defineComponent({
 
     watch(
       props.renderData,
-      (data) => {
+      (data: any) => {
         if (data.length) {
-          count.value = data[data.length - 1];
+          count.value = data[data.length - 1] as number;
           if (data[data.length - 2] === 0) {
             growth.value = 0;
           } else {
-            growth.value = (
-              ((data[data.length - 1] - data[data.length - 2]) /
-                data[data.length - 2]) *
-              100
-            ).toFixed(2);
+            growth.value = Number(
+              (
+                ((data[data.length - 1] - data[data.length - 2]) /
+                  data[data.length - 2]) *
+                100
+              ).toFixed(2)
+            );
           }
 
           chartData.value = data;

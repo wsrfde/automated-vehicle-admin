@@ -137,25 +137,25 @@ export default defineComponent({
     };
 
     const getCode = () => {
-      getCodeImg().then((res) => {
+      getCodeImg().then((res: any) => {
         codeUrl.value = res.img;
         loginForm.uuid = res.uuid;
       });
     };
 
     const handleSubmit = async ({
-      errors,
       values,
+      errors,
     }: {
+      values: Record<string, any>;
       errors: Record<string, ValidatedError> | undefined;
-      values: LoginData;
     }) => {
-      const { password } = { ...values };
+      const { password } = values;
       const user = {
         ...values,
         password:
-          localPassword.value === password ? password : encrypt(password),
-      };
+          localPassword.value === password ? password : await encrypt(password),
+      } as LoginData;
       if (!errors) {
         setLoading(true);
         try {
@@ -166,7 +166,7 @@ export default defineComponent({
           }
           await userStore.login(user);
           await routerJump();
-        } catch (err) {
+        } catch (err: any) {
           console.log(err);
           errorMessage.value = err.response.data.message;
           if (err.response.data.message === '验证码不存在或已过期') {

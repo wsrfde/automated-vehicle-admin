@@ -73,7 +73,7 @@ export default defineComponent({
   },
   setup(props) {
     const visible = ref(false);
-    const form = reactive({
+    const form: any = reactive({
       pass: '',
       email: '',
       code: '',
@@ -88,6 +88,7 @@ export default defineComponent({
     const validMail = (value, callback) => {
       if (value === '' || value === null) {
         callback('新邮箱不能为空');
+        // TODO:有时间验证下
       } else if (value === this.email) {
         callback('新邮箱不能与旧邮箱相同');
       } else if (validEmail(value)) {

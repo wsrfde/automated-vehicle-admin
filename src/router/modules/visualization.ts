@@ -1,4 +1,6 @@
-export default {
+import { RouteRecordRaw } from 'vue-router';
+
+export default <RouteRecordRaw>{
   path: 'visualization',
   name: 'visualization',
   component: () => import('@/views/visualization/index.vue'),

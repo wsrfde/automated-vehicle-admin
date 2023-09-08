@@ -100,7 +100,7 @@
             v-else
             type="text"
             status="success"
-            @click="saveEdit(record, rowIndex)"
+            @click="saveEdit(record)"
           >
             完成
           </a-button>
@@ -120,7 +120,7 @@
             type="text"
             status="warning"
             :disabled="isSameName(record.username)"
-            @click="resetPasswordFun(record, rowIndex)"
+            @click="resetPasswordFun(record)"
           >
             重置密码
           </a-button>
@@ -157,7 +157,10 @@ export default defineComponent({
     const editIndex = ref(-1);
     const userStore = useUserStore();
     const rolesOptions = computed(() =>
-      props.rolesData.map((item) => ({ label: item.title, value: item.key }))
+      props.rolesData.map((item: any) => ({
+        label: item.title,
+        value: item.key,
+      }))
     );
     const columns = [
       {
@@ -185,7 +188,7 @@ export default defineComponent({
         slotName: 'optional',
       },
     ];
-    const renderData = ref([]);
+    const renderData = ref<any[]>([]);
     const basePagination: Pagination = {
       current: 1,
       pageSize: 10,
@@ -215,7 +218,7 @@ export default defineComponent({
       renderData.value.unshift({});
     };
 
-    const getUserList = (params = {}) => {
+    const getUserList = (params: any = {}) => {
       const query = {
         page: basePagination.current,
         size: basePagination.pageSize,
@@ -224,7 +227,7 @@ export default defineComponent({
         sort: 'id',
       };
       setLoading(true);
-      getUsers(query).then((res) => {
+      getUsers(query).then((res: any) => {
         setLoading(false);
         renderData.value = res.content;
         pagination.current = params.page;

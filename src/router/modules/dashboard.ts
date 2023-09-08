@@ -1,4 +1,6 @@
-export default {
+import { RouteRecordRaw } from 'vue-router';
+
+export default <RouteRecordRaw>{
   path: 'dashboard',
   name: 'dashboard',
   component: () => import('@/views/dashboard/index.vue'),

@@ -1,6 +1,7 @@
 import defaultSettings from '@/config/settings';
+import { RouteRecordRaw } from 'vue-router';
 
-export default {
+export default <RouteRecordRaw>{
   path: defaultSettings().monitorAddress,
   name: 'real-time-monitor',
   meta: {

@@ -1,6 +1,6 @@
 import 'vue-router';
 
-export type roles = 'superAdmin' | 'admin' | 'user' | '*';
+export type roles = 'super_admin' | 'admin' | 'user' | '*';
 
 declare module 'vue-router' {
   interface RouteMeta {

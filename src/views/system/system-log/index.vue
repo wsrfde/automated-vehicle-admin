@@ -74,7 +74,7 @@ export default defineComponent({
     const fetchData = async (params = { current: 1, pageSize: 10 }) => {
       setLoading(true);
       try {
-        const res = await getSystemLogs(params);
+        const res: any = await getSystemLogs(params);
         renderData.value = res.content;
         pagination.current = params.current;
         pagination.total = res.totalElements;

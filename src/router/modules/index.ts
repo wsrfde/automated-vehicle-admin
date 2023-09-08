@@ -1,5 +1,5 @@
-import System from './System';
 import Dashboard from './dashboard';
+import System from './system';
 import Visualization from './visualization';
 import User from './user';
 

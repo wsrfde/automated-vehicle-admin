@@ -17,8 +17,10 @@ export default defineComponent({
   },
   setup(props) {
     const renderData = ref([]);
-    watch(props.loadData, (val) => {
-      renderData.value = val.map((item) => item.value[item.value.length - 1]);
+    watch(props.loadData, (val: any) => {
+      renderData.value = val.map(
+        (item: any) => item.value[item.value.length - 1]
+      );
     });
     const { chartOption } = useChartOption((isDark) => {
       return {

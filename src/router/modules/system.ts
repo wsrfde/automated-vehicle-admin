@@ -1,4 +1,6 @@
-export default {
+import { RouteRecordRaw } from 'vue-router';
+
+export default <RouteRecordRaw>{
   path: 'system',
   name: 'system',
   component: () => import('@/views/system/index.vue'),

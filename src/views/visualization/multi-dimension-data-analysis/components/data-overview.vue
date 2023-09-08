@@ -127,7 +127,7 @@ export default defineComponent({
 
     watch(props.requestData, (newVal) => {
       const data = newVal.flat();
-      data.forEach((el) => {
+      data.forEach((el: any) => {
         switch (el.name) {
           case '1号天车装车':
             oneCarLoad.value = el.value;

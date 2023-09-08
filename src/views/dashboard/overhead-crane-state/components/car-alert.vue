@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, PropType, ref, watch } from 'vue';
 
 export default defineComponent({
   props: {
     carTips: {
-      type: Object,
+      type: Object as PropType<any>,
       default: () => ({}),
     },
   },
