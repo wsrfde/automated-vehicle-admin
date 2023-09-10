@@ -48,28 +48,28 @@ import { defineComponent, ref } from 'vue';
 import { FileItem } from '@arco-design/web-vue/es/upload/interfaces';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
-import { Message } from '@arco-design/web-vue';
+import { Message, DescData } from '@arco-design/web-vue';
 
 export default defineComponent({
   setup() {
     const userStore = useUserStore();
     const baseUrl = process.env.BASE_API;
     const headers = {
-      Authorization: getToken(),
+      Authorization: getToken() || '',
     };
     const file = {
       uid: '-2',
       name: 'avatar.png',
       url: `${process.env.BASE_API}/avatar/${userStore.avatarName}`,
     };
-    const renderData = [
+    const renderData: DescData[] = [
       {
         label: '登入账号',
-        value: userStore.username,
+        value: `${userStore.username}`,
       },
       {
         label: '账号ID',
-        value: userStore.id,
+        value: `${userStore.id}`,
       },
       // {
       //   label: '手机号码',
@@ -81,7 +81,7 @@ export default defineComponent({
       // },
       {
         label: '注册时间',
-        value: userStore.createTime,
+        value: `${userStore.createTime}`,
       },
     ];
     const fileList = ref<FileItem[]>([file]);

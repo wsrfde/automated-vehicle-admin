@@ -15,7 +15,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const initData = (data = {}) => [
+    const initData = (data: any = {}) => [
       {
         label: '大车X坐标',
         value: data.crane_x ? (data.crane_x / 10000).toFixed(2) : '-',

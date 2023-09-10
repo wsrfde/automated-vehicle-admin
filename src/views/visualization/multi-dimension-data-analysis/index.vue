@@ -27,10 +27,10 @@ export default defineComponent({
     ContentPublishingSource,
   },
   setup() {
-    const requestData = reactive([[], []]);
+    const requestData = reactive<any[]>([[], []]);
     const fetchData = async () => {
-      const res = await getRecent7DaysData();
-      (res ?? []).forEach((item) => {
+      const res: any = await getRecent7DaysData();
+      (res ?? []).forEach((item: any) => {
         if (item.step === '装车') {
           requestData[0].push({
             craneNo: item.craneNo,

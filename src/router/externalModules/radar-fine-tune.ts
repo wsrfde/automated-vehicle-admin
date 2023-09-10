@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 export default <RouteRecordRaw>{
   path: 'https://www.baidu.com',
+  redirect: '',
   name: 'radar-fine-tune',
   meta: {
     title: '雷达微调',

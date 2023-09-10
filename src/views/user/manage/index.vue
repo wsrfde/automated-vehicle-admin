@@ -15,16 +15,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { getRoles } from '@/api/user';
+import { TreeNodeData } from '@arco-design/web-vue/es/tree/interface';
 import UserList from './components/user-list.vue';
 import RoleManage from './components/role-manage.vue';
 
 export default defineComponent({
   components: { UserList, RoleManage },
   setup() {
-    const rolesData = ref([]);
+    const rolesData = ref<TreeNodeData[]>([]);
     function getRolesData(query) {
-      console.log(query);
-      getRoles(query).then((res) => {
+      getRoles(query).then((res: any) => {
         rolesData.value = res.content.map((item) => ({
           title: item.name,
           key: item.description,

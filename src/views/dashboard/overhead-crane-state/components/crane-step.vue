@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 
 export default defineComponent({
   props: {
@@ -20,7 +20,7 @@ export default defineComponent({
       default: '',
     },
     stepOption: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
   },

@@ -33,14 +33,14 @@ import useAppStore from '@/store/modules/app';
 export default defineComponent({
   setup() {
     const appStore = useAppStore();
-    const currentAddress = ref(appStore.monitorAddress);
+    const currentAddress = ref<string>(appStore.monitorAddress);
     const isChangeAddress = ref(false);
 
     const changeAddressBtn = () => {
       isChangeAddress.value = true;
     };
     const saveAddressBtn = () => {
-      appStore.changeMonitorAddress(currentAddress);
+      appStore.changeMonitorAddress(currentAddress.value);
       isChangeAddress.value = false;
       window.location.reload();
     };

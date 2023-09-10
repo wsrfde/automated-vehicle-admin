@@ -2,57 +2,42 @@
   <div class="container">
     <Breadcrumb :items="['仪表盘', '车辆管理']" />
     <a-card class="general-card" title="车辆管理">
-      <!--      <a-row>-->
-      <!--        <a-col :flex="1">-->
-      <!--          <a-form-->
-      <!--            :model="formModel"-->
-      <!--            :label-col-props="{ span: 6 }"-->
-      <!--            :wrapper-col-props="{ span: 18 }"-->
-      <!--            label-align="left"-->
-      <!--          >-->
-      <!--            <a-row :gutter="16">-->
-      <!--              <a-col :span="8">-->
-      <!--                <a-form-item field="length" label="车辆长度">-->
-      <!--                  <a-input v-model="formModel.length" placeholder="请输入" />-->
-      <!--                </a-form-item>-->
-      <!--              </a-col>-->
-      <!--              <a-col :span="8">-->
-      <!--                <a-form-item field="width" label="车辆宽度">-->
-      <!--                  <a-input v-model="formModel.width" placeholder="请输入" />-->
-      <!--                </a-form-item>-->
-      <!--              </a-col>-->
-      <!--              <a-col :span="8">-->
-      <!--                <a-form-item field="height" label="车辆高度">-->
-      <!--                  <a-input v-model="formModel.height" placeholder="请输入" />-->
-      <!--                </a-form-item>-->
-      <!--              </a-col>-->
-      <!--              <a-col :span="8">-->
-      <!--                <a-form-item field="license" label="车牌">-->
-      <!--                  <a-input v-model="formModel.license" placeholder="请输入" />-->
-      <!--                </a-form-item>-->
-      <!--              </a-col>-->
-      <!--            </a-row>-->
-      <!--          </a-form>-->
-      <!--        </a-col>-->
-      <!--        <a-divider style="height: 84px" direction="vertical" />-->
-      <!--        <a-col :flex="'86px'" style="text-align: right">-->
-      <!--          <a-space direction="vertical" :size="18">-->
-      <!--            <a-button type="primary" @click="getVehicleList()">-->
-      <!--              <template #icon>-->
-      <!--                <icon-search />-->
-      <!--              </template>-->
-      <!--              查询-->
-      <!--            </a-button>-->
-      <!--            <a-button @click="reset">-->
-      <!--              <template #icon>-->
-      <!--                <icon-refresh />-->
-      <!--              </template>-->
-      <!--              重置-->
-      <!--            </a-button>-->
-      <!--          </a-space>-->
-      <!--        </a-col>-->
-      <!--      </a-row>-->
-      <!--      <a-divider />-->
+      <a-row>
+        <a-col :flex="1">
+          <a-form
+            :model="formModel"
+            :label-col-props="{ span: 6 }"
+            :wrapper-col-props="{ span: 18 }"
+            label-align="left"
+          >
+            <a-row :gutter="16">
+              <a-col :span="8">
+                <a-form-item field="license" label="车牌">
+                  <a-input v-model="formModel.license" placeholder="请输入" />
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </a-form>
+        </a-col>
+        <a-divider style="height: 84px" direction="vertical" />
+        <a-col :flex="'86px'" style="text-align: right">
+          <a-space direction="vertical" :size="18">
+            <a-button type="primary" @click="getVehicleList()">
+              <template #icon>
+                <icon-search />
+              </template>
+              查询
+            </a-button>
+            <a-button @click="reset">
+              <template #icon>
+                <icon-refresh />
+              </template>
+              重置
+            </a-button>
+          </a-space>
+        </a-col>
+      </a-row>
+      <a-divider />
 
       <a-row>
         <a-col :span="16">
@@ -95,6 +80,22 @@
             {{ record.license }}
           </a-tag>
         </template>
+        <template #loadInTon="{ record, rowIndex }">
+          <a-input v-if="rowIndex === editIndex" v-model="record.loadInTon" />
+          <p v-else>{{ record.loadInTon }}</p>
+        </template>
+        <template #driver="{ record, rowIndex }">
+          <a-input v-if="rowIndex === editIndex" v-model="record.driver" />
+          <p v-else>{{ record.driver }}</p>
+        </template>
+        <template #phone="{ record, rowIndex }">
+          <a-input v-if="rowIndex === editIndex" v-model="record.phone" />
+          <p v-else>{{ record.phone }}</p>
+        </template>
+        <template #note="{ record, rowIndex }">
+          <a-input v-if="rowIndex === editIndex" v-model="record.note" />
+          <p v-else>{{ record.note }}</p>
+        </template>
         <template #optional="{ record, rowIndex }">
           <a-space :size="5">
             <a-button
@@ -109,7 +110,7 @@
               v-else
               type="text"
               status="success"
-              @click="saveEdit(record, rowIndex)"
+              @click="saveEdit(record)"
             >
               完成
             </a-button>
@@ -140,10 +141,7 @@ import { Notification } from '@arco-design/web-vue';
 
 const generateFormModel = () => {
   return {
-    height: '',
-    length: '',
     license: '',
-    width: '',
   };
 };
 
@@ -180,12 +178,33 @@ export default defineComponent({
         slotName: 'license',
       },
       {
+        title: '车辆载重',
+        dataIndex: 'loadInTon',
+        slotName: 'loadInTon',
+      },
+      // 姓名、联系方式、自定义备注 车辆载重
+      {
+        title: '司机姓名',
+        dataIndex: 'driver',
+        slotName: 'driver',
+      },
+      {
+        title: '联系电话',
+        dataIndex: 'phone',
+        slotName: 'phone',
+      },
+      {
+        title: '备注',
+        dataIndex: 'note',
+        slotName: 'note',
+      },
+      {
         title: '操作',
         slotName: 'optional',
       },
     ];
 
-    const renderData = ref([]);
+    const renderData = ref<any[]>([]);
     const basePagination: Pagination = {
       current: 1,
       pageSize: 10,
@@ -194,15 +213,15 @@ export default defineComponent({
       ...basePagination,
     });
 
-    const getVehicleList = (params = {}) => {
+    const getVehicleList = (params: any = {}) => {
       const query = {
-        page: basePagination.current,
-        size: basePagination.pageSize,
+        // page: basePagination.current,
+        // size: basePagination.pageSize,
         ...params,
         ...formModel.value,
       };
       setLoading(true);
-      getVehicleData(query).then((res) => {
+      getVehicleData(query).then((res: any) => {
         setLoading(false);
         renderData.value = res.content;
         pagination.current = params.page;

@@ -32,9 +32,11 @@
                 <a-form-item field="step" label="天车状态">
                   <a-select v-model="formModel.step" placeholder="请选择">
                     <a-option value="">全部</a-option>
-                    <a-option value="预备装车">预备装车</a-option>
-                    <a-option value="装车">装车</a-option>
-                    <a-option value="倒料">倒料</a-option>
+                    <a-option :value="findOptionVal('预备装车')">
+                      预备装车
+                    </a-option>
+                    <a-option :value="findOptionVal('装车')">装车</a-option>
+                    <a-option :value="findOptionVal('倒料')">倒料</a-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -86,6 +88,7 @@ import { defineComponent, ref, onMounted } from 'vue';
 import useLoading from '@/hooks/loading';
 import { getJobStatistics } from '@/api/dashboard';
 import json2Excel from '@/utils/json2Excel';
+import { CRANE_OPTION } from '@/utils/dictionary';
 
 const generateFormModel = () => {
   return {
@@ -99,8 +102,8 @@ const generateFormModel = () => {
 export default defineComponent({
   setup() {
     const formModel = ref(generateFormModel());
-    const renderData = ref([]);
-    const otherData = ref({});
+    const renderData = ref<any[]>([]);
+    const otherData = ref<any>({});
     const { loading, setLoading } = useLoading(false); // 这里应该是true
     const columns = [
       {
@@ -121,13 +124,16 @@ export default defineComponent({
       },
     ];
 
+    const findOptionVal = (title: string) => {
+      return CRANE_OPTION.find((item) => item.title === title)?.value;
+    };
     const getVehicleList = (params = {}) => {
       const query = {
         ...params,
         ...formModel.value,
       };
       setLoading(true);
-      getJobStatistics(query).then((res) => {
+      getJobStatistics(query).then((res: any) => {
         setLoading(false);
         const { stats, ...data } = res;
         renderData.value = stats.map((item) => ({
@@ -171,17 +177,16 @@ export default defineComponent({
       ];
     };
 
-    const findTitle = (key) => {
+    const findTitle = (key: string) => {
       const findItem = columns.find((item) => item.dataIndex === key);
       return findItem?.title;
     };
 
     const downloadExcel = () => {
-      console.log('downloadExcel');
       const data = [...renderData.value, ...summary()].map((item) => {
         const newItem: any = {};
         Object.keys(item).forEach((key) => {
-          newItem[findTitle(key)] = item[key];
+          newItem[findTitle(key) ?? 0] = item[key];
         });
         return newItem;
       });
@@ -204,6 +209,7 @@ export default defineComponent({
       columns,
       renderData,
       formModel,
+      findOptionVal,
       getVehicleList,
       dateChange,
       summary,

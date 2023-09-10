@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, computed, h, compile } from 'vue';
 import {
-  TableColumn,
+  TableColumnData,
   TableData,
 } from '@arco-design/web-vue/es/table/interface.d';
 
@@ -61,7 +61,7 @@ export default defineComponent({
             rowIndex,
           }: {
             record: TableData;
-            column: TableColumn;
+            column: TableColumnData;
             rowIndex: number;
           }) {
             const tmp = `<span>${rowIndex + 1}</span>`;
@@ -74,7 +74,7 @@ export default defineComponent({
             record,
           }: {
             record: TableData;
-            column: TableColumn;
+            column: TableColumnData;
             rowIndex: number;
           }) {
             const tmp = `<div class='data-statistic-list-cover-wrapper'>

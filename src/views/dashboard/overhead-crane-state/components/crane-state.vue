@@ -61,8 +61,8 @@ export default defineComponent({
       },
     ];
 
-    const stateFun = (state: string) => {
-      switch (state) {
+    const stateFun = (state: unknown) => {
+      switch (Number(state)) {
         case 0:
           return {
             color: '#5ebb3a',

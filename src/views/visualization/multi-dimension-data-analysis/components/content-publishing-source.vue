@@ -27,10 +27,10 @@ export default defineComponent({
       return arr.reduce((prev, cur) => prev + cur, 0);
     };
 
-    watch(props.requestData, (newVal) => {
+    watch(props.requestData, (newVal: any[]) => {
       if (newVal.length > 0) {
-        loadData.value = newVal[0].map((item) => sumValue(item.value));
-        pourData.value = newVal[1].map((item) => sumValue(item.value));
+        loadData.value = newVal[0].map((item: any) => sumValue(item.value));
+        pourData.value = newVal[1].map((item: any) => sumValue(item.value));
         // preLoadData.value = newVal[2].map((item) => sumValue(item.value));
       }
     });

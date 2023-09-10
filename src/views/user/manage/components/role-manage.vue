@@ -25,16 +25,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
 import { deleteRole } from '@/api/user';
 import { Notification } from '@arco-design/web-vue';
+import { TreeNodeData } from '@arco-design/web-vue/es/tree/interface';
 import ChangeRolesModal from './changeRolesModal.vue';
 
 export default defineComponent({
   components: { ChangeRolesModal },
   props: {
     rolesData: {
-      type: Array,
+      type: Array as PropType<TreeNodeData[]>,
       default: () => [],
     },
   },
@@ -42,7 +43,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const page = ref(0);
     const pageSize = ref(99); // 角色不会有很多的
-    // const treeData = ref([]);
     const treeData = computed(() => props.rolesData);
     const editForm = ref({});
     const query = {
@@ -68,7 +68,7 @@ export default defineComponent({
     function deleteData(nodeData) {
       deleteRole([nodeData.id]).then(() => {
         Notification.success({
-          title: '删除成功',
+          content: '删除成功',
         });
         emit('getRolesData', query);
       });

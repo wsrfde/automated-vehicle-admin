@@ -1,6 +1,6 @@
 import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import { useUserStore } from '@/store';
-import { roles } from '@/router/typings';
+import { RoleType } from '@/store/modules/user/types';
 
 export default function usePermission() {
   const userStore = useUserStore();
@@ -10,7 +10,7 @@ export default function usePermission() {
         !route.meta?.requiresAuth ||
         !route.meta?.roles ||
         route.meta?.roles?.includes('*') ||
-        route.meta?.roles?.includes(<roles>userStore.role)
+        route.meta?.roles?.includes(<RoleType>userStore.role)
       );
     },
     // Find the first route that can be accessed in the routing table

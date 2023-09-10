@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   props: {
@@ -28,7 +28,7 @@ export default defineComponent({
       default: '',
     },
     defaultValue: {
-      type: Number,
+      type: Number as PropType<any>,
       default: 0,
     },
     defaultCheck: {

@@ -6,6 +6,7 @@ import {
   LoginData,
 } from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
+import { ALL_ROLES } from '@/utils/dictionary';
 import { UserState } from './types';
 
 const useUserStore = defineStore('user', {
@@ -62,10 +63,11 @@ const useUserStore = defineStore('user', {
         throw Error('用户没有权限');
       }
       delete res.user.roles;
-
       const user = {
         ...res.user,
-        role: res.user.nickName, // 后端不肯加role字段，用nickName代替
+        role: ALL_ROLES.includes(res.user.nickName)
+          ? res.user.nickName
+          : res.roles[0], // 后端不肯加role字段，用nickName代替
       };
       this.setInfo(user);
     },

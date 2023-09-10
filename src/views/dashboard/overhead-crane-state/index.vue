@@ -38,8 +38,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, reactive, ref } from 'vue';
+import { defineComponent, onUnmounted, reactive } from 'vue';
 import StompClient from '@/utils/stompServer';
+import { CRANE_OPTION } from '@/utils/dictionary';
 import CraneStep from './components/crane-step.vue';
 import CraneHandle from './components/crane-handle.vue';
 import CarAlert from './components/car-alert.vue';
@@ -57,31 +58,16 @@ export default defineComponent({
     CraneState,
   },
   setup() {
-    const carTips = ref({});
+    const carTips = reactive({});
+    const stepOption = CRANE_OPTION;
 
-    const stepOption = [
+    const craneConfigList = reactive<
       {
-        title: '维修',
-        value: 'maintain',
-      },
-      {
-        title: '待命',
-        value: 'await',
-      },
-      {
-        title: '预备装车',
-        value: 'ready',
-      },
-      {
-        title: '装车',
-        value: 'load',
-      },
-      {
-        title: '倒料',
-        value: 'pour',
-      },
-    ];
-    const craneConfigList = reactive([
+        title: string;
+        crane_no: number;
+        data: any;
+      }[]
+    >([
       {
         title: '天车 #01',
         crane_no: 1,
@@ -94,15 +80,19 @@ export default defineComponent({
       },
     ]);
 
-    const changeStep = (step: number, index) => {
-      craneConfigList[index].data.step = step;
-    };
-
     const stomp = new StompClient([
       {
-        topicUrl: 'jtgx/car/park', // 车辆进入通知
+        topicUrl: 'jtgx/car/park/1', // 车辆1进入通知
         callback: (e) => {
-          carTips.value = e;
+          console.log('park1', e);
+          Object.assign(carTips, e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/car/park/2', // 车辆2进入通知
+        callback: (e) => {
+          console.log('park2', e);
+          Object.assign(carTips, e);
         },
       },
       {
@@ -164,7 +154,6 @@ export default defineComponent({
       carTips,
       stepOption,
       craneConfigList,
-      changeStep,
     };
   },
 });
@@ -190,9 +179,9 @@ export default defineComponent({
     :deep(& > .arco-card-body) {
       padding: 0;
     }
-    &:last-child {
-      //margin-top: 20px;
-    }
+    //&:last-child {
+    //margin-top: 20px;
+    //}
   }
 }
 </style>

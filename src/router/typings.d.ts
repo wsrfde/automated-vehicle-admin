@@ -1,16 +1,17 @@
 import 'vue-router';
-
-export type roles = 'super_admin' | 'admin' | 'user' | '*';
+import { RoleType } from '@/store/modules/user/types';
 
 declare module 'vue-router' {
   interface RouteMeta {
     // options
-    roles?: roles[];
+    roles?: RoleType[];
     // every route must declare
     requiresAuth: boolean; // need login
     icon?: string;
     // menu select key
     menuSelectKey?: string;
     hideInMenu?: boolean;
+    // 新增属性
+    title?: string;
   }
 }

@@ -56,7 +56,7 @@
     </a-list-item>
   </a-list>
   <change-password-modal ref="changePasswordModalRef" />
-  <change-email-modal ref="changeEmailModalRef" :email="userInfo.email" />
+  <change-email-modal ref="changeEmailModalRef" :email="userInfo.email || ''" />
 </template>
 
 <script lang="ts">

@@ -84,7 +84,7 @@ export default defineComponent({
             : editRole({ ...form.value, id: editId.value })
           ).then(() => {
             Notification.success({
-              title: isAdd ? '添加成功' : '修改成功',
+              content: isAdd ? '添加成功' : '修改成功',
             });
             done(true);
             cancel();

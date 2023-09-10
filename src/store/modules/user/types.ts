@@ -1,4 +1,6 @@
-export type RoleType = '' | '*' | 'superAdmin' | 'admin' | 'user';
+export type RoleType = '' | '*' | 'super_admin' | 'admin' | 'user';
+// 定义常量
+
 export interface UserState {
   avatarName?: string;
   avatarPath?: string;
