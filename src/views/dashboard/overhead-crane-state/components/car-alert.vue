@@ -7,8 +7,8 @@
     <div class="alert-box">
       <transition appear>
         <p v-if="isShow" class="alert-text">
-          <span>车辆{{ carTips.license }}进入门闸</span>
-          <span>{{ carTips.passTime }}</span>
+          <span>车辆{{ newCarTips.license }}进入门闸</span>
+          <span>{{ newCarTips.passTime }}</span>
         </p>
       </transition>
     </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue';
+import { defineComponent, PropType, reactive, ref, watch } from 'vue';
 
 export default defineComponent({
   props: {
@@ -27,20 +27,23 @@ export default defineComponent({
   },
   setup(props) {
     const isShow = ref(false);
-
+    const newCarTips = reactive<{ license?: string; passTime?: string }>({});
     watch(
       () => props.carTips,
       (e) => {
-        console.log(e);
-        isShow.value = false;
-        setTimeout(() => {
-          isShow.value = true;
-        }, 1000);
+        // 这里只判断进入的车辆
+        if (e.state === 'in') {
+          isShow.value = false;
+          Object.assign(newCarTips, e);
+          setTimeout(() => {
+            isShow.value = true;
+          }, 1000);
+        }
       },
       { deep: true }
     );
 
-    return { isShow };
+    return { isShow, newCarTips };
   },
 });
 </script>

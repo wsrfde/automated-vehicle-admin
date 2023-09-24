@@ -80,6 +80,20 @@
             {{ record.license }}
           </a-tag>
         </template>
+        <template #bottomHeight="{ record, rowIndex }">
+          <a-input
+            v-if="rowIndex === editIndex"
+            v-model="record.bottomHeight"
+          />
+          <p v-else>{{ record.bottomHeight }}</p>
+        </template>
+        <template #guardrailHeight="{ record, rowIndex }">
+          <a-input
+            v-if="rowIndex === editIndex"
+            v-model="record.guardrailHeight"
+          />
+          <p v-else>{{ record.guardrailHeight }}</p>
+        </template>
         <template #loadInTon="{ record, rowIndex }">
           <a-input v-if="rowIndex === editIndex" v-model="record.loadInTon" />
           <p v-else>{{ record.loadInTon }}</p>
@@ -176,6 +190,16 @@ export default defineComponent({
         title: '车牌',
         dataIndex: 'license',
         slotName: 'license',
+      },
+      {
+        title: '车厢底部高度',
+        dataIndex: 'bottomHeight',
+        slotName: 'bottomHeight',
+      },
+      {
+        title: '车厢栏板高度',
+        dataIndex: 'guardrailHeight',
+        slotName: 'guardrailHeight',
       },
       {
         title: '车辆载重',

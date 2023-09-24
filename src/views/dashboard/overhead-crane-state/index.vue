@@ -84,21 +84,22 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/car/park/1', // 车辆1进入通知
         callback: (e) => {
-          console.log('park1', e);
           Object.assign(carTips, e);
         },
       },
       {
         topicUrl: 'jtgx/car/park/2', // 车辆2进入通知
         callback: (e) => {
-          console.log('park2', e);
           Object.assign(carTips, e);
         },
       },
       {
         topicUrl: 'jtgx/emergency/1', // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          Object.assign(craneConfigList[0].data, e);
+          console.log(e);
+          Object.assign(craneConfigList[0].data, {
+            stop: e['101\n+OCCH_ALL'],
+          });
         },
       },
       {
@@ -122,7 +123,9 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/emergency/2', // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          Object.assign(craneConfigList[1].data, e);
+          Object.assign(craneConfigList[1].data, {
+            stop: e['101\n+OCCH_ALL'],
+          });
         },
       },
       {

@@ -38,6 +38,26 @@ import { emergencyStop } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 import StopModal from './stop-modal.vue';
 
+const stateFormat = (state: string) => {
+  switch (state) {
+    case '0':
+      return {
+        color: '#5ebb3a',
+        text: '正常',
+      };
+    case '1':
+      return {
+        color: '#f53f3f',
+        text: '错误',
+      };
+    default:
+      return {
+        color: '#ccc',
+        text: '-',
+      };
+  }
+};
+
 export default defineComponent({
   components: { StopModal },
   props: {
@@ -51,41 +71,14 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const btnStatus = computed(() => props.craneData.stop === 0);
     const stopModalRef = ref<InstanceType<typeof StopModal>>();
-
-    const stateFormat = (state: string) => {
-      switch (state) {
-        case 'success':
-          return {
-            color: '#5ebb3a',
-            text: '正常',
-          };
-        case 'warn':
-          return {
-            color: '#ff7d00',
-            text: '警告',
-          };
-        case 'error':
-          return {
-            color: '#f53f3f',
-            text: '异常',
-          };
-        default:
-          return {
-            color: '#ccc',
-            text: '-',
-          };
-      }
-    };
-
-    const stateData = computed(() => stateFormat(props.craneData.alarmState));
+    const btnStatus = computed(() => props.craneData.stop === 0);
+    const stateData = computed(() => stateFormat(props.craneData.stop));
 
     const stopFun = async (stop: number) => {
       const query = {
         message: {
           crane_no: props.craneNo,
-          alarmState: stop === 0 ? 'success' : 'error',
           stop, // 1:停止 0:复位
         },
       };
