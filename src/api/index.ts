@@ -18,7 +18,6 @@ axios.interceptors.request.use(
     if (getToken()) {
       config.headers.Authorization = getToken(); // 让每个请求携带自定义token
     }
-    config.headers['Content-Type'] = 'application/json';
     return config;
   },
   (error) => {

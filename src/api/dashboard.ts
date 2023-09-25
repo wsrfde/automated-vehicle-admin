@@ -27,3 +27,7 @@ export function overheadCrane(data) {
 export function getJobStatistics(params) {
   return axios.get('/api/stats', { params });
 }
+// 发送指令
+export function sendInstructions(data) {
+  return axios.post('/api/mqtt/sendMessage', data);
+}

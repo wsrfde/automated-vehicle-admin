@@ -63,5 +63,15 @@ export default <RouteRecordRaw>{
     //     roles: ['*'],
     //   },
     // },
+    {
+      path: 'functional-tests',
+      name: 'functionalTests',
+      component: () => import('@/views/dashboard/functional-tests/index.vue'),
+      meta: {
+        title: '功能测试',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
