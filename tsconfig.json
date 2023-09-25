@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ES2020",
+    "target": "ES2022",
+    "module": "ES2022",
     "moduleResolution": "node",
     "strict": true,
     "noImplicitAny": false, // 在表达式和声明上,隐含any类型时报错:关闭
@@ -14,7 +14,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["es2020", "dom"],
+    "lib": ["es2022", "dom"],
     "types": [
       "node",
     ]

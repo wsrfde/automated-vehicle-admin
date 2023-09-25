@@ -27,7 +27,12 @@ export function overheadCrane(data) {
 export function getJobStatistics(params) {
   return axios.get('/api/stats', { params });
 }
-// 发送指令
+// 发送指令，baseURL写死，只允许在测试环境测试
 export function sendInstructions(data) {
-  return axios.post('/api/mqtt/sendMessage', data);
+  const testURL = 'http://121.196.49.105:6645';
+  return axios.post(`${testURL}/api/mqtt/sendMessage`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }

@@ -40,7 +40,7 @@ export default defineComponent({
 
           // route filter hideInMenu true
           element.children = element.children.filter(
-            (x) => x.meta?.hideInMenu !== true
+            (x) => x.meta?.hideInMenu !== true,
           );
 
           // Associated child node
@@ -90,7 +90,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     );
     watch(
       () => appStore.menuCollapse,
@@ -99,7 +99,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     );
     const setCollapse = (val: boolean) => {
       appStore.updateSettings({ menuCollapse: val });

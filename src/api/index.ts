@@ -12,6 +12,7 @@ export interface HttpResponse<T = unknown> {
 }
 // set base url
 axios.defaults.baseURL = process.env.BASE_API;
+axios.defaults.headers['Content-Type'] = 'application/json';
 // add request interceptors
 axios.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -22,7 +23,7 @@ axios.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 // add response interceptors
 axios.interceptors.response.use(
@@ -40,7 +41,7 @@ axios.interceptors.response.use(
       reader.readAsText(error.response.data, 'utf-8');
       reader.onload = () => {
         const errorMsg = JSON.parse(
-          typeof reader.result === 'string' ? reader.result : ''
+          typeof reader.result === 'string' ? reader.result : '',
         ).message;
         Notification.error({
           content: errorMsg,
@@ -89,5 +90,5 @@ axios.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );

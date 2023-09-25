@@ -1,40 +1,121 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['仪表盘', '功能测试']" />
-    <a-card class="general-card" title="按钮测试">
-      <a-button status="danger" @click="oneCarTest">一车装车测试</a-button>
-      <a-divider direction="vertical"></a-divider>
-      <a-button status="danger" @click="twoCarTest">二车装车测试</a-button>
+    <a-card class="general-card" title="车辆测试">
+      <div>
+        <a-button status="danger" @click="oneCarPourTest"
+          >一车倒料测试</a-button
+        >
+        <a-divider direction="vertical"></a-divider>
+        <a-button status="danger" @click="twoCarPourTest"
+          >二车倒料测试</a-button
+        >
+      </div>
+      <div style="margin-top: 20px">
+        <a-button status="warning" @click="oneCarStandbyTest"
+          >一车待命测试</a-button
+        >
+        <a-divider direction="vertical"></a-divider>
+        <a-button status="warning" @click="twoCarStandbyTest"
+          >二车待命测试</a-button
+        >
+      </div>
     </a-card>
+    <a-row class="grid-demo" :gutter="20">
+      <a-col :span="12">
+        <a-card class="general-card" title="发送自定义指令">
+          <a-form
+            :model="form"
+            style="width: 30vw"
+            auto-label-width
+            @submit="handleSubmit"
+          >
+            <a-form-item
+              field="topic"
+              label="topic"
+              required
+              extra="输入示例：jtgx/overhead-crane-handle/1"
+            >
+              <a-input v-model="form.topic" placeholder="请输入"></a-input>
+            </a-form-item>
+            <a-form-item
+              field="message"
+              label="message"
+              required
+              extra='输入示例：{ "crane_no": 1, "step": 0, "operate": true}'
+            >
+              <a-textarea
+                v-model="form.message"
+                placeholder="请输入"
+                allow-clear
+                :auto-size="{
+                  minRows: 2,
+                  maxRows: 5,
+                }"
+              />
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" html-type="submit"> 发送 </a-button>
+            </a-form-item>
+          </a-form>
+        </a-card>
+      </a-col>
+      <!--      <a-col :span="12">-->
+      <!--        <a-card class="general-card" title="接收自定义指令">-->
+      <!--          <a-form :model="form" style="width: 30vw">-->
+      <!--            <a-form-item label="topic">-->
+      <!--              <a-input v-model="form.topic"></a-input>-->
+      <!--            </a-form-item>-->
+      <!--            <a-form-item label="收到数据">-->
+      <!--              <a-textarea-->
+      <!--                v-model="form.message"-->
+      <!--                placeholder="输入示例：{ 'crane_no': 1, 'step': 0, 'operate': true}"-->
+      <!--                allow-clear-->
+      <!--                :auto-size="{-->
+      <!--                  minRows: 2,-->
+      <!--                  maxRows: 5,-->
+      <!--                }"-->
+      <!--              />-->
+      <!--            </a-form-item>-->
+      <!--          </a-form>-->
+      <!--        </a-card>-->
+      <!--      </a-col>-->
+    </a-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 import { sendInstructions } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
 export default defineComponent({
   name: 'Index',
   setup() {
-    const sendInstructionsFun = (topic, message) => {
+    const btnVal = ref('');
+    const form = reactive({
+      topic: '',
+      message: '',
+    });
+
+    const sendInstructionsFun = (topic: string, message: object) => {
       const query = {
         qos: '1',
         retained: false,
         topic,
-        message,
+        message: JSON.stringify(message),
       };
       const formData = new FormData();
-      Object.entries(query).forEach(([key, value]) => {
+      Object.entries(query).forEach(([key, value]: any[]) => {
         formData.append(key, value);
       });
 
-      sendInstructions(formData).then((res) => {
+      sendInstructions(formData).then((res: any) => {
         Notification.info(res.msg);
       });
     };
 
-    const oneCarTest = () => {
+    const oneCarPourTest = () => {
       const sedMsg = {
         craneid: 1,
         step: 3,
@@ -42,7 +123,7 @@ export default defineComponent({
       };
       sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
     };
-    const twoCarTest = () => {
+    const twoCarPourTest = () => {
       const sedMsg = {
         craneid: 2,
         step: 3,
@@ -51,9 +132,36 @@ export default defineComponent({
       sendInstructionsFun('jtgx/overhead-crane-handle/2', sedMsg);
     };
 
+    const oneCarStandbyTest = () => {
+      const sedMsg = { crane_no: 1, step: 1, operate: true };
+      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
+    };
+
+    const twoCarStandbyTest = () => {
+      const sedMsg = { crane_no: 2, step: 1, operate: true };
+      sendInstructionsFun('jtgx/overhead-crane-handle/2', sedMsg);
+    };
+
+    const handleSubmit = (data) => {
+      const { topic, message } = data.values;
+      try {
+        const sedMsg = JSON.parse(message);
+        if (topic && message) {
+          sendInstructionsFun(topic, sedMsg);
+        }
+      } catch (e) {
+        Notification.error('输入格式不正确');
+      }
+    };
+
     return {
-      oneCarTest,
-      twoCarTest,
+      form,
+      btnVal,
+      oneCarPourTest,
+      twoCarPourTest,
+      oneCarStandbyTest,
+      twoCarStandbyTest,
+      handleSubmit,
     };
   },
 });
@@ -62,5 +170,8 @@ export default defineComponent({
 <style scoped lang="less">
 .container {
   padding: 0 20px 20px 20px;
+  .general-card {
+    margin-top: 20px;
+  }
 }
 </style>
