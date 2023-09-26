@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 export default (
   fileName = 'json2Excel.xlsx',
   data: any[] = [],
-  sheetName = 'sheet1'
+  sheetName = 'sheet1',
 ) => {
   const jsonWorkSheet = XLSX.utils.json_to_sheet(data);
   jsonWorkSheet['!cols'] = [{ wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }];

@@ -40,7 +40,7 @@ export default defineComponent({
           }, 1000);
         }
       },
-      { deep: true }
+      { deep: true },
     );
 
     return { isShow, newCarTips };

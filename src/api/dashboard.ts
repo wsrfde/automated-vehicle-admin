@@ -29,7 +29,7 @@ export function getJobStatistics(params) {
 }
 // 发送指令，baseURL写死，只允许在测试环境测试
 export function sendInstructions(data) {
-  const testURL = 'http://121.196.49.105:6645';
+  const testURL = 'http://192.168.8.8:8000';
   return axios.post(`${testURL}/api/mqtt/sendMessage`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',

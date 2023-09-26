@@ -1,44 +1,8 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['仪表盘', '功能测试']" />
-    <a-card class="general-card" title="车辆测试">
-      <div>
-        <a-button status="danger" @click="oneCarPourTest"
-          >一车倒料测试</a-button
-        >
-        <a-divider direction="vertical"></a-divider>
-        <a-button status="danger" @click="twoCarPourTest"
-          >二车倒料测试</a-button
-        >
-      </div>
-      <div style="margin-top: 20px">
-        <a-button status="warning" @click="oneCarStandbyTest"
-          >一车待命测试</a-button
-        >
-        <a-divider direction="vertical"></a-divider>
-        <a-button status="warning" @click="twoCarStandbyTest"
-          >二车待命测试</a-button
-        >
-      </div>
-      <div style="margin-top: 20px">
-        <a-button status="success" @click="oneCarStartupTest"
-          >一车启动电源</a-button
-        >
-        <a-divider direction="vertical"></a-divider>
-        <a-button status="success" @click="twoCarStartupTest"
-          >二车启动电源</a-button
-        >
-      </div>
-      <div style="margin-top: 20px">
-        <a-button status="normal" type="outline" @click="oneCarCloseShakeTest"
-          >一车关闭防摇</a-button
-        >
-        <a-divider direction="vertical"></a-divider>
-        <a-button status="normal" type="outline" @click="twoCarCloseShakeTest"
-          >二车关闭防摇</a-button
-        >
-      </div>
-    </a-card>
+    <SwitchChild :send-instructions-fun="sendInstructionsFun" />
+    <ButtonChild :send-instructions-fun="sendInstructionsFun" />
     <a-row class="grid-demo" :gutter="20">
       <a-col :span="12">
         <a-card class="general-card" title="发送自定义指令">
@@ -78,26 +42,6 @@
           </a-form>
         </a-card>
       </a-col>
-      <!--      <a-col :span="12">-->
-      <!--        <a-card class="general-card" title="接收自定义指令">-->
-      <!--          <a-form :model="form" style="width: 30vw">-->
-      <!--            <a-form-item label="topic">-->
-      <!--              <a-input v-model="form.topic"></a-input>-->
-      <!--            </a-form-item>-->
-      <!--            <a-form-item label="收到数据">-->
-      <!--              <a-textarea-->
-      <!--                v-model="form.message"-->
-      <!--                placeholder="输入示例：{ 'crane_no': 1, 'step': 0, 'operate': true}"-->
-      <!--                allow-clear-->
-      <!--                :auto-size="{-->
-      <!--                  minRows: 2,-->
-      <!--                  maxRows: 5,-->
-      <!--                }"-->
-      <!--              />-->
-      <!--            </a-form-item>-->
-      <!--          </a-form>-->
-      <!--        </a-card>-->
-      <!--      </a-col>-->
     </a-row>
   </div>
 </template>
@@ -107,8 +51,15 @@ import { defineComponent, ref, reactive } from 'vue';
 import { sendInstructions } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
+import ButtonChild from '@/views/dashboard/functional-tests/components/button-child.vue';
+import SwitchChild from './components/switch-child.vue';
+
 export default defineComponent({
   name: 'Index',
+  components: {
+    ButtonChild,
+    SwitchChild,
+  },
   setup() {
     const btnVal = ref('');
     const form = reactive({
@@ -133,67 +84,18 @@ export default defineComponent({
       });
     };
 
-    const oneCarPourTest = () => {
-      const sedMsg = 'craneid:0;step:3;auto:true;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
-    };
-    const twoCarPourTest = () => {
-      const sedMsg = 'craneid:1;step:3;auto:true;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
-    };
-
-    const oneCarStandbyTest = () => {
-      const sedMsg = 'craneid:0;step:1;auto:false;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
-    };
-
-    const twoCarStandbyTest = () => {
-      const sedMsg = 'craneid:1;step:1;auto:false;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
-    };
-    const oneCarStartupTest = () => {
-      const sedMsg = 'craneid:0;power:true;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/power-on', sedMsg);
-    };
-
-    const twoCarStartupTest = () => {
-      const sedMsg = 'craneid:1;power:true;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/power-on', sedMsg);
-    };
-    const oneCarCloseShakeTest = () => {
-      const sedMsg = 'craneid:0;faultresset:false;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/kinema-argvs', sedMsg);
-    };
-
-    const twoCarCloseShakeTest = () => {
-      const sedMsg = 'craneid:1;faultresset:false;';
-      sendInstructionsFun('jtgx/overhead-crane-handle/kinema-argvs', sedMsg);
-    };
-
     const handleSubmit = (data) => {
       const { topic, message } = data.values;
-      // try {
-      // const sedMsg = JSON.parse(message);
       if (topic && message) {
         sendInstructionsFun(topic, message);
       }
-      // } catch (e) {
-      //   Notification.error('输入格式不正确');
-      // }
     };
 
     return {
       form,
       btnVal,
-      oneCarPourTest,
-      twoCarPourTest,
-      oneCarStandbyTest,
-      twoCarStandbyTest,
-      oneCarStartupTest,
-      twoCarStartupTest,
-      oneCarCloseShakeTest,
-      twoCarCloseShakeTest,
       handleSubmit,
+      sendInstructionsFun,
     };
   },
 });
@@ -205,5 +107,9 @@ export default defineComponent({
   .general-card {
     margin-top: 20px;
   }
+}
+
+.ml10 {
+  margin-left: 10px;
 }
 </style>
