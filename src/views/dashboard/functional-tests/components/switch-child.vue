@@ -3,11 +3,11 @@
     <a-space direction="vertical" style="width: 100%" size="medium">
       <a-row>
         <a-col :span="12">
-          <a-switch @change="carStartup($event, 0)" />
+          <a-switch :disabled="oneCarStartup" @change="carStartup($event, 0)" />
           <span class="ml10"> 一车电源开关</span>
         </a-col>
         <a-col :span="12">
-          <a-switch @change="carStartup($event, 1)" />
+          <a-switch :disabled="twoCarStartup" @change="carStartup($event, 1)" />
           <span class="ml10"> 二车电源开关</span>
         </a-col>
       </a-row>
@@ -46,20 +46,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'SwitchChild',
   props: {
     sendInstructionsFun: {
       type: Function,
+      default: () => ({}),
     },
   },
   setup({ sendInstructionsFun }) {
+    const oneCarStartup = ref(false);
+    const twoCarStartup = ref(false);
     // 电源
     const carStartup = (val: any, id: number) => {
-      const sedMsg = `craneid:${val};power:${id};`;
+      const sedMsg = `craneid:${id};power:${val};`;
       sendInstructionsFun('jtgx/overhead-crane-handle/power-on', sedMsg);
+      if (id === 0) {
+        oneCarStartup.value = true;
+      } else {
+        twoCarStartup.value = true;
+      }
+      setTimeout(() => {
+        if (id === 0) {
+          oneCarStartup.value = false;
+        } else {
+          twoCarStartup.value = false;
+        }
+      }, 10000);
     };
     // 倒料
     const carPour = (val: any, id: number) => {
@@ -81,6 +96,8 @@ export default defineComponent({
       sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
     };
     return {
+      oneCarStartup,
+      twoCarStartup,
       carStartup,
       carPour,
       carShake,
