@@ -6,30 +6,28 @@
         type="primary"
         status="danger"
         class="custom-btn"
-        size="large"
         @click="openCloseFun"
       >
-        <icon-record-stop size="20" style="margin-right: 10px" />
-        紧急停止
+        <icon-record-stop size="40" style="margin-right: 20px" />
+        <h2>紧急停止</h2>
       </a-button>
       <a-button
         v-else
         type="primary"
         status="success"
         class="custom-btn"
-        size="large"
         @click="resetFun"
       >
-        <icon-play-circle size="20" style="margin-right: 10px" />
-        紧急复位
+        <icon-play-circle size="40" style="margin-right: 20px" />
+        <h2>紧急复位</h2>
       </a-button>
     </p>
-    <p class="alert-box">
-      <b>声光报警：</b>
+    <div class="alert-box">
+      <h2>声光报警：</h2>
       <a-tag :color="stateData.color" size="large" class="custom-tag">
         {{ stateData.text }}
       </a-tag>
-    </p>
+    </div>
   </a-card>
   <StopModal ref="stopModalRef" @change-state="changeState" />
 </template>
@@ -38,14 +36,14 @@
 import { computed, defineComponent, ref } from 'vue';
 import StopModal from './stop-modal.vue';
 
-const stateFormat = (state: string) => {
+const stateFormat = (state: number) => {
   switch (state) {
-    case '0':
+    case 0:
       return {
         color: '#5ebb3a',
         text: '正常',
       };
-    case '1':
+    case 1:
       return {
         color: '#f53f3f',
         text: '错误',
@@ -82,10 +80,10 @@ export default defineComponent({
     // stop 1:停止 0:复位
     const stopFun = async (stop: number) => {
       // 停止时防止急停失败
-      if (stop === 1) {
-        const sendMsg = `craneid:${props.craneNo};onetask:carstop;`;
-        props.sendCustomDirectiveFun('gtai/movingctrl', sendMsg);
-      }
+      // if (stop === 1) {
+      //   const sendMsg = `craneid:${props.craneNo};onetask:carstop;`;
+      //   props.sendCustomDirectiveFun('gtai/movingctrl', sendMsg);
+      // }
 
       setTimeout(() => {
         const sendMsg = `101\n+OCCH_ALL:${stop}`;
@@ -128,16 +126,25 @@ export default defineComponent({
   p {
     margin: 0;
   }
+  .custom-btn {
+    width: 200px;
+    height: 60px;
+  }
 
   :deep(.arco-card-body) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     .alert-box {
-      .custom-tag {
+      h2 {
         display: inline-block;
+      }
+      .custom-tag {
+        display: inline-flex;
         width: 150px;
-        text-align: center;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

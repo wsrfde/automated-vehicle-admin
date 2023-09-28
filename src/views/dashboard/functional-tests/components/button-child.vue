@@ -3,10 +3,54 @@
     <a-space direction="vertical" style="width: 100%" size="medium">
       <a-row>
         <a-col :span="12">
-          <a-button @click="carScan($event, 0)">一车全局扫描 </a-button>
+          <a-button
+            status="danger"
+            type="primary"
+            style="width: 200px; height: 70px"
+            @click="carUrgencyStop($event, 0)"
+            >一车紧急停止
+          </a-button>
         </a-col>
         <a-col :span="12">
-          <a-button @click="carScan($event, 1)">二车全局扫描 </a-button>
+          <a-button
+            status="danger"
+            type="primary"
+            style="width: 200px; height: 70px"
+            @click="carUrgencyStop($event, 1)"
+            >二车紧急停止
+          </a-button>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="12">
+          <a-button @click="carStop($event, 0)">一车停止 </a-button>
+        </a-col>
+        <a-col :span="12">
+          <a-button @click="carStop($event, 1)">二车停止 </a-button>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="12">
+          <a-button @click="carScan($event, 0, 'carscan')"
+            >一车车辆扫描
+          </a-button>
+        </a-col>
+        <a-col :span="12">
+          <a-button @click="carScan($event, 1, 'carscan')"
+            >二车车辆扫描
+          </a-button>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="12">
+          <a-button @click="carScan($event, 0, 'scanfull')"
+            >一车全局扫描
+          </a-button>
+        </a-col>
+        <a-col :span="12">
+          <a-button @click="carScan($event, 1, 'scanfull')"
+            >二车全局扫描
+          </a-button>
         </a-col>
       </a-row>
       <a-row>
@@ -64,10 +108,27 @@ export default defineComponent({
     },
   },
   setup({ sendInstructionsFun }) {
-    // 扫描
-    const carScan = (event: any, id: number) => {
+    // 紧急停止
+    const carUrgencyStop = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
-      const sedMsg = `craneid:${id};onetask:scanfull;zz:8.6;speed:100;`;
+      const sedMsg = `craneid:${id};onetask:carstop;`;
+      sendInstructionsFun('gtai/movingctrl', sedMsg);
+
+      setTimeout(() => {
+        const setMsg1 = `craneid:${id};power:false;`;
+        sendInstructionsFun('jtgx/overhead-crane-handle/power-on', setMsg1);
+      }, 50);
+    };
+    // 车辆停止
+    const carStop = (event: any, id: number) => {
+      animateCSS(event.target, 'pulse', 0.5);
+      const sedMsg = `craneid:${id};onetask:carstop;`;
+      sendInstructionsFun('gtai/movingctrl', sedMsg);
+    };
+    // 扫描
+    const carScan = (event: any, id: number, onetask: string) => {
+      animateCSS(event.target, 'pulse', 0.5);
+      const sedMsg = `craneid:${id};onetask:${onetask};zz:8.6;speed:100;`;
       sendInstructionsFun('gtai/movingctrl', sedMsg);
     };
     // 单次卸料
@@ -98,11 +159,13 @@ export default defineComponent({
     };
 
     return {
+      carStop,
       carScan,
       singleDischarge,
       singlePour,
       onceGrasp,
       oncePut,
+      carUrgencyStop,
     };
   },
 });

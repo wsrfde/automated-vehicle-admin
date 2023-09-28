@@ -19,16 +19,19 @@
         <CustomInstruct :send-instructions-fun="sendInstructionsFun" />
       </a-col>
     </a-row>
-    <NearlySevenDaysList />
+
+    <NearlySevenDaysList :seven-days-data="sevenDaysData" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import { sendInstructions } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
-import NearlySevenDaysList from '@/views/dashboard/functional-tests/components/nearly-seven-days-list.vue';
+import StompClient from '@/utils/stompServer';
+import { stringToObjectFun } from '@/utils/validate';
+import NearlySevenDaysList from './components/nearly-seven-days-list.vue';
 import LoadAndReverseCarForm from './components/load-and-reverse-car-form.vue';
 import ButtonChild from './components/button-child.vue';
 import MoveCarForm from './components/move-car-form.vue';
@@ -49,6 +52,7 @@ export default defineComponent({
   },
   setup() {
     const btnVal = ref('');
+    const sevenDaysData = ref({});
 
     const sendInstructionsFun = (topic: string, message: string) => {
       const query = {
@@ -67,8 +71,25 @@ export default defineComponent({
       });
     };
 
+    const stomp = new StompClient([
+      {
+        topicUrl: 'gtai/movingstatus',
+        callback: (e) => {
+          sevenDaysData.value = stringToObjectFun(e);
+        },
+      },
+    ]);
+
+    onMounted(() => {
+      stomp.connect();
+    });
+    onUnmounted(() => {
+      stomp.destroy();
+    });
+
     return {
       btnVal,
+      sevenDaysData,
       sendInstructionsFun,
     };
   },

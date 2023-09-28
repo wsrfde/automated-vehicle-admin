@@ -1,5 +1,5 @@
 <template>
-  <a-card class="general-card" title="操作日志">
+  <a-card class="general-card" title="行车完整运动状态">
     <a-table
       :pagination="basePagination"
       :columns="columns"
@@ -13,14 +13,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue';
-import StompClient from '@/utils/stompServer';
+import { computed, defineComponent } from 'vue';
 import { Pagination } from '@/types/global';
-import { stringToObjectFun } from '@/utils/validate';
 
 export default defineComponent({
   name: 'NearlySevenDaysList',
-  setup() {
+  props: {
+    sevenDaysData: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup({ sevenDaysData }) {
     const basePagination: Pagination = {
       current: 1,
       pageSize: 20,
@@ -57,31 +61,14 @@ export default defineComponent({
       store1_h: '存储区高度',
       store2_h: '装车区高度',
     };
-    const requestData = ref<{ craneid?: string }>({});
 
     const formatData = computed(() => {
-      return Object.entries(requestData.value).map(([key, val]) => ({
-        id: requestData.value.craneid,
+      return Object.entries(sevenDaysData).map(([key, val]) => ({
+        id: sevenDaysData.craneid,
         english: key,
         value: val,
         chinese: chineseAnnotation[key],
       }));
-    });
-
-    const stomp = new StompClient([
-      {
-        topicUrl: 'gtai/movingstatus', // 车辆1进入通知
-        callback: (e) => {
-          requestData.value = stringToObjectFun(e);
-        },
-      },
-    ]);
-
-    onMounted(() => {
-      stomp.connect();
-    });
-    onUnmounted(() => {
-      stomp.destroy();
     });
 
     return {
