@@ -157,3 +157,13 @@ export function validateIdNo(rule, value, callback) {
     callback();
   }
 }
+
+// 字符串转对象，如"craneId:1;movingTo:2;“ => {craneId:1,movingTo:2}
+export const stringToObjectFun = (str: string): Record<string, string> => {
+  const regex = /(\w+):([^;]+);/g;
+
+  return [...str.matchAll(regex)].reduce((acc, match) => {
+    const [, key, value] = match;
+    return Object.assign(acc, { [key]: value });
+  }, {});
+};

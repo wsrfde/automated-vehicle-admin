@@ -73,14 +73,14 @@ export default defineComponent({
     // 单次卸料
     const singleDischarge = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
-      const sedMsg = `craneid:${id};onetask:loadingIn;entrance:1;pickingzz:9;placeoz:8.0;`;
+      const sedMsg = `craneid:${id};onetask:loadingIn;entrance:1;pickingzz:9;placeoz:2.0;`;
       sendInstructionsFun('gtai/movingctrl', sedMsg);
     };
 
     // 单次倒料
     const singlePour = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
-      const sedMsg = `craneid:${id};onetask:preparing;pickingzz:9;placeoz:8.0;`;
+      const sedMsg = `craneid:${id};onetask:preparing;pickingzz:9;placeoz:2.0;`;
       sendInstructionsFun('gtai/movingctrl', sedMsg);
     };
 

@@ -48,12 +48,12 @@ export default defineComponent({
         value: data.subCarStatus,
       },
       {
-        label: '边缘计算机状态',
-        value: data.edgeComputerStatus,
-      },
-      {
         label: '极限限位',
         value: data.limitSwitch,
+      },
+      {
+        label: '防摇状态',
+        value: data.fanyaoStatus,
       },
       {
         label: '栏杆门限位',

@@ -9,7 +9,11 @@
         class="custom-card"
         :title="item.title"
       >
-        <AlarmAlert :crane-no="item.crane_no" :crane-data="item.data" />
+        <AlarmAlert
+          :crane-no="item.crane_no"
+          :crane-data="item.data"
+          :send-custom-directive-fun="sendCustomDirectiveFun"
+        />
         <CraneStep
           class="mb15"
           :current-step="item.data.step"
@@ -41,6 +45,8 @@
 import { defineComponent, onUnmounted, reactive } from 'vue';
 import StompClient from '@/utils/stompServer';
 import { CRANE_OPTION } from '@/utils/dictionary';
+import { sendCustomDirective } from '@/api/dashboard';
+import { Notification } from '@arco-design/web-vue';
 import CraneStep from './components/crane-step.vue';
 import CraneHandle from './components/crane-handle.vue';
 import CarAlert from './components/car-alert.vue';
@@ -80,6 +86,23 @@ export default defineComponent({
       },
     ]);
 
+    const sendCustomDirectiveFun = (topic: string, message: string) => {
+      const query = {
+        qos: '1',
+        retained: false,
+        topic,
+        message,
+      };
+      const formData = new FormData();
+      Object.entries(query).forEach(([key, value]: any[]) => {
+        formData.append(key, value);
+      });
+
+      sendCustomDirective(formData).then((res: any) => {
+        Notification.info(res.msg);
+      });
+    };
+
     const stomp = new StompClient([
       {
         topicUrl: 'jtgx/car/park/1', // 车辆1进入通知
@@ -96,7 +119,6 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/emergency/1', // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          console.log(e);
           Object.assign(craneConfigList[0].data, {
             stop: e['101\n+OCCH_ALL'],
           });
@@ -157,6 +179,7 @@ export default defineComponent({
       carTips,
       stepOption,
       craneConfigList,
+      sendCustomDirectiveFun,
     };
   },
 });

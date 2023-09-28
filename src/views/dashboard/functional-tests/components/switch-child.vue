@@ -31,16 +31,6 @@
           <span class="ml10"> 二车防摇开关</span>
         </a-col>
       </a-row>
-      <a-row>
-        <a-col :span="12">
-          <a-switch @change="autoSwitch($event, 0)" />
-          <span class="ml10"> 一车自动与手动切换</span>
-        </a-col>
-        <a-col :span="12">
-          <a-switch @change="autoSwitch($event, 1)" />
-          <span class="ml10"> 二车自动与手动切换</span>
-        </a-col>
-      </a-row>
     </a-space>
   </a-card>
 </template>
@@ -90,18 +80,12 @@ export default defineComponent({
       sendInstructionsFun('jtgx/overhead-crane-handle/kinema-argvs', sedMsg);
     };
 
-    // 自动/手动切换
-    const autoSwitch = (val: any, id: number) => {
-      const sedMsg = `craneid:${id};step:1;auto:${val};`;
-      sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
-    };
     return {
       oneCarStartup,
       twoCarStartup,
       carStartup,
       carPour,
       carShake,
-      autoSwitch,
     };
   },
 });

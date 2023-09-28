@@ -20,8 +20,12 @@ export default class StompClient {
           if (this.stompClient.subscribe) {
             // 返回实例中可以调用unsubscribe()方法，用来取消订阅
             this.stompClient.subscribe(item.topicUrl, (message) => {
-              const payload = JSON.parse(message.body);
-              item.callback(payload);
+              try {
+                const payload = JSON.parse(message.body);
+                item.callback(payload);
+              } catch (e) {
+                item.callback(message.body);
+              }
             });
           }
         });

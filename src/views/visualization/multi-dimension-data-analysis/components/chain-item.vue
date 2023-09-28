@@ -109,7 +109,7 @@ export default defineComponent({
                 ((data[data.length - 1] - data[data.length - 2]) /
                   data[data.length - 2]) *
                 100
-              ).toFixed(2)
+              ).toFixed(2),
             );
           }
 
@@ -117,7 +117,7 @@ export default defineComponent({
         }
         setLoading(false);
       },
-      { immediate: true }
+      { immediate: true },
     );
     return {
       loading,

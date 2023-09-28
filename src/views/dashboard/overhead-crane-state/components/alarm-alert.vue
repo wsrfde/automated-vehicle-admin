@@ -6,6 +6,7 @@
         type="primary"
         status="danger"
         class="custom-btn"
+        size="large"
         @click="openCloseFun"
       >
         <icon-record-stop size="20" style="margin-right: 10px" />
@@ -16,6 +17,7 @@
         type="primary"
         status="success"
         class="custom-btn"
+        size="large"
         @click="resetFun"
       >
         <icon-play-circle size="20" style="margin-right: 10px" />
@@ -34,8 +36,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-import { emergencyStop } from '@/api/dashboard';
-import { Notification } from '@arco-design/web-vue';
 import StopModal from './stop-modal.vue';
 
 const stateFormat = (state: string) => {
@@ -69,22 +69,31 @@ export default defineComponent({
       type: Object,
       default: () => ({}),
     },
+    sendCustomDirectiveFun: {
+      type: Function,
+      default: () => ({}),
+    },
   },
   setup(props) {
     const stopModalRef = ref<InstanceType<typeof StopModal>>();
     const btnStatus = computed(() => props.craneData.stop === 0);
     const stateData = computed(() => stateFormat(props.craneData.stop));
 
+    // stop 1:停止 0:复位
     const stopFun = async (stop: number) => {
-      const query = {
-        message: {
-          crane_no: props.craneNo,
-          stop, // 1:停止 0:复位
-        },
-      };
-      await emergencyStop(JSON.stringify(query)).then(() => {
-        Notification.success(stop === 1 ? '紧急停止成功' : '紧急复位成功');
-      });
+      // 停止时防止急停失败
+      if (stop === 1) {
+        const sendMsg = `craneid:${props.craneNo};onetask:carstop;`;
+        props.sendCustomDirectiveFun('gtai/movingctrl', sendMsg);
+      }
+
+      setTimeout(() => {
+        const sendMsg = `101\n+OCCH_ALL:${stop}`;
+        props.sendCustomDirectiveFun(
+          `jtgx/emergency/${props.craneNo}`,
+          sendMsg,
+        );
+      }, 50);
     };
     const openCloseFun = () => {
       stopModalRef.value?.show();
@@ -92,9 +101,11 @@ export default defineComponent({
     const resetFun = () => {
       stopFun(0);
     };
-    const changeState = async (e) => {
-      await stopFun(e);
-      stopModalRef.value?.hide();
+    const changeState = (e) => {
+      setTimeout(async () => {
+        await stopFun(e);
+        stopModalRef.value?.hide();
+      }, 50);
     };
 
     return {
