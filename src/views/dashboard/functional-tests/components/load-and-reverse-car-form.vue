@@ -56,7 +56,7 @@ export default defineComponent({
     const formRef = ref<InstanceType<typeof Form>>();
     const form = reactive({
       id: '',
-      speed: '',
+      speed: '100',
       step: '',
       pickingzz: '',
       placeoz: '',

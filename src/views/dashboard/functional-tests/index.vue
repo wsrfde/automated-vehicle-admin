@@ -2,7 +2,10 @@
   <div class="container">
     <Breadcrumb :items="['仪表盘', '功能测试']" />
     <SwitchState :switch-data="switchData" />
-    <SwitchChild :send-instructions-fun="sendInstructionsFun" />
+    <SwitchChild
+      :switch-data="switchData"
+      :send-instructions-fun="sendInstructionsFun"
+    />
     <ButtonChild
       :car-stop-state="carStopState"
       :send-instructions-fun="sendInstructionsFun"
@@ -83,11 +86,13 @@ export default defineComponent({
       {
         topicUrl: 'gtai/movingstatus',
         callback: (e) => {
+          console.log(e);
+          console.log(stringToObjectFun(e));
           sevenDaysData.value = stringToObjectFun(e);
         },
       },
       {
-        topicUrl: 'jtgx/power-and-fanyao/1',
+        topicUrl: 'jtgx/power-and-fanyao/1', // 开关/防摇
         callback: (e) => {
           Object.assign(switchData[0], stringToObjectFun(e));
         },
@@ -111,7 +116,7 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jtgx/emergency/reslut/1',
+        topicUrl: 'jtgx/emergency/reslut/1', // 急停声光报警
         callback: (e) => {
           Object.assign(carStopState[0], stringToObjectFun(e));
         },

@@ -65,7 +65,7 @@ export default defineComponent({
     const form = reactive({
       id: '',
       move: [],
-      speed: '',
+      speed: '100',
       step: '',
     });
 
