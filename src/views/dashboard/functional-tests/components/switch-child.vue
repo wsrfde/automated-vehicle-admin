@@ -23,11 +23,11 @@
       </a-row>
       <a-row>
         <a-col :span="12">
-          <a-switch @change="carShake($event, 0)" />
+          <a-switch v-model="shakeStatus[0]" @change="carShake($event, 0)" />
           <span class="ml10"> 一车防摇开关</span>
         </a-col>
         <a-col :span="12">
-          <a-switch @change="carShake($event, 1)" />
+          <a-switch v-model="shakeStatus[1]" @change="carShake($event, 1)" />
           <span class="ml10"> 二车防摇开关</span>
         </a-col>
       </a-row>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 
 export default defineComponent({
   name: 'SwitchChild',
@@ -49,6 +49,13 @@ export default defineComponent({
   setup({ sendInstructionsFun }) {
     const oneCarStartup = ref(false);
     const twoCarStartup = ref(false);
+
+    const shakeStatus = ref([false, false]);
+
+    const statusSwitches = () => {
+      shakeStatus.value = shakeStatus.value.map((status) => !status);
+    };
+
     // 电源
     const carStartup = (val: any, id: number) => {
       const sedMsg = `craneid:${id};power:${val};`;
@@ -80,12 +87,22 @@ export default defineComponent({
       sendInstructionsFun('jtgx/overhead-crane-handle/kinema-argvs', sedMsg);
     };
 
+    onMounted(() => {
+      const intervalId = setInterval(statusSwitches, 5000); // 每隔5秒钟开关状态
+
+      // 在组件卸载时清除定时器，避免内存泄漏
+      onUnmounted(() => {
+        clearInterval(intervalId);
+      });
+    });
+
     return {
       oneCarStartup,
       twoCarStartup,
       carStartup,
       carPour,
       carShake,
+      shakeStatus,
     };
   },
 });

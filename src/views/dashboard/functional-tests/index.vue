@@ -1,8 +1,12 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['仪表盘', '功能测试']" />
+    <SwitchState :switch-data="switchData" />
     <SwitchChild :send-instructions-fun="sendInstructionsFun" />
-    <ButtonChild :send-instructions-fun="sendInstructionsFun" />
+    <ButtonChild
+      :car-stop-state="carStopState"
+      :send-instructions-fun="sendInstructionsFun"
+    />
     <a-row :gutter="20">
       <a-col :span="12">
         <MoveCarForm :send-instructions-fun="sendInstructionsFun" />
@@ -25,12 +29,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, onMounted, onUnmounted, reactive } from 'vue';
 import { sendInstructions } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
 import StompClient from '@/utils/stompServer';
 import { stringToObjectFun } from '@/utils/validate';
+import SwitchState from '@/views/dashboard/functional-tests/components/switch-state.vue';
 import NearlySevenDaysList from './components/nearly-seven-days-list.vue';
 import LoadAndReverseCarForm from './components/load-and-reverse-car-form.vue';
 import ButtonChild from './components/button-child.vue';
@@ -42,6 +47,7 @@ import SwitchChild from './components/switch-child.vue';
 export default defineComponent({
   name: 'Index',
   components: {
+    SwitchState,
     NearlySevenDaysList,
     LoadAndReverseCarForm,
     CustomInstruct,
@@ -52,6 +58,8 @@ export default defineComponent({
   },
   setup() {
     const btnVal = ref('');
+    const switchData = reactive<any[]>([{}, {}]);
+    const carStopState = reactive<any[]>([{}, {}]);
     const sevenDaysData = ref({});
 
     const sendInstructionsFun = (topic: string, message: string) => {
@@ -78,6 +86,42 @@ export default defineComponent({
           sevenDaysData.value = stringToObjectFun(e);
         },
       },
+      {
+        topicUrl: 'jtgx/power-and-fanyao/1',
+        callback: (e) => {
+          Object.assign(switchData[0], stringToObjectFun(e));
+        },
+      },
+      {
+        topicUrl: 'jtgx/power-and-fanyao/1',
+        callback: (e) => {
+          Object.assign(switchData[0], stringToObjectFun(e));
+        },
+      },
+      {
+        topicUrl: 'jtgx/power-and-fanyao/2',
+        callback: (e) => {
+          Object.assign(switchData[1], stringToObjectFun(e));
+        },
+      },
+      {
+        topicUrl: 'jtgx/power-and-fanyao/2',
+        callback: (e) => {
+          Object.assign(switchData[1], stringToObjectFun(e));
+        },
+      },
+      {
+        topicUrl: 'jtgx/emergency/reslut/1',
+        callback: (e) => {
+          Object.assign(carStopState[0], stringToObjectFun(e));
+        },
+      },
+      {
+        topicUrl: 'jtgx/emergency/reslut/2',
+        callback: (e) => {
+          Object.assign(carStopState[1], stringToObjectFun(e));
+        },
+      },
     ]);
 
     onMounted(() => {
@@ -90,6 +134,8 @@ export default defineComponent({
     return {
       btnVal,
       sevenDaysData,
+      switchData,
+      carStopState,
       sendInstructionsFun,
     };
   },

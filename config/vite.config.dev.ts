@@ -10,6 +10,7 @@ export default mergeConfig(
         // BASE_API: 'http://47.105.44.218', // 开发环境
         BASE_API: 'http://47.100.100.190:8000', // 开发环境
         // WS_API: 'ws://47.105.44.218/ws',
+        // WS_API: 'mqtt://47.100.100.190:8083',
         WS_API: 'ws://47.100.100.190:8000/ws',
         THREE_URL: 'http://three.iojun.com/', // 三维模型
       },
@@ -28,5 +29,5 @@ export default mergeConfig(
       }),
     ],
   },
-  baseConfig
+  baseConfig,
 );

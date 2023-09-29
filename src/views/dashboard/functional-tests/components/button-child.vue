@@ -3,22 +3,46 @@
     <a-space direction="vertical" style="width: 100%" size="medium">
       <a-row>
         <a-col :span="12">
-          <a-button
-            status="danger"
-            type="primary"
-            style="width: 200px; height: 70px"
-            @click="carUrgencyStop($event, 0)"
-            >一车紧急停止
-          </a-button>
+          <a-space :size="200">
+            <a-button
+              status="danger"
+              type="primary"
+              style="width: 200px; height: 70px"
+              @click="carUrgencyStop($event, 0)"
+              >一车紧急停止
+            </a-button>
+            <a-tag
+              color="red"
+              style="
+                width: 200px;
+                height: 70px;
+                justify-content: center;
+                font-size: 18px;
+              "
+              >{{ formatStr(carStopState[0].pushbuttonStatus) }}</a-tag
+            >
+          </a-space>
         </a-col>
         <a-col :span="12">
-          <a-button
-            status="danger"
-            type="primary"
-            style="width: 200px; height: 70px"
-            @click="carUrgencyStop($event, 1)"
-            >二车紧急停止
-          </a-button>
+          <a-space :size="200">
+            <a-button
+              status="danger"
+              type="primary"
+              style="width: 200px; height: 70px"
+              @click="carUrgencyStop($event, 1)"
+              >二车紧急停止
+            </a-button>
+            <a-tag
+              color="arcoblue"
+              style="
+                width: 200px;
+                height: 70px;
+                justify-content: center;
+                font-size: 18px;
+              "
+              >{{ formatStr(carStopState[1].pushbuttonStatus) }}</a-tag
+            >
+          </a-space>
         </a-col>
       </a-row>
       <a-row>
@@ -55,27 +79,6 @@
       </a-row>
       <a-row>
         <a-col :span="12">
-          <a-button @click="singleDischarge($event, 0)"
-            >一车单次卸料点动
-          </a-button>
-        </a-col>
-        <a-col :span="12">
-          <a-button @click="singleDischarge($event, 1)"
-            >二车单次卸料点动
-          </a-button>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :span="12">
-          <a-button @click="singlePour($event, 0)">一车单次倒料点动 </a-button>
-        </a-col>
-        <a-col :span="12">
-          <a-button @click="singlePour($event, 1)">二车单次倒料点动 </a-button>
-        </a-col>
-      </a-row>
-
-      <a-row>
-        <a-col :span="12">
           <a-button @click="onceGrasp($event, 0)">一车一键抓料 </a-button>
         </a-col>
         <a-col :span="12">
@@ -98,6 +101,7 @@
 import { defineComponent } from 'vue';
 import 'animate.css';
 import animateCSS from '@/utils/animate';
+import { PropType } from 'vue/dist/vue';
 
 export default defineComponent({
   name: 'ButtonChild',
@@ -106,11 +110,18 @@ export default defineComponent({
       type: Function,
       default: () => ({}),
     },
+    carStopState: {
+      type: Array as PropType<any[]>,
+      default: () => [],
+    },
   },
   setup({ sendInstructionsFun }) {
+    const formatStr = (state: boolean) => {
+      return state ? `按下` : `弹起`;
+    };
+
     // 紧急停止
     const carUrgencyStop = (event: any, id: number) => {
-      animateCSS(event.target, 'pulse', 0.5);
       const sedMsg = `craneid:${id};onetask:carstop;`;
       sendInstructionsFun('gtai/movingctrl', sedMsg);
 
@@ -131,19 +142,6 @@ export default defineComponent({
       const sedMsg = `craneid:${id};onetask:${onetask};zz:8.6;speed:100;`;
       sendInstructionsFun('gtai/movingctrl', sedMsg);
     };
-    // 单次卸料
-    const singleDischarge = (event: any, id: number) => {
-      animateCSS(event.target, 'pulse', 0.5);
-      const sedMsg = `craneid:${id};onetask:loadingIn;entrance:1;pickingzz:9;placeoz:2.0;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
-    };
-
-    // 单次倒料
-    const singlePour = (event: any, id: number) => {
-      animateCSS(event.target, 'pulse', 0.5);
-      const sedMsg = `craneid:${id};onetask:preparing;pickingzz:9;placeoz:2.0;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
-    };
 
     // 一键抓料
     const onceGrasp = (event: any, id: number) => {
@@ -161,11 +159,10 @@ export default defineComponent({
     return {
       carStop,
       carScan,
-      singleDischarge,
-      singlePour,
       onceGrasp,
       oncePut,
       carUrgencyStop,
+      formatStr,
     };
   },
 });
