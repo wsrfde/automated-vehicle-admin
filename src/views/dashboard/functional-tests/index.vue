@@ -79,6 +79,7 @@ export default defineComponent({
 
       sendInstructions(formData).then((res: any) => {
         Notification.info(res.msg);
+        console.log('-----');
       });
     };
 
