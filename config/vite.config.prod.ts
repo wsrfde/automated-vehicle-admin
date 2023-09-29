@@ -12,5 +12,5 @@ export default mergeConfig(
       },
     },
   },
-  baseConfig
+  baseConfig,
 );

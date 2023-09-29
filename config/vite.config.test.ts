@@ -7,10 +7,8 @@ export default mergeConfig(
     mode: 'development',
     define: {
       'process.env': {
-        // BASE_API: 'http://47.105.44.218', // 开发环境
-        BASE_API: 'http://47.100.100.190:8000', // 开发环境
-        // WS_API: 'ws://47.105.44.218/ws',
-        WS_API: 'ws://47.100.100.190:8000/ws',
+        BASE_API: 'http://192.168.8.8:8000',
+        WS_API: 'ws://192.168.8.8:8083/ws', // 测试环境
         THREE_URL: 'http://three.iojun.com/', // 三维模型
       },
     },

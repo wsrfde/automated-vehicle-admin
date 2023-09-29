@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, computed } from 'vue';
+import { defineComponent, ref, PropType } from 'vue';
 
 export default defineComponent({
   name: 'SwitchChild',
@@ -56,15 +56,9 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup({ sendInstructionsFun, switchData }) {
+  setup({ sendInstructionsFun }) {
     const oneCarStartup = ref(false);
     const twoCarStartup = ref(false);
-
-    // const shakeStatus = ref([false, false]);
-    //
-    // const statusSwitches = () => {
-    //   shakeStatus.value = shakeStatus.value.map((status) => !status);
-    // };
 
     // 电源
     const carStartup = (val: any, id: number) => {
