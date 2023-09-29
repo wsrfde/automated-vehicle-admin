@@ -127,6 +127,7 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/crane/position/front/1', // 坐标信息
         callback: (e) => {
+          console.log(e);
           Object.assign(craneConfigList[0].data, e);
         },
       },

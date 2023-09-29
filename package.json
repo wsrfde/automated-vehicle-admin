@@ -27,6 +27,7 @@
     "jsencrypt": "^3.3.2",
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
+    "mqtt": "^5.0.5",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.6",
     "query-string": "^8.1.0",

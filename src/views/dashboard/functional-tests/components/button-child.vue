@@ -126,6 +126,7 @@ export default defineComponent({
       sendInstructionsFun('gtai/movingctrl', sedMsg);
 
       setTimeout(() => {
+        // TODO：
         const setMsg1 = `craneid:${id};power:false;`;
         sendInstructionsFun('jtgx/overhead-crane-handle/power-on', setMsg1);
       }, 50);

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mqtt/4.1.0/mqtt.min.js"></script>
+  <script>
+    const options = {
+      clientId: `mqttjs_${Math.random().toString(16).substring(2, 8)}`,
+      protocol: 'ws', // 注意这里是 'ws' 而不是默认的 'mqtt'
+      username: 'volmon',  // 如果需要，替换为您的用户名
+      password: 'volmon123',  // 如果需要，替换为您的密码
+    };
+
+    const client = mqtt.connect('ws://47.100.100.190:8083', options);
+
+    client.on('connect', function () {
+      console.log('Connected to MQTT server');
+      client.subscribe('gtai/movingstatus', function (err) {
+        console.log('sub ok');
+        if (err) {
+          console.error('Failed to subscribe:', err);
+        }
+      });
+    });
+
+    client.on('message', function (topic, message) {
+      console.log(`Received message on ${topic}: ${message.toString()}`);
+    });
+
+    // 处理错误事件，以便在出现问题时了解原因
+    client.on('error', function (error) {
+      console.error('MQTT Client Error:', error);
+    });
+  </script>
+</body>
+</html>
