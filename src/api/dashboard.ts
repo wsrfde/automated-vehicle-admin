@@ -29,11 +29,7 @@ export function getJobStatistics(params) {
 }
 // 发送自定义指令
 export function sendCustomDirective(data) {
-  return axios.post(`/api/mqtt/sendMessage`, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  return axios.post(`/api/mqtt/sendMessage`, data);
 }
 // 测试环境：发送自定义指令
 // export function sendInstructions(data) {

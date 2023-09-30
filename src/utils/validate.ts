@@ -159,26 +159,27 @@ export function validateIdNo(rule, value, callback) {
 }
 
 // 字符串转对象，如"craneId:1;movingTo:2;“ => {craneId:1,movingTo:2}
-export const stringToObjectFun = (str: string): Record<string, string> => {
-  const regex = /(\w+):([^;]+);/g;
+export const stringToObjectFun = (
+  str: string,
+): Record<string, string | number | boolean> => {
+  const regex = /([^:]+):([^;]+);/g;
 
-  const valueFormat = (value: any) => {
+  const valueFormat = (value: any): string | number | boolean => {
+    if (!Number.isNaN(value * 1)) {
+      return value * 1; // 转为 number
+    }
     if (value === 'true') {
       return true;
     }
     if (value === 'false') {
       return false;
     }
-    // 没用switch是因为不支持复杂判断
-    if (!Number.isNaN(value * 1)) {
-      return value * 1; // 转number
-    }
     return value;
   };
 
   return [...str.matchAll(regex)].reduce((acc, match) => {
-    const [, key, value] = match;
+    const [key, value] = match.slice(1); // 提取键和值
 
-    return Object.assign(acc, { [key]: valueFormat(value) });
+    return { ...acc, [key]: valueFormat(value) };
   }, {});
 };

@@ -16,8 +16,8 @@ import { defineComponent, PropType, ref } from 'vue';
 export default defineComponent({
   props: {
     currentStep: {
-      type: String,
-      default: '',
+      type: Number,
+      default: -1,
     },
     stepOption: {
       type: Array as PropType<any[]>,
@@ -29,7 +29,7 @@ export default defineComponent({
       direction: 'horizontal',
     });
 
-    const findStepIndex = (val: string) => {
+    const findStepIndex = (val: number) => {
       return props.stepOption.findIndex((item: any) => item.value === val) + 1;
     };
 

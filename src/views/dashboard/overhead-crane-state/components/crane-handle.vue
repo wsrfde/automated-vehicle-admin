@@ -38,8 +38,8 @@ export default defineComponent({
       default: false,
     },
     currentStep: {
-      type: String,
-      default: '',
+      type: Number,
+      default: -1,
     },
     stepOption: {
       type: Array as PropType<any[]>,

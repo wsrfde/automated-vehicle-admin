@@ -68,21 +68,16 @@ export default defineComponent({
     const carStopState = reactive<any[]>([{}, {}]);
     const sevenDaysData = ref({});
 
-    const sendCustomDirectiveFun = (topic: string, message: string) => {
+    const sendCustomDirectiveFun = (
+      topic: string,
+      message: string | object,
+    ) => {
       const query = {
-        qos: '1',
-        retained: false,
         topic,
         message,
       };
-      const formData = new FormData();
-      Object.entries(query).forEach(([key, value]: any[]) => {
-        formData.append(key, value);
-      });
-
-      sendCustomDirective(formData).then((res: any) => {
+      sendCustomDirective(JSON.stringify(query)).then((res: any) => {
         Notification.info(res.msg);
-        console.log('-----');
       });
     };
 
@@ -96,6 +91,7 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/power-and-fanyao/1', // 开关/防摇
         callback: (e) => {
+          console.log(e);
           Object.assign(switchData[0], e);
         },
       },
@@ -120,7 +116,6 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/emergency/reslut/1', // 急停声光报警
         callback: (e) => {
-          console.log(e);
           Object.assign(carStopState[0], e);
         },
       },

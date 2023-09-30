@@ -86,7 +86,7 @@ export default defineComponent({
       // }
 
       setTimeout(() => {
-        const sendMsg = `101\n+OCCH_ALL:${stop}`;
+        const sendMsg = `101\n+OCCH_ALL:${stop};`;
         props.sendCustomDirectiveFun(
           `jtgx/emergency/${props.craneNo}`,
           sendMsg,

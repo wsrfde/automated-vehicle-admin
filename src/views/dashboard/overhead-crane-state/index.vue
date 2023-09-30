@@ -86,19 +86,16 @@ export default defineComponent({
       },
     ]);
 
-    const sendCustomDirectiveFun = (topic: string, message: string) => {
+    const sendCustomDirectiveFun = (
+      topic: string,
+      message: string | object,
+    ) => {
       const query = {
-        qos: '1',
-        retained: false,
         topic,
         message,
       };
-      const formData = new FormData();
-      Object.entries(query).forEach(([key, value]: any[]) => {
-        formData.append(key, value);
-      });
 
-      sendCustomDirective(formData).then((res: any) => {
+      sendCustomDirective(JSON.stringify(query)).then((res: any) => {
         Notification.info(res.msg);
       });
     };
