@@ -43,12 +43,12 @@ import { defineComponent, reactive } from 'vue';
 export default defineComponent({
   name: 'CustomInstruct',
   props: {
-    sendInstructionsFun: {
+    sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
   },
-  setup({ sendInstructionsFun }) {
+  setup({ sendCustomDirectiveFun }) {
     const form = reactive({
       topic: '',
       message: '',
@@ -57,7 +57,7 @@ export default defineComponent({
     const handleSubmit = (data) => {
       const { topic, message } = data.values;
       if (topic && message) {
-        sendInstructionsFun(topic, message);
+        sendCustomDirectiveFun(topic, message);
       }
     };
 

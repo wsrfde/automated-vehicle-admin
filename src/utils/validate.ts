@@ -162,8 +162,23 @@ export function validateIdNo(rule, value, callback) {
 export const stringToObjectFun = (str: string): Record<string, string> => {
   const regex = /(\w+):([^;]+);/g;
 
+  const valueFormat = (value: any) => {
+    if (value === 'true') {
+      return true;
+    }
+    if (value === 'false') {
+      return false;
+    }
+    // 没用switch是因为不支持复杂判断
+    if (!Number.isNaN(value * 1)) {
+      return value * 1; // 转number
+    }
+    return value;
+  };
+
   return [...str.matchAll(regex)].reduce((acc, match) => {
     const [, key, value] = match;
-    return Object.assign(acc, { [key]: value });
+
+    return Object.assign(acc, { [key]: valueFormat(value) });
   }, {});
 };

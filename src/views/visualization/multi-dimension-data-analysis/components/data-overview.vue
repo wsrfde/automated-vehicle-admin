@@ -53,7 +53,7 @@ const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
           <span>${el.seriesName}</span>
         </p>
         <span class="tooltip-value">${el.value.toLocaleString()}</span>
-      </div>`
+      </div>`,
     )
     .reverse()
     .join('');
@@ -63,7 +63,7 @@ const generateSeries = (
   name: string,
   lineColor: string,
   itemBorderColor: string,
-  data: number[]
+  data: number[],
 ): LineSeriesOption => {
   return {
     name,
@@ -310,7 +310,7 @@ export default defineComponent({
             '3号天车装车',
             '#165DFF',
             '#E8F3FF',
-            threeCarLoad.value
+            threeCarLoad.value,
           ),
           generateSeries('1号天车倒料', '#e87231', '#ffe5d4', oneCarPour.value),
           generateSeries('2号天车倒料', '#04ab60', '#b5eed1', twoCarPour.value),
@@ -318,7 +318,7 @@ export default defineComponent({
             '3号天车倒料',
             '#1577c0',
             '#cbe9ff',
-            threeCarPour.value
+            threeCarPour.value,
           ),
         ],
       };

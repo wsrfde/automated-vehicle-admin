@@ -55,12 +55,12 @@ import { Form } from '@arco-design/web-vue';
 export default defineComponent({
   name: 'MoveCarMaintainForm',
   props: {
-    sendInstructionsFun: {
+    sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
   },
-  setup({ sendInstructionsFun }) {
+  setup({ sendCustomDirectiveFun }) {
     const formRef = ref<InstanceType<typeof Form>>();
     const form = reactive({
       id: '',
@@ -75,7 +75,7 @@ export default defineComponent({
           const sedMsg = `craneid:${form.id};step:${
             form.step
           };auto:true;moveto:${form.move.join()};speed:${form.speed};`;
-          sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
+          sendCustomDirectiveFun('jtgx/overhead-crane-handle/1', sedMsg);
         }
       });
     };

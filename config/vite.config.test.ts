@@ -10,7 +10,6 @@ export default mergeConfig(
         BASE_API: 'http://192.168.8.8:8000',
         WS_API: 'ws://192.168.8.8:8000/ws',
         // WS_API: 'ws://192.168.8.8:8083/ws', // 测试环境
-        MQTT_API: 'ws://192.168.8.8:8083', // mqtt
         THREE_URL: 'http://three.iojun.com/', // 三维模型
       },
     },

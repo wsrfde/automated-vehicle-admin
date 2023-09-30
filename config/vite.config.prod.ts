@@ -8,7 +8,6 @@ export default mergeConfig(
       'process.env': {
         BASE_API: 'http://192.168.8.8:8000', // 生产环境
         WS_API: 'ws://192.168.8.8:8000/ws',
-        MQTT_API: 'ws://192.168.8.8:8083', // mqtt
         THREE_URL: 'http://192.168.8.8:81', // 三维模型
       },
     },

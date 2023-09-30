@@ -49,12 +49,12 @@ import { Form } from '@arco-design/web-vue';
 export default defineComponent({
   name: 'MoveCarForm',
   props: {
-    sendInstructionsFun: {
+    sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
   },
-  setup({ sendInstructionsFun }) {
+  setup({ sendCustomDirectiveFun }) {
     const formRef = ref<InstanceType<typeof Form>>();
     const form = reactive({
       id: '',
@@ -68,7 +68,7 @@ export default defineComponent({
           const sedMsg = `craneid:${form.id};moveto:${form.move.join()};speed:${
             form.speed
           };`;
-          sendInstructionsFun('gtai/movingctrl', sedMsg);
+          sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
         }
       });
     };

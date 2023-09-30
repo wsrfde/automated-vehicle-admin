@@ -47,12 +47,12 @@ import { Form } from '@arco-design/web-vue';
 export default defineComponent({
   name: 'LoadAndReverseCarForm',
   props: {
-    sendInstructionsFun: {
+    sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
   },
-  setup({ sendInstructionsFun }) {
+  setup({ sendCustomDirectiveFun }) {
     const formRef = ref<InstanceType<typeof Form>>();
     const form = reactive({
       id: '',
@@ -66,7 +66,7 @@ export default defineComponent({
       formRef.value?.validate((errors) => {
         if (!errors) {
           const sedMsg = `craneid:${form.id};step:${form.step};auto:true;pickingzz:${form.pickingzz};placeoz:${form.placeoz};speed:${form.speed};`;
-          sendInstructionsFun('jtgx/overhead-crane-handle/1', sedMsg);
+          sendCustomDirectiveFun('jtgx/overhead-crane-handle/1', sedMsg);
         }
       });
     };

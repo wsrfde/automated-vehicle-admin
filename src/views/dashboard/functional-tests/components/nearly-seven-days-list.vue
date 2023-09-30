@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, watch } from 'vue';
 import { Pagination } from '@/types/global';
 
 export default defineComponent({
@@ -24,7 +24,7 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup({ sevenDaysData }) {
+  setup(props) {
     const basePagination: Pagination = {
       current: 1,
       pageSize: 20,
@@ -63,8 +63,8 @@ export default defineComponent({
     };
 
     const formatData = computed(() => {
-      return Object.entries(sevenDaysData).map(([key, val]) => ({
-        id: sevenDaysData.craneid,
+      return Object.entries(props.sevenDaysData).map(([key, val]) => ({
+        id: props.sevenDaysData.craneid,
         english: key,
         value: val,
         chinese: chineseAnnotation[key],

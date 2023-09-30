@@ -1,6 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import { IFrame } from '@stomp/stompjs/src/i-frame';
 import { StompConfig } from '@stomp/stompjs/src/stomp-config';
+import { stringToObjectFun } from '@/utils/validate';
 
 export default class StompClient {
   stompClient: Partial<Client> = {};
@@ -24,7 +25,8 @@ export default class StompClient {
                 const payload = JSON.parse(message.body);
                 item.callback(payload);
               } catch (e) {
-                item.callback(message.body);
+                const payload = stringToObjectFun(message.body);
+                item.callback(payload);
               }
             });
           }

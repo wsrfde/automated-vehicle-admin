@@ -35,12 +35,12 @@ export function sendCustomDirective(data) {
     },
   });
 }
-// 发送指令，baseURL写死，只允许在测试环境测试
-export function sendInstructions(data) {
-  const testURL = 'http://192.168.8.8:8000';
-  return axios.post(`${testURL}/api/mqtt/sendMessage`, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-}
+// 测试环境：发送自定义指令
+// export function sendInstructions(data) {
+//   const testURL = 'http://192.168.8.8:8000';
+//   return axios.post(`${testURL}/api/mqtt/sendMessage`, data, {
+//     headers: {
+//       'Content-Type': 'multipart/form-data',
+//     },
+//   });
+// }

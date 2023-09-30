@@ -4,26 +4,30 @@
     <SwitchState :switch-data="switchData" />
     <SwitchChild
       :switch-data="switchData"
-      :send-instructions-fun="sendInstructionsFun"
+      :send-custom-directive-fun="sendCustomDirectiveFun"
     />
     <ButtonChild
       :car-stop-state="carStopState"
-      :send-instructions-fun="sendInstructionsFun"
+      :send-custom-directive-fun="sendCustomDirectiveFun"
     />
     <a-row :gutter="20">
       <a-col :span="12">
-        <MoveCarForm :send-instructions-fun="sendInstructionsFun" />
+        <MoveCarForm :send-custom-directive-fun="sendCustomDirectiveFun" />
       </a-col>
       <a-col :span="12">
-        <MoveCarMaintainForm :send-instructions-fun="sendInstructionsFun" />
+        <MoveCarMaintainForm
+          :send-custom-directive-fun="sendCustomDirectiveFun"
+        />
       </a-col>
     </a-row>
     <a-row class="grid-demo" :gutter="20">
       <a-col :span="12">
-        <LoadAndReverseCarForm :send-instructions-fun="sendInstructionsFun" />
+        <LoadAndReverseCarForm
+          :send-custom-directive-fun="sendCustomDirectiveFun"
+        />
       </a-col>
       <a-col :span="12">
-        <CustomInstruct :send-instructions-fun="sendInstructionsFun" />
+        <CustomInstruct :send-custom-directive-fun="sendCustomDirectiveFun" />
       </a-col>
     </a-row>
 
@@ -33,11 +37,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, reactive } from 'vue';
-import { sendInstructions } from '@/api/dashboard';
+import { sendCustomDirective } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
 import StompClient from '@/utils/stompServer';
-import { stringToObjectFun } from '@/utils/validate';
 import SwitchState from '@/views/dashboard/functional-tests/components/switch-state.vue';
 import NearlySevenDaysList from './components/nearly-seven-days-list.vue';
 import LoadAndReverseCarForm from './components/load-and-reverse-car-form.vue';
@@ -65,7 +68,7 @@ export default defineComponent({
     const carStopState = reactive<any[]>([{}, {}]);
     const sevenDaysData = ref({});
 
-    const sendInstructionsFun = (topic: string, message: string) => {
+    const sendCustomDirectiveFun = (topic: string, message: string) => {
       const query = {
         qos: '1',
         retained: false,
@@ -77,7 +80,7 @@ export default defineComponent({
         formData.append(key, value);
       });
 
-      sendInstructions(formData).then((res: any) => {
+      sendCustomDirective(formData).then((res: any) => {
         Notification.info(res.msg);
         console.log('-----');
       });
@@ -85,47 +88,46 @@ export default defineComponent({
 
     const stomp = new StompClient([
       {
-        topicUrl: 'gtai/movingstatus',
+        topicUrl: 'gtai/movingstatus', // 完整行车状态
         callback: (e) => {
-          console.log(e);
-          console.log(stringToObjectFun(e));
-          sevenDaysData.value = stringToObjectFun(e);
+          sevenDaysData.value = e;
         },
       },
       {
         topicUrl: 'jtgx/power-and-fanyao/1', // 开关/防摇
         callback: (e) => {
-          Object.assign(switchData[0], stringToObjectFun(e));
+          Object.assign(switchData[0], e);
         },
       },
       {
         topicUrl: 'jtgx/power-and-fanyao/1',
         callback: (e) => {
-          Object.assign(switchData[0], stringToObjectFun(e));
+          Object.assign(switchData[0], e);
         },
       },
       {
         topicUrl: 'jtgx/power-and-fanyao/2',
         callback: (e) => {
-          Object.assign(switchData[1], stringToObjectFun(e));
+          Object.assign(switchData[1], e);
         },
       },
       {
         topicUrl: 'jtgx/power-and-fanyao/2',
         callback: (e) => {
-          Object.assign(switchData[1], stringToObjectFun(e));
+          Object.assign(switchData[1], e);
         },
       },
       {
         topicUrl: 'jtgx/emergency/reslut/1', // 急停声光报警
         callback: (e) => {
-          Object.assign(carStopState[0], stringToObjectFun(e));
+          console.log(e);
+          Object.assign(carStopState[0], e);
         },
       },
       {
         topicUrl: 'jtgx/emergency/reslut/2',
         callback: (e) => {
-          Object.assign(carStopState[1], stringToObjectFun(e));
+          Object.assign(carStopState[1], e);
         },
       },
     ]);
@@ -142,7 +144,7 @@ export default defineComponent({
       sevenDaysData,
       switchData,
       carStopState,
-      sendInstructionsFun,
+      sendCustomDirectiveFun,
     };
   },
 });

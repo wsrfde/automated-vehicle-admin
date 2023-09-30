@@ -12,7 +12,7 @@
               >一车紧急停止
             </a-button>
             <a-tag
-              color="red"
+              :color="carStopState[0].pushbuttonStatus ? 'arcoblue' : 'red'"
               style="
                 width: 200px;
                 height: 70px;
@@ -33,7 +33,7 @@
               >二车紧急停止
             </a-button>
             <a-tag
-              color="arcoblue"
+              :color="carStopState[1].pushbuttonStatus ? 'arcoblue' : 'red'"
               style="
                 width: 200px;
                 height: 70px;
@@ -106,7 +106,7 @@ import { PropType } from 'vue/dist/vue';
 export default defineComponent({
   name: 'ButtonChild',
   props: {
-    sendInstructionsFun: {
+    sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
@@ -115,7 +115,7 @@ export default defineComponent({
       default: () => [],
     },
   },
-  setup({ sendInstructionsFun }) {
+  setup({ sendCustomDirectiveFun }) {
     const formatStr = (state: boolean) => {
       return state ? `按下` : `弹起`;
     };
@@ -123,38 +123,37 @@ export default defineComponent({
     // 紧急停止
     const carUrgencyStop = (event: any, id: number) => {
       const sedMsg = `craneid:${id};onetask:carstop;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
+      sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
 
       setTimeout(() => {
-        // TODO：
         const setMsg1 = `craneid:${id};power:false;`;
-        sendInstructionsFun('jtgx/overhead-crane-handle/power-on', setMsg1);
+        sendCustomDirectiveFun('jtgx/overhead-crane-handle/power-on', setMsg1);
       }, 50);
     };
     // 车辆停止
     const carStop = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
       const sedMsg = `craneid:${id};onetask:carstop;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
+      sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
     };
     // 扫描
     const carScan = (event: any, id: number, onetask: string) => {
       animateCSS(event.target, 'pulse', 0.5);
       const sedMsg = `craneid:${id};onetask:${onetask};zz:8.6;speed:100;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
+      sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
     };
 
     // 一键抓料
     const onceGrasp = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
       const sedMsg = `craneid:${id};pick:8.0;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
+      sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
     };
     // 一键放料
     const oncePut = (event: any, id: number) => {
       animateCSS(event.target, 'pulse', 0.5);
       const sedMsg = `craneid:${id};place:8.0;`;
-      sendInstructionsFun('gtai/movingctrl', sedMsg);
+      sendCustomDirectiveFun('gtai/movingctrl', sedMsg);
     };
 
     return {

@@ -160,7 +160,7 @@ export default defineComponent({
       props.rolesData.map((item: any) => ({
         label: item.title,
         value: item.key,
-      }))
+      })),
     );
     const columns = [
       {

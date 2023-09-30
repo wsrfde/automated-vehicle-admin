@@ -29,15 +29,17 @@ import { defineComponent, onMounted, reactive, ref } from 'vue';
 import { getSystemLogs } from '@/api/system';
 import useLoading from '@/hooks/loading';
 import { Pagination } from '@/types/global';
+import { TableColumnData } from '@arco-design/web-vue/es/table/interface.d';
 
 export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(false); // 这里应该是true
 
-    const columns = [
+    const columns: TableColumnData[] = [
       {
         title: '用户昵称',
         dataIndex: 'username',
+        width: 90,
       },
       {
         title: '用户地址',
@@ -46,19 +48,29 @@ export default defineComponent({
       {
         title: 'IP地址',
         dataIndex: 'requestIp',
+        width: 110,
       },
       {
         title: '浏览器',
         dataIndex: 'browser',
       },
       {
-        title: '执行动作',
+        title: '执行操作',
         dataIndex: 'description',
         slotName: 'description',
       },
       {
+        title: '执行方法',
+        dataIndex: 'method',
+      },
+      {
+        title: '执行参数',
+        dataIndex: 'params',
+      },
+      {
         title: '执行日期',
         dataIndex: 'createTime',
+        width: 180,
       },
     ];
 
