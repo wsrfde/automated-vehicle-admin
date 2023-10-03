@@ -159,9 +159,7 @@ export function validateIdNo(rule, value, callback) {
 }
 
 // 字符串转对象，如"craneId:1;movingTo:2;“ => {craneId:1,movingTo:2}
-export const stringToObjectFun = (
-  str: string,
-): Record<string, string | number | boolean> => {
+export const stringToObjectFun = (str: string): object => {
   const regex = /([^:]+):([^;]+);/g;
 
   const valueFormat = (value: any): string | number | boolean => {

@@ -1,48 +1,48 @@
 <template>
   <a-card class="general-card" title="按钮测试">
     <a-space direction="vertical" style="width: 100%" size="medium">
-      <a-row>
-        <a-col :span="12">
-          <a-space :size="200">
-            <a-button
-              status="danger"
-              type="primary"
-              style="width: 200px; height: 70px"
-              @click="carUrgencyStop($event, 0)"
-              >一车紧急停止
-            </a-button>
-            <a-tag
-              :color="carStopState[0].pushbuttonStatus ? 'arcoblue' : 'red'"
-              style="
-                width: 200px;
-                height: 70px;
-                justify-content: center;
-                font-size: 18px;
-              "
-              >{{ formatStr(carStopState[0].pushbuttonStatus) }}</a-tag
-            >
-          </a-space>
+      <a-row :gutter="20">
+        <a-col :span="6">
+          <a-button
+            status="danger"
+            type="primary"
+            style="width: 200px; height: 70px"
+            @click="carUrgencyStop($event, 0)"
+            >一车紧急停止
+          </a-button>
         </a-col>
-        <a-col :span="12">
-          <a-space :size="200">
-            <a-button
-              status="danger"
-              type="primary"
-              style="width: 200px; height: 70px"
-              @click="carUrgencyStop($event, 1)"
-              >二车紧急停止
-            </a-button>
-            <a-tag
-              :color="carStopState[1].pushbuttonStatus ? 'arcoblue' : 'red'"
-              style="
-                width: 200px;
-                height: 70px;
-                justify-content: center;
-                font-size: 18px;
-              "
-              >{{ formatStr(carStopState[1].pushbuttonStatus) }}</a-tag
-            >
-          </a-space>
+        <a-col :span="6" style="display: flex; justify-content: right">
+          <a-tag
+            :color="carStopState[0].pushbuttonStatus ? 'arcoblue' : 'red'"
+            style="
+              width: 200px;
+              height: 70px;
+              justify-content: center;
+              font-size: 18px;
+            "
+            >{{ formatStr(carStopState[0].pushbuttonStatus) }}</a-tag
+          >
+        </a-col>
+        <a-col :span="6">
+          <a-button
+            status="danger"
+            type="primary"
+            style="width: 200px; height: 70px"
+            @click="carUrgencyStop($event, 1)"
+            >二车紧急停止
+          </a-button>
+        </a-col>
+        <a-col :span="6" style="display: flex; justify-content: right">
+          <a-tag
+            :color="carStopState[1].pushbuttonStatus ? 'arcoblue' : 'red'"
+            style="
+              width: 200px;
+              height: 70px;
+              justify-content: center;
+              font-size: 18px;
+            "
+            >{{ formatStr(carStopState[1].pushbuttonStatus) }}</a-tag
+          >
         </a-col>
       </a-row>
       <a-row>

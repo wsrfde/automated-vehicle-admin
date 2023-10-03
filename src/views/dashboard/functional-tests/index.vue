@@ -20,12 +20,18 @@
         />
       </a-col>
     </a-row>
-    <a-row class="grid-demo" :gutter="20">
+    <a-row :gutter="20">
       <a-col :span="12">
         <LoadAndReverseCarForm
           :send-custom-directive-fun="sendCustomDirectiveFun"
         />
       </a-col>
+      <a-col :span="12">
+        <CarLoaderForm :send-custom-directive-fun="sendCustomDirectiveFun" />
+      </a-col>
+    </a-row>
+
+    <a-row :gutter="20">
       <a-col :span="12">
         <CustomInstruct :send-custom-directive-fun="sendCustomDirectiveFun" />
       </a-col>
@@ -41,7 +47,8 @@ import { sendCustomDirective } from '@/api/dashboard';
 import { Notification } from '@arco-design/web-vue';
 
 import StompClient from '@/utils/stompServer';
-import SwitchState from '@/views/dashboard/functional-tests/components/switch-state.vue';
+import SwitchState from './components/switch-state.vue';
+import CarLoaderForm from './components/car-loader-form.vue';
 import NearlySevenDaysList from './components/nearly-seven-days-list.vue';
 import LoadAndReverseCarForm from './components/load-and-reverse-car-form.vue';
 import ButtonChild from './components/button-child.vue';
@@ -53,6 +60,7 @@ import SwitchChild from './components/switch-child.vue';
 export default defineComponent({
   name: 'Index',
   components: {
+    CarLoaderForm,
     SwitchState,
     NearlySevenDaysList,
     LoadAndReverseCarForm,

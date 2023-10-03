@@ -35,6 +35,29 @@ export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(false); // 这里应该是true
 
+    // const ipAlias = [
+    //   {
+    //     ip: '192.168.8.200',
+    //     title: '控制台',
+    //   },
+    //   {
+    //     ip: '192.168.8.8',
+    //     title: '后台服务器',
+    //   },
+    //   {
+    //     ip: '192.168.8.9',
+    //     title: '停车场',
+    //   },
+    //   {
+    //     ip: '192.168.1.100',
+    //     title: '边缘计算一',
+    //   },
+    //   {
+    //     ip: '192.168.2.100',
+    //     title: '边缘计算二',
+    //   },
+    // ];
+
     const columns: TableColumnData[] = [
       {
         title: '用户昵称',
