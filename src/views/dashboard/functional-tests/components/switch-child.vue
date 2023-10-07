@@ -21,11 +21,17 @@
       </a-row>
       <a-row>
         <a-col :span="12">
-          <a-switch @change="carPour($event, 0)" />
+          <a-switch
+            :model-value="switchData[0].Preparing === 1"
+            @change="carPour($event, 0)"
+          />
           <span class="ml10"> 一车倒料开关</span>
         </a-col>
         <a-col :span="12">
-          <a-switch @change="carPour($event, 1)" />
+          <a-switch
+            :model-value="switchData[1].Preparing === 1"
+            @change="carPour($event, 1)"
+          />
           <span class="ml10"> 二车倒料开关</span>
         </a-col>
       </a-row>

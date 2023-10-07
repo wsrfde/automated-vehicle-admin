@@ -122,6 +122,24 @@ export default defineComponent({
         },
       },
       {
+        topicUrl: 'jtgx/overhead-crane-handle/1', // 二车自动状态
+        callback: (e) => {
+          Object.assign(switchData[0], e);
+        },
+      },
+      {
+        topicUrl: 'jtgx/overhead-crane-handle/2', // 二车自动状态
+        callback: (e) => {
+          Object.assign(switchData[1], e);
+        },
+      },
+      {
+        topicUrl: 'gtai/movingstatus', // 二车倒料按钮状态
+        callback: (e) => {
+          Object.assign(switchData[e.craneid], e); // id=0就是一车，id=1是二车
+        },
+      },
+      {
         topicUrl: 'jtgx/emergency/reslut/1', // 急停声光报警
         callback: (e) => {
           Object.assign(carStopState[0], e);

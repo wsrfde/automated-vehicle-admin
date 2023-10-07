@@ -29,6 +29,20 @@
           </a-tag>
         </a-col>
       </a-row>
+      <a-row>
+        <a-col :span="12">
+          一车自动状态：
+          <a-tag :color="switchData[0].operate ? 'arcoblue' : 'red'">
+            {{ switchData[0].operate ? '自动' : '手动' }}
+          </a-tag>
+        </a-col>
+        <a-col :span="12">
+          二车自动状态：
+          <a-tag :color="switchData[1].operate ? 'arcoblue' : 'red'">
+            {{ switchData[1].operate ? '自动' : '手动' }}
+          </a-tag>
+        </a-col>
+      </a-row>
     </a-space>
   </a-card>
 </template>
