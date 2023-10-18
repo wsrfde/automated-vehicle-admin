@@ -19,7 +19,7 @@ export default defineComponent({
     const renderData = ref([]);
     watch(props.loadData, (val: any) => {
       renderData.value = val.map(
-        (item: any) => item.value[item.value.length - 1]
+        (item: any) => item.value[item.value.length - 1],
       );
     });
     const { chartOption } = useChartOption((isDark) => {

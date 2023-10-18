@@ -99,7 +99,6 @@ export default defineComponent({
       {
         topicUrl: 'jtgx/power-and-fanyao/1', // 开关/防摇
         callback: (e) => {
-          console.log(e);
           Object.assign(switchData[0], e);
         },
       },
@@ -122,17 +121,23 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jtgx/overhead-crane-handle/1', // 二车自动状态
+        topicUrl: 'gtai/cranehandle', // 自动状态
         callback: (e) => {
-          Object.assign(switchData[0], e);
+          Object.assign(switchData[e.crane_no - 1], e);
         },
       },
-      {
-        topicUrl: 'jtgx/overhead-crane-handle/2', // 二车自动状态
-        callback: (e) => {
-          Object.assign(switchData[1], e);
-        },
-      },
+      // {
+      //   topicUrl: 'jtgx/overhead-crane-handle/1', // 二车自动状态
+      //   callback: (e) => {
+      //     Object.assign(switchData[0], e);
+      //   },
+      // },
+      // {
+      //   topicUrl: 'jtgx/overhead-crane-handle/2', // 二车自动状态
+      //   callback: (e) => {
+      //     Object.assign(switchData[1], e);
+      //   },
+      // },
       {
         topicUrl: 'gtai/movingstatus', // 二车倒料按钮状态
         callback: (e) => {
