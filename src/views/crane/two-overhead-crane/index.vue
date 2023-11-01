@@ -45,7 +45,7 @@
 import { defineComponent, onUnmounted, reactive } from 'vue';
 import StompClient from '@/utils/stompServer';
 import { CRANE_OPTION } from '@/utils/dictionary';
-import { sendCustomDirective } from '@/api/dashboard';
+import { sendCustomDirective } from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
 import CraneStep from './components/crane-step.vue';
 import CraneHandle from './components/crane-handle.vue';
@@ -55,6 +55,7 @@ import CraneState from './components/crane-state.vue';
 import CraneCoordinates from './components/crane-coordinates.vue';
 
 export default defineComponent({
+  name: 'TwoOverheadCrane',
   components: {
     AlarmAlert,
     CarAlert,

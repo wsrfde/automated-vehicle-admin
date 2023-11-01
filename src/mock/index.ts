@@ -4,7 +4,7 @@ import './user';
 import './message-box';
 
 /** simple */
-import '@/views/dashboard/monitor/mock';
+import '@/views/statistic/monitor/mock';
 
 import '@/views/visualization/multi-dimension-data-analysis/mock';
 

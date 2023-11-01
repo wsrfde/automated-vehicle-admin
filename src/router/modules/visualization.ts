@@ -7,12 +7,12 @@ export default <RouteRecordRaw>{
   meta: {
     title: '数据可视化',
     requiresAuth: true,
-    icon: 'icon-apps',
+    icon: 'icon-bar-chart',
   },
   children: [
     {
       path: 'multi-dimension-data-analysis',
-      name: 'multiDimensionDataAnalysis',
+      name: 'MultiDimensionDataAnalysis',
       component: () =>
         import('@/views/visualization/multi-dimension-data-analysis/index.vue'),
       meta: {

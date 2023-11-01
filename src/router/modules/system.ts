@@ -6,7 +6,7 @@ export default <RouteRecordRaw>{
   component: () => import('@/views/system/index.vue'),
   meta: {
     title: '系统监控',
-    icon: 'icon-user',
+    icon: 'icon-computer',
     requiresAuth: true,
   },
   children: [

@@ -11,7 +11,7 @@ export default (): AppState => ({
   themeColor: '#165DFF',
   menuWidth: 250,
   globalSettings: false,
-  defaultRouter: 'overheadCraneState',
+  defaultRouter: 'MultiDimensionDataAnalysis',
   monitorAddress:
     localStorage.getItem('monitorAddress') || 'http://192.168.18.200',
 });

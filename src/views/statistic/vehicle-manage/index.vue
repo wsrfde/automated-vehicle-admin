@@ -150,7 +150,7 @@ import {
   deleteVehicleData,
   editVehicleData,
   getVehicleData,
-} from '@/api/dashboard';
+} from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
 
 const generateFormModel = () => {

@@ -21,6 +21,7 @@ import DataChainGrowth from './components/data-chain-growth.vue';
 import ContentPublishingSource from './components/content-publishing-source.vue';
 
 export default defineComponent({
+  name: 'MultiDimensionDataAnalysis',
   components: {
     DataOverview,
     DataChainGrowth,

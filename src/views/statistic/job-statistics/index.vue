@@ -32,10 +32,8 @@
                 <a-form-item field="step" label="天车状态">
                   <a-select v-model="formModel.step" placeholder="请选择">
                     <a-option value="">全部</a-option>
-                    <a-option :value="findOptionVal('预备装车')">
-                      预备装车
-                    </a-option>
-                    <a-option :value="findOptionVal('装车')">装车</a-option>
+                    <a-option :value="findOptionVal('装车')"> 装车 </a-option>
+                    <a-option :value="findOptionVal('卸料')">卸料</a-option>
                     <a-option :value="findOptionVal('倒料')">倒料</a-option>
                   </a-select>
                 </a-form-item>
@@ -86,7 +84,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import useLoading from '@/hooks/loading';
-import { getJobStatistics } from '@/api/dashboard';
+import { getJobStatistics } from '@/api/crane';
 import json2Excel from '@/utils/json2Excel';
 import { CRANE_OPTION } from '@/utils/dictionary';
 

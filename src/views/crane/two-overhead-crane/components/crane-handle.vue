@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { overheadCrane } from '@/api/dashboard';
+import { overheadCrane } from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
 
 export default defineComponent({

@@ -35,6 +35,12 @@
       <a-col :span="12">
         <CustomInstruct :send-custom-directive-fun="sendCustomDirectiveFun" />
       </a-col>
+      <a-col :span="12">
+        <CustomReceive
+          :custom-receive-data="customReceiveData"
+          :change-receive-topic-fun="changeReceiveTopicFun"
+        />
+      </a-col>
     </a-row>
 
     <NearlySevenDaysList :seven-days-data="sevenDaysData" />
@@ -43,10 +49,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, reactive } from 'vue';
-import { sendCustomDirective } from '@/api/dashboard';
+import { sendCustomDirective } from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
 
 import StompClient from '@/utils/stompServer';
+import CustomReceive from './components/custom-receive.vue';
 import SwitchState from './components/switch-state.vue';
 import CarLoaderForm from './components/car-loader-form.vue';
 import NearlySevenDaysList from './components/nearly-seven-days-list.vue';
@@ -58,8 +65,9 @@ import CustomInstruct from './components/custom-instruct.vue';
 import SwitchChild from './components/switch-child.vue';
 
 export default defineComponent({
-  name: 'Index',
+  name: 'FunctionalTests',
   components: {
+    CustomReceive,
     CarLoaderForm,
     SwitchState,
     NearlySevenDaysList,
@@ -72,6 +80,8 @@ export default defineComponent({
   },
   setup() {
     const btnVal = ref('');
+    const customReceiveTopic = ref('');
+    const customReceiveData = ref({});
     const switchData = reactive<any[]>([{}, {}]);
     const carStopState = reactive<any[]>([{}, {}]);
     const sevenDaysData = ref({});
@@ -156,8 +166,19 @@ export default defineComponent({
           Object.assign(carStopState[1], e);
         },
       },
+      {
+        topicUrl: customReceiveTopic.value,
+        callback: (e) => {
+          customReceiveData.value = e;
+        },
+      },
     ]);
 
+    const changeReceiveTopicFun = (e: string) => {
+      stomp.destroy();
+      customReceiveTopic.value = e;
+      stomp.connect();
+    };
     onMounted(() => {
       stomp.connect();
     });
@@ -170,6 +191,8 @@ export default defineComponent({
       sevenDaysData,
       switchData,
       carStopState,
+      customReceiveData,
+      changeReceiveTopicFun,
       sendCustomDirectiveFun,
     };
   },
