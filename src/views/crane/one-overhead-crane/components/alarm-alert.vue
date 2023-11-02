@@ -1,17 +1,24 @@
 <template>
   <a-card class="alarm-alert" title="总控开关">
     <p>
-      <span class="ml10 mr20"> 一车电源开关</span>
+      <span class="ml10 mr20">
+        {{ craneNo === 1 ? '一' : '二' }}车电源开关
+      </span>
       <a-switch
         :model-value="craneData.power"
         :disabled="oneCarStartup"
-        @change="carStartup($event, 0)"
+        @change="carStartup($event, craneNo - 1)"
       />
     </p>
     <a-divider direction="vertical" class="custom-divider"></a-divider>
     <p>
-      <span class="ml10 mr20"> 一车防摇开关</span>
-      <a-switch :model-value="craneData.fanyao" @change="carShake($event, 0)" />
+      <span class="ml10 mr20">
+        {{ craneNo === 1 ? '一' : '二' }}车防摇开关
+      </span>
+      <a-switch
+        :model-value="craneData.fanyao"
+        @change="carShake($event, craneNo - 1)"
+      />
     </p>
     <a-divider direction="vertical" class="custom-divider"></a-divider>
     <p class="stop-handle">

@@ -1,5 +1,26 @@
 <template>
-  <a-card class="alarm-alert" title="">
+  <a-card class="alarm-alert" title="总控开关">
+    <p>
+      <span class="ml10 mr20">
+        {{ craneNo === 1 ? '一' : '二' }}车电源开关
+      </span>
+      <a-switch
+        :model-value="craneData.power"
+        :disabled="oneCarStartup"
+        @change="carStartup($event, craneNo - 1)"
+      />
+    </p>
+    <a-divider direction="vertical" class="custom-divider"></a-divider>
+    <p>
+      <span class="ml10 mr20">
+        {{ craneNo === 1 ? '一' : '二' }}车防摇开关
+      </span>
+      <a-switch
+        :model-value="craneData.fanyao"
+        @change="carShake($event, craneNo - 1)"
+      />
+    </p>
+    <a-divider direction="vertical" class="custom-divider"></a-divider>
     <p class="stop-handle">
       <a-button
         v-if="btnStatus"
@@ -22,12 +43,6 @@
         <h2>紧急复位</h2>
       </a-button>
     </p>
-    <div class="alert-box">
-      <h2>声光报警：</h2>
-      <a-tag :color="stateData.color" size="large" class="custom-tag">
-        {{ stateData.text }}
-      </a-tag>
-    </div>
   </a-card>
   <StopModal ref="stopModalRef" @change-state="changeState" />
 </template>
@@ -35,26 +50,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import StopModal from './stop-modal.vue';
-
-const stateFormat = (state: number) => {
-  switch (state) {
-    case 0:
-      return {
-        color: '#5ebb3a',
-        text: '正常',
-      };
-    case 1:
-      return {
-        color: '#f53f3f',
-        text: '错误',
-      };
-    default:
-      return {
-        color: '#ccc',
-        text: '-',
-      };
-  }
-};
 
 export default defineComponent({
   components: { StopModal },
@@ -75,7 +70,38 @@ export default defineComponent({
   setup(props) {
     const stopModalRef = ref<InstanceType<typeof StopModal>>();
     const btnStatus = computed(() => props.craneData.stop === 0);
-    const stateData = computed(() => stateFormat(props.craneData.stop));
+    const oneCarStartup = ref(false);
+    const twoCarStartup = ref(false);
+
+    // 电源
+    const carStartup = (val: any, id: number) => {
+      const sedMsg = `craneid:${id};power:${val};`;
+      props.sendCustomDirectiveFun(
+        'jtgx/overhead-crane-handle/power-on',
+        sedMsg,
+      );
+      if (id === 0) {
+        oneCarStartup.value = true;
+      } else {
+        twoCarStartup.value = true;
+      }
+      setTimeout(() => {
+        if (id === 0) {
+          oneCarStartup.value = false;
+        } else {
+          twoCarStartup.value = false;
+        }
+      }, 10000);
+    };
+
+    // 防摇
+    const carShake = (val: any, id: number) => {
+      const sedMsg = `craneid:${id};faultresset:${val};`;
+      props.sendCustomDirectiveFun(
+        'jtgx/overhead-crane-handle/kinema-argvs',
+        sedMsg,
+      );
+    };
 
     // stop 1:停止 0:复位
     const stopFun = async (stop: number) => {
@@ -109,26 +135,41 @@ export default defineComponent({
     return {
       btnStatus,
       stopModalRef,
-      stateData,
-      stateFormat,
+      oneCarStartup,
+      twoCarStartup,
       openCloseFun,
       changeState,
       resetFun,
+      carStartup,
+      carShake,
     };
   },
 });
 </script>
 
 <style scoped lang="less">
+.ml10 {
+  margin: 0 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
 .alarm-alert {
   margin-bottom: 20px;
   border-width: 0 0 1px 0;
   p {
     margin: 0;
   }
+  .custom-divider {
+    min-height: 4em;
+  }
   .custom-btn {
     width: 200px;
     height: 60px;
+  }
+  .stop-handle {
+    width: 35%;
+    text-align: right;
   }
 
   :deep(.arco-card-body) {

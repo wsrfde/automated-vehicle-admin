@@ -11,7 +11,7 @@
         </div>
         <CraneStep
           class="mb15"
-          :crane-data="oneCraneConfig.data"
+          :moving-status="oneCraneConfig.data.movingStatus"
           :step-option="stepOption"
         />
         <AlarmAlert
@@ -29,11 +29,18 @@
         </a-row>
         <a-row :gutter="20" class="mt20">
           <a-col :span="12">
-            <CraneResolveRadio />
+            <CraneResolveRadio
+              :crane-no="oneCraneConfig.crane_no"
+              :send-custom-directive-fun="sendCustomDirectiveFun"
+            />
           </a-col>
           <a-col :span="12">
             <CraneResolveSwitch />
-            <CraneResolveInput class="mt20" />
+            <CraneResolveInput
+              class="mt20"
+              :crane-no="oneCraneConfig.crane_no"
+              :send-custom-directive-fun="sendCustomDirectiveFun"
+            />
           </a-col>
         </a-row>
       </a-card>
@@ -117,7 +124,7 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: `jtgx/crane/position/front/${oneCraneConfig.crane_no}`, // 坐标信息
+        topicUrl: `jtgx/crane/position/${oneCraneConfig.crane_no}`, // 坐标信息
         callback: (e) => {
           Object.assign(oneCraneConfig.data, e);
         },
@@ -140,7 +147,9 @@ export default defineComponent({
           // id=0就是一车，id=1是二车
           // 已做动态判断，不用更改
           if (e.craneid === oneCraneConfig.crane_no - 1) {
-            Object.assign(oneCraneConfig.data, e);
+            Object.assign(oneCraneConfig.data, {
+              movingStatus: e,
+            });
           }
         },
       },

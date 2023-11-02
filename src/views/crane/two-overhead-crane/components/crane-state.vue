@@ -1,11 +1,7 @@
 <template>
-  <a-card class="crane-state" title="状态集合">
-    <a-descriptions
-      :data="stateData(craneData)"
-      :column="2"
-      size="large"
-      :align="{ value: 'right' }"
-    >
+  <a-card class="crane-state" title="实时状态">
+    <!--    :align="{ value: 'right' }"-->
+    <a-descriptions :data="stateData(craneData)" :column="2" size="large">
       <a-descriptions-item
         v-for="(item, index) of stateData(craneData)"
         :key="index"
@@ -36,10 +32,6 @@ export default defineComponent({
   setup() {
     const stateData = (data) => [
       {
-        label: '电源状态',
-        value: data.powerStatus,
-      },
-      {
         label: '大车状态',
         value: data.mainCarStatus,
       },
@@ -50,10 +42,6 @@ export default defineComponent({
       {
         label: '极限限位',
         value: data.limitSwitch,
-      },
-      {
-        label: '防摇状态',
-        value: data.fanyaoStatus,
       },
       {
         label: '栏杆门限位',
@@ -98,7 +86,7 @@ export default defineComponent({
 .crane-state {
   height: 100%;
   .custom-tag {
-    width: 8vw;
+    width: 5vw;
     text-align: center;
     display: inline-block;
   }

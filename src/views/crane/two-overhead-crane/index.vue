@@ -1,41 +1,48 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['仪表盘', '天车状态']" />
+    <Breadcrumb :items="['天车管理', '二号天车']" />
     <CarAlert :car-tips="carTips" />
     <div class="car-box">
-      <a-card
-        v-for="(item, index) in craneConfigList"
-        :key="item.title"
-        class="custom-card"
-        :title="item.title"
-      >
-        <AlarmAlert
-          :crane-no="item.crane_no"
-          :crane-data="item.data"
-          :send-custom-directive-fun="sendCustomDirectiveFun"
-        />
+      <a-card class="custom-card" :title="oneCraneConfig.title">
+        <div class="mb15 flex-box">
+          <SwitchStatus :crane-data="oneCraneConfig.data" />
+          <CraneState :crane-data="oneCraneConfig.data" />
+          <CraneCoordinates :crane-data="oneCraneConfig.data" />
+        </div>
         <CraneStep
           class="mb15"
-          :current-step="item.data.step"
+          :moving-status="oneCraneConfig.data.movingStatus"
           :step-option="stepOption"
         />
-        <a-layout>
-          <a-layout-content>
-            <CraneCoordinates :crane-data="item.data" />
-          </a-layout-content>
-          <a-layout-content class="ml15">
-            <CraneState :crane-data="item.data" />
-          </a-layout-content>
-          <a-layout-sider style="width: 14vw" class="ml15">
-            <CraneHandle
-              :crane-no="item.crane_no"
-              :current-operate="item.data.operate"
-              :current-step="item.data.step"
-              :step-option="stepOption"
+        <AlarmAlert
+          :crane-no="oneCraneConfig.crane_no"
+          :crane-data="oneCraneConfig.data"
+          :send-custom-directive-fun="sendCustomDirectiveFun"
+        />
+        <a-row :gutter="20">
+          <a-col :span="12">
+            <CraneControl />
+          </a-col>
+          <a-col :span="12">
+            <CraneList />
+          </a-col>
+        </a-row>
+        <a-row :gutter="20" class="mt20">
+          <a-col :span="12">
+            <CraneResolveRadio
+              :crane-no="oneCraneConfig.crane_no"
+              :send-custom-directive-fun="sendCustomDirectiveFun"
             />
-          </a-layout-sider>
-        </a-layout>
-        <a-divider v-if="index !== craneConfigList.length - 1" />
+          </a-col>
+          <a-col :span="12">
+            <CraneResolveSwitch />
+            <CraneResolveInput
+              class="mt20"
+              :crane-no="oneCraneConfig.crane_no"
+              :send-custom-directive-fun="sendCustomDirectiveFun"
+            />
+          </a-col>
+        </a-row>
       </a-card>
     </div>
   </div>
@@ -47,19 +54,29 @@ import StompClient from '@/utils/stompServer';
 import { CRANE_OPTION } from '@/utils/dictionary';
 import { sendCustomDirective } from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
+import CraneResolveInput from './components/crane-resolve-input.vue';
+import CraneResolveSwitch from './components/crane-resolve-switch.vue';
+import CraneList from './components/crane-list.vue';
+import SwitchStatus from './components/SwitchStatus.vue';
 import CraneStep from './components/crane-step.vue';
-import CraneHandle from './components/crane-handle.vue';
+import CraneControl from './components/crane-control.vue';
 import CarAlert from './components/car-alert.vue';
 import AlarmAlert from './components/alarm-alert.vue';
 import CraneState from './components/crane-state.vue';
 import CraneCoordinates from './components/crane-coordinates.vue';
+import CraneResolveRadio from './components/crane-resolve-radio.vue';
 
 export default defineComponent({
-  name: 'TwoOverheadCrane',
+  name: 'OneOverheadCrane',
   components: {
+    CraneResolveInput,
+    CraneResolveSwitch,
+    CraneResolveRadio,
+    CraneList,
+    SwitchStatus,
     AlarmAlert,
     CarAlert,
-    CraneHandle,
+    CraneControl,
     CraneStep,
     CraneCoordinates,
     CraneState,
@@ -67,25 +84,15 @@ export default defineComponent({
   setup() {
     const carTips = reactive({});
     const stepOption = CRANE_OPTION;
-
-    const craneConfigList = reactive<
-      {
-        title: string;
-        crane_no: number;
-        data: any;
-      }[]
-    >([
-      {
-        title: '天车 #01',
-        crane_no: 1,
-        data: {}, // 用于存储天车数据
-      },
-      {
-        title: '天车 #02',
-        crane_no: 2,
-        data: {}, // 用于存储天车数据
-      },
-    ]);
+    const oneCraneConfig = reactive<{
+      title: string;
+      crane_no: number;
+      data: any;
+    }>({
+      title: '天车 #02',
+      crane_no: 2,
+      data: {}, // 用于存储天车数据
+    });
 
     const sendCustomDirectiveFun = (
       topic: string,
@@ -103,68 +110,53 @@ export default defineComponent({
 
     const stomp = new StompClient([
       {
-        topicUrl: 'jtgx/car/park/1', // 车辆1进入通知
+        topicUrl: `jtgx/car/park/${oneCraneConfig.crane_no}`, // 车辆进入通知
         callback: (e) => {
           Object.assign(carTips, e);
         },
       },
       {
-        topicUrl: 'jtgx/car/park/2', // 车辆2进入通知
+        topicUrl: `jtgx/emergency/${oneCraneConfig.crane_no}`, // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          Object.assign(carTips, e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/emergency/1', // 声光报警&紧急停止按钮状态
-        callback: (e) => {
-          Object.assign(craneConfigList[0].data, {
+          Object.assign(oneCraneConfig.data, {
             stop: e['101\n+OCCH_ALL'],
           });
         },
       },
       {
-        topicUrl: 'jtgx/crane/position/front/1', // 坐标信息
+        topicUrl: `jtgx/crane/position/${oneCraneConfig.crane_no}`, // 坐标信息
         callback: (e) => {
-          console.log(e);
-          Object.assign(craneConfigList[0].data, e);
+          Object.assign(oneCraneConfig.data, e);
         },
       },
       {
-        topicUrl: 'jtgx/backStage/1', // 状态集合
+        topicUrl: `jtgx/backStage/${oneCraneConfig.crane_no}`, // 状态集合
         callback: (e) => {
-          Object.assign(craneConfigList[0].data, e);
+          Object.assign(oneCraneConfig.data, e);
         },
       },
       {
-        topicUrl: 'jtgx/overhead-crane-handle/1', // 当前状态
+        topicUrl: `jtgx/overhead-crane-handle/${oneCraneConfig.crane_no}`, // 当前状态
         callback: (e) => {
-          Object.assign(craneConfigList[0].data, e);
+          Object.assign(oneCraneConfig.data, e);
         },
       },
       {
-        topicUrl: 'jtgx/emergency/2', // 声光报警&紧急停止按钮状态
+        topicUrl: 'gtai/movingstatus', // 倒料按钮状态
         callback: (e) => {
-          Object.assign(craneConfigList[1].data, {
-            stop: e['101\n+OCCH_ALL'],
-          });
+          // id=0就是一车，id=1是二车
+          // 已做动态判断，不用更改
+          if (e.craneid === oneCraneConfig.crane_no - 1) {
+            Object.assign(oneCraneConfig.data, {
+              movingStatus: e,
+            });
+          }
         },
       },
       {
-        topicUrl: 'jtgx/crane/position/front/2',
+        topicUrl: `jtgx/power-and-fanyao/${oneCraneConfig.crane_no}`, // 开关/防摇
         callback: (e) => {
-          Object.assign(craneConfigList[1].data, e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/backStage/2',
-        callback: (e) => {
-          Object.assign(craneConfigList[1].data, e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/overhead-crane-handle/2', // 当前状态
-        callback: (e) => {
-          Object.assign(craneConfigList[1].data, e);
+          Object.assign(oneCraneConfig, e);
         },
       },
     ]);
@@ -177,7 +169,7 @@ export default defineComponent({
     return {
       carTips,
       stepOption,
-      craneConfigList,
+      oneCraneConfig,
       sendCustomDirectiveFun,
     };
   },
@@ -195,18 +187,24 @@ export default defineComponent({
   padding: 0 20px 20px 20px;
 }
 .car-box {
-  margin-top: 20px;
+  margin-top: 10px;
   .custom-card {
+    border: 0;
     background: none;
     :deep(.arco-card-header) {
-      background: var(--color-bg-2);
+      border: 0;
     }
     :deep(& > .arco-card-body) {
       padding: 0;
     }
-    //&:last-child {
-    //margin-top: 20px;
-    //}
+  }
+}
+.flex-box {
+  display: flex;
+  justify-content: space-between;
+  div {
+    flex-basis: 32.5%;
+    height: auto;
   }
 }
 </style>
