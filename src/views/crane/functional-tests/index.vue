@@ -113,18 +113,6 @@ export default defineComponent({
         },
       },
       {
-        topicUrl: 'jtgx/power-and-fanyao/1',
-        callback: (e) => {
-          Object.assign(switchData[0], e);
-        },
-      },
-      {
-        topicUrl: 'jtgx/power-and-fanyao/2',
-        callback: (e) => {
-          Object.assign(switchData[1], e);
-        },
-      },
-      {
         topicUrl: 'jtgx/power-and-fanyao/2',
         callback: (e) => {
           Object.assign(switchData[1], e);

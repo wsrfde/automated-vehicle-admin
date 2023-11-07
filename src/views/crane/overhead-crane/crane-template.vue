@@ -1,22 +1,22 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['天车管理', '一号天车']" />
+    <Breadcrumb :items="['天车管理', craneConfigData.title]" />
     <CarAlert :car-tips="carTips" />
     <div class="car-box">
-      <a-card class="custom-card" :title="oneCraneConfig.title">
+      <a-card class="custom-card" :title="'天车 #0' + craneConfigData.crane_no">
         <div class="mb15 flex-box">
-          <SwitchStatus :crane-data="oneCraneConfig.data" />
-          <CraneState :crane-data="oneCraneConfig.data" />
-          <CraneCoordinates :crane-data="oneCraneConfig.data" />
+          <SwitchStatus :crane-data="craneConfigData.data" />
+          <CraneState :crane-data="craneConfigData.data" />
+          <CraneCoordinates :crane-data="craneConfigData.data" />
         </div>
         <CraneStep
           class="mb15"
-          :moving-status="oneCraneConfig.data.movingStatus"
+          :moving-status="craneConfigData.data.movingStatus"
           :step-option="stepOption"
         />
         <AlarmAlert
-          :crane-no="oneCraneConfig.crane_no"
-          :crane-data="oneCraneConfig.data"
+          :crane-no="craneConfigData.crane_no"
+          :crane-data="craneConfigData.data"
           :send-custom-directive-fun="sendCustomDirectiveFun"
         />
         <a-row :gutter="20">
@@ -30,7 +30,7 @@
         <a-row :gutter="20" class="mt20">
           <a-col :span="12">
             <CraneResolveRadio
-              :crane-no="oneCraneConfig.crane_no"
+              :crane-no="craneConfigData.crane_no"
               :send-custom-directive-fun="sendCustomDirectiveFun"
             />
           </a-col>
@@ -38,7 +38,8 @@
             <CraneResolveSwitch />
             <CraneResolveInput
               class="mt20"
-              :crane-no="oneCraneConfig.crane_no"
+              :crane-no="craneConfigData.crane_no"
+              :crane-data="craneConfigData.data"
               :send-custom-directive-fun="sendCustomDirectiveFun"
             />
           </a-col>
@@ -54,20 +55,19 @@ import StompClient from '@/utils/stompServer';
 import { CRANE_OPTION } from '@/utils/dictionary';
 import { sendCustomDirective } from '@/api/crane';
 import { Notification } from '@arco-design/web-vue';
-import CraneResolveInput from './components/crane-resolve-input.vue';
-import CraneResolveSwitch from './components/crane-resolve-switch.vue';
-import CraneList from './components/crane-list.vue';
-import SwitchStatus from './components/SwitchStatus.vue';
-import CraneStep from './components/crane-step.vue';
-import CraneControl from './components/crane-control.vue';
-import CarAlert from './components/car-alert.vue';
-import AlarmAlert from './components/alarm-alert.vue';
-import CraneState from './components/crane-state.vue';
-import CraneCoordinates from './components/crane-coordinates.vue';
-import CraneResolveRadio from './components/crane-resolve-radio.vue';
+import CraneResolveInput from './crane-template-child/crane-resolve-input.vue';
+import CraneResolveSwitch from './crane-template-child/crane-resolve-switch.vue';
+import CraneList from './crane-template-child/crane-list.vue';
+import SwitchStatus from './crane-template-child/SwitchStatus.vue';
+import CraneStep from './crane-template-child/crane-step.vue';
+import CraneControl from './crane-template-child/crane-control.vue';
+import CarAlert from './crane-template-child/car-alert.vue';
+import AlarmAlert from './crane-template-child/alarm-alert.vue';
+import CraneState from './crane-template-child/crane-state.vue';
+import CraneCoordinates from './crane-template-child/crane-coordinates.vue';
+import CraneResolveRadio from './crane-template-child/crane-resolve-radio.vue';
 
 export default defineComponent({
-  name: 'OneOverheadCrane',
   components: {
     CraneResolveInput,
     CraneResolveSwitch,
@@ -81,16 +81,22 @@ export default defineComponent({
     CraneCoordinates,
     CraneState,
   },
-  setup() {
+  props: {
+    craneConfig: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup({ craneConfig }) {
     const carTips = reactive({});
     const stepOption = CRANE_OPTION;
-    const oneCraneConfig = reactive<{
+    const craneConfigData = reactive<{
       title: string;
       crane_no: number;
       data: any;
     }>({
-      title: '天车 #01',
-      crane_no: 1,
+      title: craneConfig.title,
+      crane_no: craneConfig.crane_no,
       data: {}, // 用于存储天车数据
     });
 
@@ -110,35 +116,35 @@ export default defineComponent({
 
     const stomp = new StompClient([
       {
-        topicUrl: `jtgx/car/park/${oneCraneConfig.crane_no}`, // 车辆1进入通知
+        topicUrl: `jtgx/car/park/${craneConfigData.crane_no}`, // 车辆1进入通知
         callback: (e) => {
           Object.assign(carTips, e);
         },
       },
       {
-        topicUrl: `jtgx/emergency/${oneCraneConfig.crane_no}`, // 声光报警&紧急停止按钮状态
+        topicUrl: `jtgx/emergency/${craneConfigData.crane_no}`, // 声光报警&紧急停止按钮状态
         callback: (e) => {
-          Object.assign(oneCraneConfig.data, {
+          Object.assign(craneConfigData.data, {
             stop: e['101\n+OCCH_ALL'],
           });
         },
       },
       {
-        topicUrl: `jtgx/crane/position/${oneCraneConfig.crane_no}`, // 坐标信息
+        topicUrl: `jtgx/crane/position/${craneConfigData.crane_no}`, // 坐标信息
         callback: (e) => {
-          Object.assign(oneCraneConfig.data, e);
+          Object.assign(craneConfigData.data, e);
         },
       },
       {
-        topicUrl: `jtgx/backStage/${oneCraneConfig.crane_no}`, // 状态集合
+        topicUrl: `jtgx/backStage/${craneConfigData.crane_no}`, // 状态集合
         callback: (e) => {
-          Object.assign(oneCraneConfig.data, e);
+          Object.assign(craneConfigData.data, e);
         },
       },
       {
-        topicUrl: `jtgx/overhead-crane-handle/${oneCraneConfig.crane_no}`, // 当前状态
+        topicUrl: `jtgx/overhead-crane-handle/${craneConfigData.crane_no}`, // 当前状态
         callback: (e) => {
-          Object.assign(oneCraneConfig.data, e);
+          Object.assign(craneConfigData.data, e);
         },
       },
       {
@@ -146,17 +152,17 @@ export default defineComponent({
         callback: (e) => {
           // id=0就是一车，id=1是二车
           // 已做动态判断，不用更改
-          if (e.craneid === oneCraneConfig.crane_no - 1) {
-            Object.assign(oneCraneConfig.data, {
+          if (e.craneid === craneConfigData.crane_no - 1) {
+            Object.assign(craneConfigData.data, {
               movingStatus: e,
             });
           }
         },
       },
       {
-        topicUrl: `jtgx/power-and-fanyao/${oneCraneConfig.crane_no}`, // 开关/防摇
+        topicUrl: `jtgx/power-and-fanyao/${craneConfigData.crane_no}`, // 开关/防摇
         callback: (e) => {
-          Object.assign(oneCraneConfig, e);
+          Object.assign(craneConfigData.data, e);
         },
       },
     ]);
@@ -169,7 +175,7 @@ export default defineComponent({
     return {
       carTips,
       stepOption,
-      oneCraneConfig,
+      craneConfigData,
       sendCustomDirectiveFun,
     };
   },

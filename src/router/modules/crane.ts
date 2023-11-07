@@ -13,7 +13,7 @@ export default <RouteRecordRaw>{
     {
       path: 'one-overhead-crane',
       name: 'OneOverheadCrane',
-      component: () => import('@/views/crane/one-overhead-crane/index.vue'),
+      component: () => import('@/views/crane/overhead-crane/one-crane.vue'),
       meta: {
         title: '一号天车',
         requiresAuth: true,
@@ -23,7 +23,7 @@ export default <RouteRecordRaw>{
     {
       path: 'two-overhead-crane',
       name: 'TwoOverheadCrane',
-      component: () => import('@/views/crane/two-overhead-crane/index.vue'),
+      component: () => import('@/views/crane/overhead-crane/two-crane.vue'),
       meta: {
         title: '二号天车',
         requiresAuth: true,

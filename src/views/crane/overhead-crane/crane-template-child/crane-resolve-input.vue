@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 
 export default defineComponent({
   props: {
@@ -40,18 +40,33 @@ export default defineComponent({
       type: Number,
       default: 1,
     },
+    craneData: {
+      type: Object,
+      default: () => ({}),
+    },
     sendCustomDirectiveFun: {
       type: Function,
       default: () => ({}),
     },
   },
   setup(props) {
-    const form = reactive({
+    const form = reactive<{ move: any[]; speed: string }>({
       move: [],
       speed: '100',
     });
-
     const switchState = ref(false);
+
+    watch(
+      () => props.craneData,
+      (newVal) => {
+        form.move = [newVal.crane_x, newVal.crane_y, newVal.crane_z].map(
+          (item) => `${item}`,
+        );
+      },
+      {
+        deep: true,
+      },
+    );
     const handleSubmit = () => {
       const sedMsg = `craneid:${
         props.craneNo - 1
